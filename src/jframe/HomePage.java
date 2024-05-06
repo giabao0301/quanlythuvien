@@ -41,7 +41,7 @@ public class HomePage extends javax.swing.JFrame {
         PiePlot piePlot =(PiePlot) piechart.getPlot();
       
        //changing pie chart blocks colors
-       piePlot.setSectionPaint("IPhone 5s", new Color(255,255,102));
+        piePlot.setSectionPaint("IPhone 5s", new Color(255,255,102));
         piePlot.setSectionPaint("SamSung Grand", new Color(102,255,102));
         piePlot.setSectionPaint("MotoG", new Color(255,102,153));
         piePlot.setSectionPaint("Nokia Lumia", new Color(0,204,204));
@@ -256,6 +256,11 @@ public class HomePage extends javax.swing.JFrame {
             public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
             }
             public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
+            }
+        });
+        jPanel9.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jPanel9MouseClicked(evt);
             }
         });
         jPanel9.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -484,7 +489,7 @@ public class HomePage extends javax.swing.JFrame {
                 {null, null, null, null}
             },
             new String [] {
-                "Id", "Tên", "Title 3", "Title 4"
+                "Id", "Tên", "Tác giả", "Số lượng"
             }
         ));
         rSTableMetro2.setColorBordeFilas(new java.awt.Color(255, 255, 255));
@@ -546,6 +551,12 @@ public class HomePage extends javax.swing.JFrame {
     private void jPanel16AncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_jPanel16AncestorAdded
         // TODO add your handling code here:
     }//GEN-LAST:event_jPanel16AncestorAdded
+
+    private void jPanel9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel9MouseClicked
+       ManageBooks manageBooks = new ManageBooks();
+       manageBooks.setVisible(true);
+       dispose();
+    }//GEN-LAST:event_jPanel9MouseClicked
 
     /**
      * @param args the command line arguments

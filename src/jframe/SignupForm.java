@@ -36,7 +36,7 @@ public class SignupForm extends javax.swing.JFrame {
         String phone = txt_phone.getText();
 
         try {
-            Connection connect = DBConnection.geConnection();
+            Connection connect = DBConnection.getConnection();
             String sql = "insert into users(name, password, email, phone) values(?, ?, ?, ?)";
             PreparedStatement pst = connect.prepareStatement(sql);
 
