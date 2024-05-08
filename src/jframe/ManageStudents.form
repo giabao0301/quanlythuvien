@@ -387,7 +387,9 @@
             <Component class="rojeru_san.complementos.RSTableMetro" name="tbl_studentDetails">
               <Properties>
                 <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
+
                   <Table columnCount="6" rowCount="25">
+                  <Table columnCount="6" rowCount="0">
                     <Column editable="true" title="Mssv" type="java.lang.Object"/>
                     <Column editable="true" title="H&#x1ecd; v&#xe0; t&#xea;n" type="java.lang.Object"/>
                     <Column editable="true" title="Gi&#x1edb;i t&#xed;nh" type="java.lang.Object"/>
