@@ -5,6 +5,7 @@
 package jframe;
 
 import javax.swing.table.DefaultTableModel;
+import models.Student;
 
 /**
  *
@@ -15,6 +16,8 @@ import javax.swing.JOptionPane;
 import javax.swing.table.TableModel;
 import java.text.SimpleDateFormat;
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class ManageStudents extends javax.swing.JFrame {
@@ -30,7 +33,7 @@ public class ManageStudents extends javax.swing.JFrame {
         setStudentDetailsToTable();
     }
 
-//    to set the book details into table
+//    to set the student details into table
     public void setStudentDetailsToTable() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -178,6 +181,68 @@ private Date parseDate(String dateString) {
         }
         return isDeleted;
     }
+    
+//  method to find student based on studentID and major
+    public Student searchByID(String studentID) {
+        String sql = "SELECT * FROM student_details WHERE studentID = ?";
+        try (Connection con = DBConnection.getConnection();
+            PreparedStatement pst = con.prepareStatement(sql)) {
+            pst.setString(1, studentID);
+            ResultSet rs = pst.executeQuery();
+
+            if (rs.next()) {
+                String id = rs.getString("studentID");
+                String name = rs.getString("StudentName");
+                String gender = rs.getString("gender");
+                Date birthday = rs.getDate("birthday");
+                String email = rs.getString("studentEmail");
+                String studentMajor = rs.getString("major");
+
+                // Tạo đối tượng sinh viên từ dữ liệu được trả về từ cơ sở dữ liệu
+                Student student = new Student(id, name, gender, birthday, email, studentMajor);
+                return student;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null; // Trả về null nếu không tìm thấy sinh viên
+    }
+
+    public List<Student> searchByMajor(String major) {
+        List<Student> studentList = new ArrayList<>();
+        String sql = "SELECT * FROM student_details WHERE major = ?";
+        try (Connection con = DBConnection.getConnection();
+            PreparedStatement pst = con.prepareStatement(sql)) {
+            pst.setString(1, major);
+            ResultSet rs = pst.executeQuery();
+        
+            // Duyệt qua các dòng kết quả và thêm vào danh sách
+            while (rs.next()) {
+                String id = rs.getString("studentID");
+                String name = rs.getString("StudentName");
+                String gender = rs.getString("gender");
+                Date birthday = rs.getDate("birthday");
+                String email = rs.getString("studentEmail");
+                String studentMajor = rs.getString("major");
+
+                // Định dạng ngày sinh thành chuỗi yyyy-MM-dd
+                //SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                //String formattedBirthday = dateFormat.format(birthday);
+
+                Student st = new Student(id, name, gender,birthday, email, studentMajor);
+                studentList.add(st);
+            }
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return studentList; // Trả về null nếu không tìm thấy sinh viên
+    }
+    
+    
+    public void displayTable(){
+        
+    }
 
 //    method to clear table
     public void clearTable() {
@@ -227,6 +292,15 @@ private Date parseDate(String dateString) {
         tbl_studentDetails = new rojeru_san.complementos.RSTableMetro();
         jPanel2 = new javax.swing.JPanel();
         lblThongTinSV = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        txtFindID = new javax.swing.JTextField();
+        txtFindMajor = new javax.swing.JTextField();
+        jPanel3 = new javax.swing.JPanel();
+        jButton1 = new javax.swing.JButton();
+        jLabel6 = new javax.swing.JLabel();
+        btnHienThi = new rojeru_san.complementos.RSButtonHover();
+        btnLamMoi = new rojeru_san.complementos.RSButtonHover();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -379,6 +453,22 @@ private Date parseDate(String dateString) {
                 {null, null, null, null, null, null},
                 {null, null, null, null, null, null},
                 {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
                 {null, null, null, null, null, null}
             },
             new String [] {
@@ -396,15 +486,80 @@ private Date parseDate(String dateString) {
         });
         jScrollPane2.setViewportView(tbl_studentDetails);
 
-        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 140, 940, 330));
+        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 270, 940, 440));
 
         jPanel2.setBackground(new java.awt.Color(153, 153, 255));
+        jPanel2.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
         lblThongTinSV.setFont(new java.awt.Font("Montserrat", 1, 48)); // NOI18N
         lblThongTinSV.setText("Thông tin sinh viên");
         jPanel2.add(lblThongTinSV);
 
-        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 40, 940, 80));
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, 940, 80));
+
+        jLabel1.setBackground(new java.awt.Color(153, 153, 153));
+        jLabel1.setFont(new java.awt.Font("Segoe UI Semibold", 0, 18)); // NOI18N
+        jLabel1.setText("Tìm kiếm theo mã sinh viên");
+        jLabel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 130, 250, 40));
+
+        jLabel3.setBackground(new java.awt.Color(204, 204, 204));
+        jLabel3.setFont(new java.awt.Font("Segoe UI Semibold", 0, 18)); // NOI18N
+        jLabel3.setText("Tìm kiếm theo chuyên ngành");
+        jLabel3.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 190, 250, 40));
+
+        txtFindID.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        txtFindID.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtFindIDActionPerformed(evt);
+            }
+        });
+        jPanel1.add(txtFindID, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 130, 310, 40));
+
+        txtFindMajor.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        txtFindMajor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtFindMajorActionPerformed(evt);
+            }
+        });
+        jPanel1.add(txtFindMajor, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 190, 310, 40));
+
+        jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 190, -1, 40));
+
+        jButton1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jButton1.setForeground(new java.awt.Color(0, 153, 255));
+        jButton1.setText("Tìm kiếm");
+        jButton1.setBorder(null);
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 160, 110, 40));
+
+        jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/kinhLup.png"))); // NOI18N
+        jLabel6.setText("jLabel6");
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 160, 50, 40));
+
+        btnHienThi.setText("Hiển thị");
+        btnHienThi.setFont(new java.awt.Font("Montserrat", 1, 18)); // NOI18N
+        btnHienThi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnHienThiActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnHienThi, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 740, 110, 40));
+
+        btnLamMoi.setText("Làm mới");
+        btnLamMoi.setFont(new java.awt.Font("Montserrat", 1, 18)); // NOI18N
+        btnLamMoi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLamMoiActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnLamMoi, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 740, 110, 40));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 0, 1030, 830));
 
@@ -413,7 +568,6 @@ private Date parseDate(String dateString) {
 
     private void jLabel8MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel8MouseClicked
         HomePage homePage = new HomePage();
-
         homePage.setVisible(true);
         dispose();
     }//GEN-LAST:event_jLabel8MouseClicked
@@ -481,6 +635,53 @@ private Date parseDate(String dateString) {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtStudentEmailActionPerformed
 
+    private void txtFindIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFindIDActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtFindIDActionPerformed
+
+    private void txtFindMajorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFindMajorActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtFindMajorActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        String masv = txtFindID.getText();
+        String nganh = txtFindMajor.getText();
+        
+        if (!masv.isEmpty() && nganh.isEmpty()){
+            //người dùng nhập mã sinh viên
+            Student sv = searchByID(masv);
+            if (sv != null) {
+                model.setRowCount(0);
+                Object[] row = {sv.getStudentID(), sv.getName(), sv.getGender(), sv.getBirthday(), sv.getEmail(), sv.getMajor()};
+                model.addRow(row);
+                JOptionPane.showMessageDialog(rootPane, "Tìm kiếm sinh viên thành công");
+            } else {
+                JOptionPane.showMessageDialog(rootPane, "Không tìm thấy sinh viên có mã " + masv);
+                txtFindID.setText("");
+            }
+        } else if (!nganh.isEmpty() && masv.isEmpty()){
+            List<Student> danhSachSV = searchByMajor(nganh);
+            if (!danhSachSV.isEmpty()) {
+                model.setRowCount(0); 
+                for (Student sv : danhSachSV) {
+                    Object[] row = {sv.getStudentID(), sv.getName(), sv.getGender(), sv.getBirthday(), sv.getEmail(), sv.getMajor()};
+                    model.addRow(row);
+                }
+                JOptionPane.showMessageDialog(rootPane, "Tìm kiếm sản phẩm theo đơn vị tính thành công");
+            } else {
+                JOptionPane.showMessageDialog(rootPane, "Không tìm thấy sản phẩm có đơn vị tính là " + nganh);
+            }
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void btnHienThiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHienThiActionPerformed
+        setStudentDetailsToTable();
+    }//GEN-LAST:event_btnHienThiActionPerformed
+
+    private void btnLamMoiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLamMoiActionPerformed
+        clearTable();
+    }//GEN-LAST:event_btnLamMoiActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -518,19 +719,26 @@ private Date parseDate(String dateString) {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private rojeru_san.complementos.RSButtonHover btnHienThi;
+    private rojeru_san.complementos.RSButtonHover btnLamMoi;
     private rojeru_san.complementos.RSButtonHover btnSua;
     private rojeru_san.complementos.RSButtonHover btnThem;
     private rojeru_san.complementos.RSButtonHover btnXoa;
     private javax.swing.JComboBox<String> comboMajor;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
@@ -539,6 +747,8 @@ private Date parseDate(String dateString) {
     private javax.swing.JLabel lblThongTinSV;
     private rojeru_san.complementos.RSTableMetro tbl_studentDetails;
     private app.bolivia.swing.JCTextField txtBirthday;
+    private javax.swing.JTextField txtFindID;
+    private javax.swing.JTextField txtFindMajor;
     private app.bolivia.swing.JCTextField txtGender;
     private app.bolivia.swing.JCTextField txtStudentEmail;
     private app.bolivia.swing.JCTextField txtStudentID;
