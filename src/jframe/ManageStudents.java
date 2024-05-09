@@ -42,6 +42,7 @@ public class ManageStudents extends javax.swing.JFrame {
             ResultSet rs = st.executeQuery("select * from student_details");
 
             while (rs.next()) {
+                int serialID = rs.getInt("serialID");
                 String studentID = rs.getString("studentID");
                 String studentName = rs.getString("StudentName");
                 String gender = rs.getString("gender");
@@ -54,7 +55,7 @@ public class ManageStudents extends javax.swing.JFrame {
                 String formattedBirthday = dateFormat.format(birthday);
                 
                 
-                Object[] obj = {studentID, studentName, gender, formattedBirthday, studentEmail, major};
+                Object[] obj = {serialID, studentID, studentName, gender, formattedBirthday, studentEmail, major};
                 model = (DefaultTableModel) tbl_studentDetails.getModel();
                 model.addRow(obj);
 
@@ -83,7 +84,7 @@ public class ManageStudents extends javax.swing.JFrame {
         try {
             Connection conn = DBConnection.getConnection();
             String sql = "INSERT INTO student_details (studentID, StudentName, gender, birthday, studentEmail, major) VALUES (?, ?, ?, ?, ?, ?)";
-            PreparedStatement pst = conn.prepareStatement(sql);
+            PreparedStatement pst = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             pst.setString(1, studentID);
             pst.setString(2, studentName);
             pst.setString(3, gender);
@@ -93,6 +94,16 @@ public class ManageStudents extends javax.swing.JFrame {
 
             int rowCount = pst.executeUpdate();
             if (rowCount > 0) {
+                // Lấy giá trị của serialID đã được tự động tăng
+                ResultSet generatedKeys = pst.getGeneratedKeys();
+
+                if (generatedKeys.next()) {
+                    int serialID = generatedKeys.getInt(1);
+                    // Đổ dữ liệu vào table
+                    Object[] obj = {serialID, studentID, studentName, gender, birthdayString, studentEmail, major};
+                    DefaultTableModel model = (DefaultTableModel) tbl_studentDetails.getModel();
+                    model.addRow(obj);
+                }
                 isAdded = true;
             }
         } catch (SQLException e) {
@@ -283,10 +294,8 @@ private Date parseDate(String dateString) {
         jLabel5 = new javax.swing.JLabel();
         txtBirthday = new app.bolivia.swing.JCTextField();
         txtStudentEmail = new app.bolivia.swing.JCTextField();
-        btnThem = new rojeru_san.complementos.RSButtonHover();
-        btnXoa = new rojeru_san.complementos.RSButtonHover();
-        btnSua = new rojeru_san.complementos.RSButtonHover();
         comboMajor = new javax.swing.JComboBox<>();
+        jLabel10 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tbl_studentDetails = new rojeru_san.complementos.RSTableMetro();
@@ -301,6 +310,9 @@ private Date parseDate(String dateString) {
         jLabel6 = new javax.swing.JLabel();
         btnHienThi = new rojeru_san.complementos.RSButtonHover();
         btnLamMoi = new rojeru_san.complementos.RSButtonHover();
+        btnSua = new rojeru_san.complementos.RSButtonHover();
+        btnXoa = new rojeru_san.complementos.RSButtonHover();
+        btnThem = new rojeru_san.complementos.RSButtonHover();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -312,7 +324,7 @@ private Date parseDate(String dateString) {
         jLabel9.setFont(new java.awt.Font("Montserrat SemiBold", 0, 18)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(255, 255, 255));
         jLabel9.setText("MSSV");
-        jPanel4.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 90, -1, -1));
+        jPanel4.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 210, -1, -1));
 
         txtStudentID.setFont(new java.awt.Font("Montserrat", 0, 18)); // NOI18N
         txtStudentID.setPlaceholder("Nhập mã số sinh viên");
@@ -321,7 +333,7 @@ private Date parseDate(String dateString) {
                 txtStudentIDActionPerformed(evt);
             }
         });
-        jPanel4.add(txtStudentID, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 120, 280, 40));
+        jPanel4.add(txtStudentID, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 240, 280, 40));
 
         txtStudentName.setFont(new java.awt.Font("Montserrat", 0, 18)); // NOI18N
         txtStudentName.setPlaceholder("Nhập họ và tên sinh viên");
@@ -330,7 +342,7 @@ private Date parseDate(String dateString) {
                 txtStudentNameActionPerformed(evt);
             }
         });
-        jPanel4.add(txtStudentName, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 220, 280, 40));
+        jPanel4.add(txtStudentName, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 320, 280, 40));
 
         txtGender.setFont(new java.awt.Font("Montserrat", 0, 18)); // NOI18N
         txtGender.setPlaceholder("Nhập giới tính");
@@ -339,22 +351,22 @@ private Date parseDate(String dateString) {
                 txtGenderActionPerformed(evt);
             }
         });
-        jPanel4.add(txtGender, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 310, 280, 40));
+        jPanel4.add(txtGender, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 410, 280, 40));
 
         jLabel11.setFont(new java.awt.Font("Montserrat SemiBold", 0, 18)); // NOI18N
         jLabel11.setForeground(new java.awt.Color(255, 255, 255));
         jLabel11.setText("Giới tính");
-        jPanel4.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 280, -1, -1));
+        jPanel4.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 380, -1, -1));
 
         jLabel2.setFont(new java.awt.Font("Montserrat SemiBold", 0, 18)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Chuyên ngành");
-        jPanel4.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 560, -1, -1));
+        jPanel4.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 650, -1, -1));
 
         jLabel7.setFont(new java.awt.Font("Montserrat SemiBold", 0, 18)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(255, 255, 255));
         jLabel7.setText("Họ và tên");
-        jPanel4.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 190, -1, -1));
+        jPanel4.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 290, -1, -1));
 
         jPanel5.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -383,12 +395,12 @@ private Date parseDate(String dateString) {
         jLabel4.setFont(new java.awt.Font("Montserrat SemiBold", 0, 18)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("Ngày sinh");
-        jPanel4.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 370, -1, -1));
+        jPanel4.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 470, -1, -1));
 
         jLabel5.setFont(new java.awt.Font("Montserrat SemiBold", 0, 18)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setText("Địa chỉ email");
-        jPanel4.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 460, -1, -1));
+        jPanel4.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 560, -1, -1));
 
         txtBirthday.setFont(new java.awt.Font("Montserrat", 0, 18)); // NOI18N
         txtBirthday.setPlaceholder("Nhập ngày sinh");
@@ -397,7 +409,7 @@ private Date parseDate(String dateString) {
                 txtBirthdayActionPerformed(evt);
             }
         });
-        jPanel4.add(txtBirthday, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 400, 280, 40));
+        jPanel4.add(txtBirthday, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 500, 280, 40));
 
         txtStudentEmail.setFont(new java.awt.Font("Montserrat", 0, 18)); // NOI18N
         txtStudentEmail.setPlaceholder("Nhập email");
@@ -406,47 +418,49 @@ private Date parseDate(String dateString) {
                 txtStudentEmailActionPerformed(evt);
             }
         });
-        jPanel4.add(txtStudentEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 500, 280, 40));
-
-        btnThem.setText("Thêm");
-        btnThem.setFont(new java.awt.Font("Montserrat", 1, 18)); // NOI18N
-        btnThem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnThemActionPerformed(evt);
-            }
-        });
-        jPanel4.add(btnThem, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 740, 90, -1));
-
-        btnXoa.setText("Xóa");
-        btnXoa.setFont(new java.awt.Font("Montserrat", 1, 18)); // NOI18N
-        btnXoa.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnXoaActionPerformed(evt);
-            }
-        });
-        jPanel4.add(btnXoa, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 740, 100, 40));
-
-        btnSua.setText("Sửa");
-        btnSua.setFont(new java.awt.Font("Montserrat", 1, 18)); // NOI18N
-        btnSua.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSuaActionPerformed(evt);
-            }
-        });
-        jPanel4.add(btnSua, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 740, 90, 40));
+        jPanel4.add(txtStudentEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 590, 280, 40));
 
         comboMajor.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         comboMajor.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "CNTT", "HTTT", "KHMT", " " }));
-        jPanel4.add(comboMajor, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 590, 280, 40));
+        jPanel4.add(comboMajor, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 680, 280, 40));
+
+        jLabel10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/adminIcons/male_user_50px.png"))); // NOI18N
+        jPanel4.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 140, 50, 60));
 
         getContentPane().add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 420, 830));
 
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         tbl_studentDetails.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {},
+            new Object [][] {
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null}
+            },
             new String [] {
-                "Mssv", "Họ và tên", "Giới tính", "Ngày sinh", "Địa chỉ email", "Chuyên ngành"
+                "STT", "Mssv", "Họ và tên", "Giới tính", "Ngày sinh", "Địa chỉ email", "Chuyên ngành"
             }
         ));
         tbl_studentDetails.setColorBordeFilas(new java.awt.Color(255, 255, 255));
@@ -460,7 +474,7 @@ private Date parseDate(String dateString) {
         });
         jScrollPane2.setViewportView(tbl_studentDetails);
 
-        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 270, 940, 440));
+        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 270, 990, 440));
 
         jPanel2.setBackground(new java.awt.Color(153, 153, 255));
         jPanel2.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
@@ -469,18 +483,16 @@ private Date parseDate(String dateString) {
         lblThongTinSV.setText("Thông tin sinh viên");
         jPanel2.add(lblThongTinSV);
 
-        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, 940, 80));
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 20, 990, 80));
 
         jLabel1.setBackground(new java.awt.Color(153, 153, 153));
         jLabel1.setFont(new java.awt.Font("Segoe UI Semibold", 0, 18)); // NOI18N
         jLabel1.setText("Tìm kiếm theo mã sinh viên");
-        jLabel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 130, 250, 40));
 
         jLabel3.setBackground(new java.awt.Color(204, 204, 204));
         jLabel3.setFont(new java.awt.Font("Segoe UI Semibold", 0, 18)); // NOI18N
         jLabel3.setText("Tìm kiếm theo chuyên ngành");
-        jLabel3.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 190, 250, 40));
 
         txtFindID.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
@@ -524,7 +536,7 @@ private Date parseDate(String dateString) {
                 btnHienThiActionPerformed(evt);
             }
         });
-        jPanel1.add(btnHienThi, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 740, 110, 40));
+        jPanel1.add(btnHienThi, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 760, 110, 40));
 
         btnLamMoi.setText("Làm mới");
         btnLamMoi.setFont(new java.awt.Font("Montserrat", 1, 18)); // NOI18N
@@ -533,7 +545,34 @@ private Date parseDate(String dateString) {
                 btnLamMoiActionPerformed(evt);
             }
         });
-        jPanel1.add(btnLamMoi, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 740, 110, 40));
+        jPanel1.add(btnLamMoi, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 760, 110, 40));
+
+        btnSua.setText("Sửa");
+        btnSua.setFont(new java.awt.Font("Montserrat", 1, 18)); // NOI18N
+        btnSua.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSuaActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnSua, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 760, 90, -1));
+
+        btnXoa.setText("Xóa");
+        btnXoa.setFont(new java.awt.Font("Montserrat", 1, 18)); // NOI18N
+        btnXoa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnXoaActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnXoa, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 760, 100, -1));
+
+        btnThem.setText("Thêm");
+        btnThem.setFont(new java.awt.Font("Montserrat", 1, 18)); // NOI18N
+        btnThem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnThemActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnThem, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 760, 90, -1));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 0, 1030, 830));
 
@@ -595,9 +634,9 @@ private Date parseDate(String dateString) {
         int rowNo = tbl_studentDetails.getSelectedRow();
         TableModel model = tbl_studentDetails.getModel();
 
-        txtStudentID.setText(model.getValueAt(rowNo, 0).toString());
-        txtStudentName.setText(model.getValueAt(rowNo, 1).toString());
-        comboMajor.setSelectedItem(model.getValueAt(rowNo, 2).toString());
+        txtStudentID.setText(model.getValueAt(rowNo, 1).toString());
+        txtStudentName.setText(model.getValueAt(rowNo, 2).toString());
+        comboMajor.setSelectedItem(model.getValueAt(rowNo, 3).toString());
         
     }//GEN-LAST:event_tbl_studentDetailsMouseClicked
 
@@ -641,9 +680,9 @@ private Date parseDate(String dateString) {
                     Object[] row = {sv.getStudentID(), sv.getName(), sv.getGender(), sv.getBirthday(), sv.getEmail(), sv.getMajor()};
                     model.addRow(row);
                 }
-                JOptionPane.showMessageDialog(rootPane, "Tìm kiếm sản phẩm theo đơn vị tính thành công");
+                JOptionPane.showMessageDialog(rootPane, "Tìm kiếm sinh viên theo chuyên ngành thành công");
             } else {
-                JOptionPane.showMessageDialog(rootPane, "Không tìm thấy sản phẩm có đơn vị tính là " + nganh);
+                JOptionPane.showMessageDialog(rootPane, "Không tìm thấy sinh viên có ngành là " + nganh);
             }
         }
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -701,6 +740,7 @@ private Date parseDate(String dateString) {
     private javax.swing.JComboBox<String> comboMajor;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
