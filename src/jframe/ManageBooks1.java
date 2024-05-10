@@ -5,10 +5,7 @@
 package jframe;
 
 import javax.swing.table.DefaultTableModel;
-import javax.swing.RowSorter;
-import javax.swing.SortOrder;
-import javax.swing.table.TableRowSorter;
-import models.Student;
+import models.Book;
 
 /**
  *
@@ -23,43 +20,39 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class ManageStudents extends javax.swing.JFrame {
+public class ManageBooks1 extends javax.swing.JFrame {
 
     /**
      * Creates new form ManageBooks
      */
-    String studentID, studentName, gender, studentEmail, major, birthday;
+    String bookID, bookName, category, author, publisher;
+    int quantity;
     DefaultTableModel model;
 
-    public ManageStudents() {
+    public ManageBooks1() {
         initComponents();
-        setStudentDetailsToTable();
+        setBookDetailsToTable();
     }
 
 //    to set the student details into table
-    public void setStudentDetailsToTable() {
+    public void setBookDetailsToTable() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/quanlythuvien", "root", "");
             Statement st = conn.createStatement();
-            ResultSet rs = st.executeQuery("select * from student_details");
+            ResultSet rs = st.executeQuery("select * from book_details");
 
             while (rs.next()) {
                 int serialID = rs.getInt("serialID");
-                String studentID = rs.getString("studentID");
-                String studentName = rs.getString("StudentName");
-                String gender = rs.getString("gender");
-                java.sql.Date birthday = rs.getDate("birthday");
-                String studentEmail = rs.getString("studentEmail");
-                String major = rs.getString("major");
+                String bookID = rs.getString("bookID");
+                String bookName = rs.getString("bookName");
+                String category = rs.getString("category");
+                String author = rs.getString("author");
+                String publisher = rs.getString("publisher");
+                String quantity = rs.getString("quantity");
 
-                // Định dạng ngày sinh thành chuỗi yyyy-MM-dd
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                String formattedBirthday = dateFormat.format(birthday);
-                
-                
-                Object[] obj = {serialID, studentID, studentName, gender, formattedBirthday, studentEmail, major};
-                model = (DefaultTableModel) tbl_studentDetails.getModel();
+                Object[] obj = {serialID, bookID, bookName, category, author, publisher, quantity};
+                model = (DefaultTableModel) tbl_bookDetails.getModel();
                 model.addRow(obj);
 
             }
@@ -69,25 +62,22 @@ public class ManageStudents extends javax.swing.JFrame {
     }
 
 //    to add book to book_details table
-    public boolean addStudent() {
-    boolean isAdded = false;
+   public boolean addBook() {
+        boolean isAdded = false;
 
-    // Lấy thông tin sinh viên từ các trường nhập liệu
-    String studentID = txtStudentID.getText();
-    String studentName = txtStudentName.getText();
-    String gender = txtGender.getText();
-    String birthdayString = txtBirthday.getText();
-    String studentEmail = txtStudentEmail.getText();
-    String major = comboMajor.getSelectedItem().toString();
+        // Lấy thông tin sách từ các trường nhập liệu
+        String bookID = txtBookID.getText();
+        String bookName = txtBookName.getText();
+        String category = comboCategory.getSelectedItem().toString();
+        String author = txtAuthor.getText();
+        String publisher = txtPublisher.getText();
+        int quantity = Integer.parseInt(txtQuantity.getText());
 
-    // Chuyển đổi chuỗi ngày sinh thành kiểu java.sql.Date
-    Date birthday = parseDate(birthdayString);
-
-    // Thực hiện thêm sinh viên vào cơ sở dữ liệu
-    try {
-        Connection conn = DBConnection.getConnection();
-        
-        // Lấy giá trị serialID lớn nhất hiện có
+        // Thực hiện thêm sách vào cơ sở dữ liệu
+        try {
+            Connection conn = DBConnection.getConnection();
+            
+            // Lấy giá trị serialID lớn nhất hiện có
         String getMaxSerialIDSql = "SELECT MAX(serialID) AS max_serialID FROM student_details";
         Statement getMaxSerialIDStatement = conn.createStatement();
         ResultSet rs = getMaxSerialIDStatement.executeQuery(getMaxSerialIDSql);
@@ -99,77 +89,58 @@ public class ManageStudents extends javax.swing.JFrame {
         
         // Tăng giá trị serialID lên một đơn vị
         int newSerialID = maxSerialID + 1;
+            
+            String sql = "INSERT INTO book_details (serialID, bookID, bookName, category, author, publisher, quantity) VALUES (?, ?, ?, ?, ?, ?)";
+            PreparedStatement pst = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            pst.setInt(1, newSerialID);
+            pst.setString(2, bookID);
+            pst.setString(3, bookName);
+            pst.setString(4, category);
+            pst.setString(5, author);
+            pst.setString(6, publisher);
+            pst.setInt(7, quantity);
 
-        // Thêm sinh viên mới vào cơ sở dữ liệu với giá trị serialID mới
-        String sql = "INSERT INTO student_details (serialID, studentID, StudentName, gender, birthday, studentEmail, major) VALUES (?, ?, ?, ?, ?, ?, ?)";
-        PreparedStatement pst = conn.prepareStatement(sql);
-        pst.setInt(1, newSerialID);
-        pst.setString(2, studentID);
-        pst.setString(3, studentName);
-        pst.setString(4, gender);
-        pst.setDate(5, birthday);
-        pst.setString(6, studentEmail);
-        pst.setString(7, major);
+            int rowCount = pst.executeUpdate();
+            if (rowCount > 0) {
+                // Lấy giá trị của serialID đã được tự động tăng
+                ResultSet generatedKeys = pst.getGeneratedKeys();
 
-        int rowCount = pst.executeUpdate();
-        if (rowCount > 0) {
-            // Đổ dữ liệu vào table
-            Object[] obj = {newSerialID, studentID, studentName, gender, birthdayString, studentEmail, major};
-            DefaultTableModel model = (DefaultTableModel) tbl_studentDetails.getModel();
-            model.addRow(obj);
-            isAdded = true;
+                if (generatedKeys.next()) {
+                    int serialID = generatedKeys.getInt(1);
+                    // Đổ dữ liệu vào table
+                    Object[] obj = {newSerialID, bookID, bookName, category, author, publisher, quantity};
+                    DefaultTableModel model = (DefaultTableModel) tbl_bookDetails.getModel();
+                    model.addRow(obj);
+                }
+                isAdded = true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-    } catch (SQLException e) {
-        e.printStackTrace();
+
+        return isAdded;
     }
-
-    return isAdded;
-}
-
-
-// Phương thức chuyển đổi chuỗi ngày thành java.sql.Date
-private Date parseDate(String dateString) {
-    SimpleDateFormat[] formats = {
-        new SimpleDateFormat("yyyy-MM-dd"),
-        new SimpleDateFormat("dd/MM/yyyy"),
-        new SimpleDateFormat("MM/dd/yyyy")
-    };
-
-    for (SimpleDateFormat format : formats) {
-        try {
-            format.setLenient(false);
-            return new Date(format.parse(dateString).getTime());
-        } catch (ParseException e) {
-            // Không làm gì cả, thử định dạng tiếp theo
-        }
-    }
-    
-    // Nếu không có định dạng nào phù hợp
-    throw new IllegalArgumentException("Ngày không hợp lệ: " + dateString);
-}
 
 //    to update book details
-    public boolean updateStudent() {
+    public boolean updateBook() {
         boolean isUpdated = false;
-        String studentID = txtStudentID.getText();
-        String studentName = txtStudentName.getText();
-        String gender = txtGender.getText();
-        String birthdayString = txtBirthday.getText();
-        String studentEmail = txtStudentEmail.getText();
-        String major = comboMajor.getSelectedItem().toString();
-
-        Date birthday = parseDate(birthdayString);
+        String bookID = txtBookID.getText();
+        String bookName = txtBookName.getText();
+        String category = comboCategory.getSelectedItem().toString();
+        String author = txtAuthor.getText();
+        String publisher = txtPublisher.getText();
+        int quantity = Integer.parseInt(txtQuantity.getText());
 
         try {
             Connection con = DBConnection.getConnection();
-            String sql = "update student_details set studentName = ?, gender = ?, birthday = ?, studentEmail = ?, major = ?   where studentID = ?";
+            String sql = "update book_details set bookName = ?, category = ?, author = ?, publisher = ?, quantity = ?   where bookID = ?";
             PreparedStatement pst = con.prepareStatement(sql);
-            pst.setString(1, studentName);
-            pst.setString(2, gender);
-            pst.setDate(3, birthday);
-            pst.setString(4, studentEmail);
-            pst.setString(5, major);
-            pst.setString(6, studentID);
+            pst.setString(1, bookID);
+            pst.setString(2, bookName);
+            pst.setString(3, category);
+            pst.setString(4, author);
+            pst.setString(5, publisher);
+            pst.setInt(6, quantity);
 
             int rowCount = pst.executeUpdate();
             if (rowCount > 0) {
@@ -183,136 +154,112 @@ private Date parseDate(String dateString) {
         return isUpdated;
     }
 
-//    method to delete student detail
-    public boolean deleteStudent() {
-    boolean isDeleted = false;
-    studentID = txtStudentID.getText(); // Lấy giá trị studentID từ textfield
+//    method to delete book detail
+    public boolean deleteBook() {
+        boolean isDeleted = false;
+        bookID = txtBookID.getText();
 
-    try {
-        Connection con = DBConnection.getConnection();
-        // Lấy serialID của sinh viên được chọn
-        String serialIDSql = "SELECT serialID FROM student_details WHERE studentID = ?";
-        PreparedStatement serialIDStatement = con.prepareStatement(serialIDSql);
-        serialIDStatement.setString(1, studentID);
-        ResultSet rs = serialIDStatement.executeQuery();
-        int serialID = 0;
-        if(rs.next()) {
-            serialID = rs.getInt("serialID");
+        try {
+            Connection con = DBConnection.getConnection();
+            // Lấy serialID của sinh viên được chọn
+            String serialIDSql = "SELECT serialID FROM student_details WHERE studentID = ?";
+            PreparedStatement serialIDStatement = con.prepareStatement(serialIDSql);
+            serialIDStatement.setString(1, bookID);
+            ResultSet rs = serialIDStatement.executeQuery();
+            int serialID = 0;
+            if(rs.next()) {
+                serialID = rs.getInt("serialID");
+            }
+            // Xóa sách có book_id được chỉ định
+            String deleteSql = "DELETE FROM book_details WHERE bookID = ?";
+            PreparedStatement deleteStatement = con.prepareStatement(deleteSql);
+            deleteStatement.setString(1, bookID);
+            int deleteRowCount = deleteStatement.executeUpdate();
+
+            // Cập nhật lại số thứ tự của các sách còn lại
+            String updateSql = "UPDATE book_details SET serialID = serialID - 1 WHERE serialID > ?";
+            PreparedStatement updateStatement = con.prepareStatement(updateSql);
+            updateStatement.setInt(1, serialID);
+            int updateRowCount = updateStatement.executeUpdate();
+
+            // Kiểm tra nếu sinh viên đã được xóa và số thứ tự đã được cập nhật
+            if (deleteRowCount > 0 && updateRowCount > 0) {
+                isDeleted = true;
+            } else {
+                isDeleted = false;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        rs.close();
-        
-        // Xóa sinh viên có student_id được chỉ định
-        String deleteSql = "DELETE FROM student_details WHERE studentID = ?";
-        PreparedStatement deleteStatement = con.prepareStatement(deleteSql);
-        deleteStatement.setString(1, studentID);
-        int deleteRowCount = deleteStatement.executeUpdate();
-
-        // Cập nhật lại số thứ tự của các sinh viên còn lại
-        String updateSql = "UPDATE student_details SET serialID = serialID - 1 WHERE serialID > ?";
-        PreparedStatement updateStatement = con.prepareStatement(updateSql);
-        updateStatement.setInt(1, serialID);
-        int updateRowCount = updateStatement.executeUpdate();
-
-        // Kiểm tra nếu sinh viên đã được xóa và số thứ tự đã được cập nhật
-        if (deleteRowCount > 0 && updateRowCount > 0) {
-            isDeleted = true;
-        } else {
-            isDeleted = false;
-        }
-    } catch (Exception e) {
-        e.printStackTrace();
+        return isDeleted;
     }
-    return isDeleted;
-}
-
-
     
-//  method to find student based on studentID and major
-    public Student searchByID(String studentID) {
-        String sql = "SELECT * FROM student_details WHERE studentID = ?";
+//  method to find book based on bookID and category
+    public Book searchByID(String bookID) {
+        String sql = "SELECT * FROM book_details WHERE bookID = ?";
         try (Connection con = DBConnection.getConnection();
             PreparedStatement pst = con.prepareStatement(sql)) {
-            pst.setString(1, studentID);
+            pst.setString(1, bookID);
             ResultSet rs = pst.executeQuery();
 
             if (rs.next()) {
-                int serialID = rs.getInt("serialID");
-                String id = rs.getString("studentID");
-                String name = rs.getString("StudentName");
-                String gender = rs.getString("gender");
-                Date birthday = rs.getDate("birthday");
-                String email = rs.getString("studentEmail");
-                String studentMajor = rs.getString("major");
+                String bookName = rs.getString("bookName");
+                String category = rs.getString("category");
+                String author = rs.getString("author");
+                String publisher = rs.getString("publisher");
+                int quantity = Integer.valueOf(rs.getString("quantity"));
 
-                // Tạo đối tượng sinh viên từ dữ liệu được trả về từ cơ sở dữ liệu
-                Student student = new Student(id, name, gender, birthday, email, studentMajor);
-                return student;
+                // Tạo đối tượng sách từ dữ liệu được trả về từ cơ sở dữ liệu
+                Book book = new Book(bookID, bookName, category, author, publisher, quantity);
+                return book;
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null; // Trả về null nếu không tìm thấy sinh viên
+        return null; // Trả về null nếu không tìm thấy sách
     }
 
-    public List<Student> searchByMajor(String major) {
-        List<Student> studentList = new ArrayList<>();
-        String sql = "SELECT * FROM student_details WHERE major = ?";
+    public List<Book> searchByCategory(String category) {
+        List<Book> bookList = new ArrayList<>();
+        String sql = "SELECT * FROM book_details WHERE category = ?";
         try (Connection con = DBConnection.getConnection();
             PreparedStatement pst = con.prepareStatement(sql)) {
-            pst.setString(1, major);
+            pst.setString(1, category);
             ResultSet rs = pst.executeQuery();
         
             // Duyệt qua các dòng kết quả và thêm vào danh sách
             while (rs.next()) {
-                String id = rs.getString("studentID");
-                String name = rs.getString("StudentName");
-                String gender = rs.getString("gender");
-                Date birthday = rs.getDate("birthday");
-                String email = rs.getString("studentEmail");
-                String studentMajor = rs.getString("major");
+                String bookID = rs.getString("bookID");
+                String bookName = rs.getString("bookName");
+                String author = rs.getString("author");
+                String publisher = rs.getString("publisher");
+                int quantity = Integer.valueOf(rs.getString("quantity"));
 
-                // Định dạng ngày sinh thành chuỗi yyyy-MM-dd
-                //SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                //String formattedBirthday = dateFormat.format(birthday);
-
-                Student st = new Student(id, name, gender,birthday, email, studentMajor);
-                studentList.add(st);
+                Book book = new Book(bookID, bookName, category, author, publisher, quantity);
+                bookList.add(book);
             }
             
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return studentList; // Trả về null nếu không tìm thấy sinh viên
+        return bookList; // Trả về null nếu không tìm thấy sách
     }
     
     
-    public void displayTable(){
-        
-    }
-
 //    method to clear table
     public void clearTable() {
-        DefaultTableModel model = (DefaultTableModel) tbl_studentDetails.getModel();
+        DefaultTableModel model = (DefaultTableModel) tbl_bookDetails.getModel();
         model.setRowCount(0);
     }
 
     public void clearFormInput() {
-        txtStudentID.setText("");
-        txtStudentName.setText("");
-        txtGender.setText("");
-        txtBirthday.setText("");
-        txtStudentEmail.setText("");
+        txtBookID.setText("");
+        txtBookName.setText("");
+        txtQuantity.setText("");
+        txtAuthor.setText("");
+        txtPublisher.setText("");
     }
 
-    // Phương thức để sắp xếp lại dữ liệu trong bảng theo serialID tăng dần
-private void sortDataBySerialID() {
-    DefaultTableModel model = (DefaultTableModel) tbl_studentDetails.getModel();
-    TableRowSorter<TableModel> sorter = new TableRowSorter<>(model);
-    tbl_studentDetails.setRowSorter(sorter);
-    List<RowSorter.SortKey> sortKeys = new ArrayList<>();
-    sortKeys.add(new RowSorter.SortKey(0, SortOrder.ASCENDING)); // Sắp xếp theo cột serialID
-    sorter.setSortKeys(sortKeys);
-}
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -322,11 +269,12 @@ private void sortDataBySerialID() {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
         jPanel4 = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
-        txtStudentID = new app.bolivia.swing.JCTextField();
-        txtStudentName = new app.bolivia.swing.JCTextField();
-        txtGender = new app.bolivia.swing.JCTextField();
+        txtBookID = new app.bolivia.swing.JCTextField();
+        txtBookName = new app.bolivia.swing.JCTextField();
+        txtQuantity = new app.bolivia.swing.JCTextField();
         jLabel11 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
@@ -336,19 +284,19 @@ private void sortDataBySerialID() {
         lblQLSV = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        txtBirthday = new app.bolivia.swing.JCTextField();
-        txtStudentEmail = new app.bolivia.swing.JCTextField();
-        comboMajor = new javax.swing.JComboBox<>();
-        jLabel10 = new javax.swing.JLabel();
+        txtAuthor = new app.bolivia.swing.JCTextField();
+        txtPublisher = new app.bolivia.swing.JCTextField();
+        comboCategory = new javax.swing.JComboBox<>();
+        jLabel12 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        tbl_studentDetails = new rojeru_san.complementos.RSTableMetro();
+        tbl_bookDetails = new rojeru_san.complementos.RSTableMetro();
         jPanel2 = new javax.swing.JPanel();
         lblThongTinSV = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         txtFindID = new javax.swing.JTextField();
-        txtFindMajor = new javax.swing.JTextField();
+        txtFindCategory = new javax.swing.JTextField();
         jPanel3 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
@@ -357,6 +305,8 @@ private void sortDataBySerialID() {
         btnSua = new rojeru_san.complementos.RSButtonHover();
         btnXoa = new rojeru_san.complementos.RSButtonHover();
         btnThem = new rojeru_san.complementos.RSButtonHover();
+        rbtGiaoTrinh = new javax.swing.JRadioButton();
+        rbtThamKhao = new javax.swing.JRadioButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -367,50 +317,50 @@ private void sortDataBySerialID() {
 
         jLabel9.setFont(new java.awt.Font("Montserrat SemiBold", 0, 18)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel9.setText("MSSV");
-        jPanel4.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 210, -1, -1));
+        jLabel9.setText("Mã sách");
+        jPanel4.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 190, -1, -1));
 
-        txtStudentID.setFont(new java.awt.Font("Montserrat", 0, 18)); // NOI18N
-        txtStudentID.setPlaceholder("Nhập mã số sinh viên");
-        txtStudentID.addActionListener(new java.awt.event.ActionListener() {
+        txtBookID.setFont(new java.awt.Font("Montserrat", 0, 18)); // NOI18N
+        txtBookID.setPlaceholder("Nhập mã sách");
+        txtBookID.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtStudentIDActionPerformed(evt);
+                txtBookIDActionPerformed(evt);
             }
         });
-        jPanel4.add(txtStudentID, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 240, 280, 40));
+        jPanel4.add(txtBookID, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 220, 280, 40));
 
-        txtStudentName.setFont(new java.awt.Font("Montserrat", 0, 18)); // NOI18N
-        txtStudentName.setPlaceholder("Nhập họ và tên sinh viên");
-        txtStudentName.addActionListener(new java.awt.event.ActionListener() {
+        txtBookName.setFont(new java.awt.Font("Montserrat", 0, 18)); // NOI18N
+        txtBookName.setPlaceholder("Nhập tên sách");
+        txtBookName.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtStudentNameActionPerformed(evt);
+                txtBookNameActionPerformed(evt);
             }
         });
-        jPanel4.add(txtStudentName, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 320, 280, 40));
+        jPanel4.add(txtBookName, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 310, 280, 40));
 
-        txtGender.setFont(new java.awt.Font("Montserrat", 0, 18)); // NOI18N
-        txtGender.setPlaceholder("Nhập giới tính");
-        txtGender.addActionListener(new java.awt.event.ActionListener() {
+        txtQuantity.setFont(new java.awt.Font("Montserrat", 0, 18)); // NOI18N
+        txtQuantity.setPlaceholder("Nhập số lượng");
+        txtQuantity.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtGenderActionPerformed(evt);
+                txtQuantityActionPerformed(evt);
             }
         });
-        jPanel4.add(txtGender, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 410, 280, 40));
+        jPanel4.add(txtQuantity, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 740, 280, 40));
 
         jLabel11.setFont(new java.awt.Font("Montserrat SemiBold", 0, 18)); // NOI18N
         jLabel11.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel11.setText("Giới tính");
-        jPanel4.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 380, -1, -1));
+        jLabel11.setText("Thể loại");
+        jPanel4.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 370, -1, -1));
 
         jLabel2.setFont(new java.awt.Font("Montserrat SemiBold", 0, 18)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel2.setText("Chuyên ngành");
-        jPanel4.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 650, -1, -1));
+        jLabel2.setText("Số lượng");
+        jPanel4.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 710, -1, -1));
 
         jLabel7.setFont(new java.awt.Font("Montserrat SemiBold", 0, 18)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel7.setText("Họ và tên");
-        jPanel4.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 290, -1, -1));
+        jLabel7.setText("Tên sách");
+        jPanel4.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 280, -1, -1));
 
         jPanel5.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -431,51 +381,52 @@ private void sortDataBySerialID() {
         lblQLSV.setBackground(new java.awt.Color(153, 153, 255));
         lblQLSV.setFont(new java.awt.Font("Verdana", 0, 24)); // NOI18N
         lblQLSV.setForeground(new java.awt.Color(102, 102, 102));
-        lblQLSV.setText("Quản lý sinh viên");
+        lblQLSV.setText("Quản lý sách");
         jPanel6.add(lblQLSV, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 10, -1, -1));
 
         jPanel4.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 10, 340, 50));
 
         jLabel4.setFont(new java.awt.Font("Montserrat SemiBold", 0, 18)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel4.setText("Ngày sinh");
-        jPanel4.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 470, -1, -1));
+        jLabel4.setText("Tác giả");
+        jPanel4.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 530, -1, -1));
 
         jLabel5.setFont(new java.awt.Font("Montserrat SemiBold", 0, 18)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel5.setText("Địa chỉ email");
-        jPanel4.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 560, -1, -1));
+        jLabel5.setText("Nhà xuất bản");
+        jPanel4.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 620, -1, -1));
 
-        txtBirthday.setFont(new java.awt.Font("Montserrat", 0, 18)); // NOI18N
-        txtBirthday.setPlaceholder("Nhập ngày sinh");
-        txtBirthday.addActionListener(new java.awt.event.ActionListener() {
+        txtAuthor.setFont(new java.awt.Font("Montserrat", 0, 18)); // NOI18N
+        txtAuthor.setPlaceholder("Nhập tác giả");
+        txtAuthor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtBirthdayActionPerformed(evt);
+                txtAuthorActionPerformed(evt);
             }
         });
-        jPanel4.add(txtBirthday, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 500, 280, 40));
+        jPanel4.add(txtAuthor, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 560, 280, 40));
 
-        txtStudentEmail.setFont(new java.awt.Font("Montserrat", 0, 18)); // NOI18N
-        txtStudentEmail.setPlaceholder("Nhập email");
-        txtStudentEmail.addActionListener(new java.awt.event.ActionListener() {
+        txtPublisher.setFont(new java.awt.Font("Montserrat", 0, 18)); // NOI18N
+        txtPublisher.setPlaceholder("Nhập nhà xuất bản");
+        txtPublisher.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtStudentEmailActionPerformed(evt);
+                txtPublisherActionPerformed(evt);
             }
         });
-        jPanel4.add(txtStudentEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 590, 280, 40));
+        jPanel4.add(txtPublisher, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 650, 280, 40));
 
-        comboMajor.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        comboMajor.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "CNTT", "HTTT", "KHMT", " " }));
-        jPanel4.add(comboMajor, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 680, 280, 40));
+        comboCategory.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        comboCategory.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Giáo trình", "Sách tham khảo", " " }));
+        jPanel4.add(comboCategory, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 400, 280, 40));
 
-        jLabel10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/adminIcons/male_user_50px.png"))); // NOI18N
-        jPanel4.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 140, 50, 60));
+        jLabel12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/adminIcons/icons8_Book_Shelf_50px.png"))); // NOI18N
+        jLabel12.setText("jLabel12");
+        jPanel4.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 110, 60, 60));
 
         getContentPane().add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 420, 830));
 
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        tbl_studentDetails.setModel(new javax.swing.table.DefaultTableModel(
+        tbl_bookDetails.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null},
@@ -504,19 +455,19 @@ private void sortDataBySerialID() {
                 {null, null, null, null, null, null, null}
             },
             new String [] {
-                "STT", "Mssv", "Họ và tên", "Giới tính", "Ngày sinh", "Địa chỉ email", "Chuyên ngành"
+                "STT", "Mã sách", "Tên sách", "Thể loại", "Tác giả", "Nhà xuất bản", "Số lượng"
             }
         ));
-        tbl_studentDetails.setColorBordeFilas(new java.awt.Color(255, 255, 255));
-        tbl_studentDetails.setColorBordeHead(new java.awt.Color(255, 255, 255));
-        tbl_studentDetails.setRowHeight(30);
-        tbl_studentDetails.setShowGrid(false);
-        tbl_studentDetails.addMouseListener(new java.awt.event.MouseAdapter() {
+        tbl_bookDetails.setColorBordeFilas(new java.awt.Color(255, 255, 255));
+        tbl_bookDetails.setColorBordeHead(new java.awt.Color(255, 255, 255));
+        tbl_bookDetails.setRowHeight(30);
+        tbl_bookDetails.setShowGrid(false);
+        tbl_bookDetails.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tbl_studentDetailsMouseClicked(evt);
+                tbl_bookDetailsMouseClicked(evt);
             }
         });
-        jScrollPane2.setViewportView(tbl_studentDetails);
+        jScrollPane2.setViewportView(tbl_bookDetails);
 
         jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 270, 990, 440));
 
@@ -524,19 +475,19 @@ private void sortDataBySerialID() {
         jPanel2.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
         lblThongTinSV.setFont(new java.awt.Font("Montserrat", 1, 48)); // NOI18N
-        lblThongTinSV.setText("Thông tin sinh viên");
+        lblThongTinSV.setText("Thông tin sách");
         jPanel2.add(lblThongTinSV);
 
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 20, 990, 80));
 
         jLabel1.setBackground(new java.awt.Color(153, 153, 153));
         jLabel1.setFont(new java.awt.Font("Segoe UI Semibold", 0, 18)); // NOI18N
-        jLabel1.setText("Tìm kiếm theo mã sinh viên");
+        jLabel1.setText("Tìm kiếm theo mã sách");
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 130, 250, 40));
 
         jLabel3.setBackground(new java.awt.Color(204, 204, 204));
         jLabel3.setFont(new java.awt.Font("Segoe UI Semibold", 0, 18)); // NOI18N
-        jLabel3.setText("Tìm kiếm theo chuyên ngành");
+        jLabel3.setText("Tìm kiếm theo thể loại sách");
         jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 190, 250, 40));
 
         txtFindID.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
@@ -547,13 +498,13 @@ private void sortDataBySerialID() {
         });
         jPanel1.add(txtFindID, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 130, 310, 40));
 
-        txtFindMajor.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        txtFindMajor.addActionListener(new java.awt.event.ActionListener() {
+        txtFindCategory.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        txtFindCategory.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtFindMajorActionPerformed(evt);
+                txtFindCategoryActionPerformed(evt);
             }
         });
-        jPanel1.add(txtFindMajor, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 190, 310, 40));
+        jPanel1.add(txtFindCategory, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 720, 310, 40));
 
         jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
         jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 190, -1, 40));
@@ -618,6 +569,21 @@ private void sortDataBySerialID() {
         });
         jPanel1.add(btnThem, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 760, 90, -1));
 
+        buttonGroup1.add(rbtGiaoTrinh);
+        rbtGiaoTrinh.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        rbtGiaoTrinh.setText("Giáo trình");
+        rbtGiaoTrinh.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rbtGiaoTrinhActionPerformed(evt);
+            }
+        });
+        jPanel1.add(rbtGiaoTrinh, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 170, 310, 40));
+
+        buttonGroup1.add(rbtThamKhao);
+        rbtThamKhao.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        rbtThamKhao.setText("Sách tham khảo");
+        jPanel1.add(rbtThamKhao, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 210, 310, 40));
+
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 0, 1030, 830));
 
         pack();
@@ -629,118 +595,137 @@ private void sortDataBySerialID() {
         dispose();
     }//GEN-LAST:event_jLabel8MouseClicked
 
-    private void txtStudentIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtStudentIDActionPerformed
+    private void txtBookIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBookIDActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtStudentIDActionPerformed
+    }//GEN-LAST:event_txtBookIDActionPerformed
 
-    private void txtStudentNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtStudentNameActionPerformed
+    private void txtBookNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBookNameActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtStudentNameActionPerformed
+    }//GEN-LAST:event_txtBookNameActionPerformed
 
-    private void txtGenderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtGenderActionPerformed
+    private void txtQuantityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtQuantityActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtGenderActionPerformed
+    }//GEN-LAST:event_txtQuantityActionPerformed
 
     private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaActionPerformed
-        if (deleteStudent()== true) {
-            JOptionPane.showMessageDialog(this, "Xóa sinh viên thành công");
+        if (deleteBook()== true) {
+            JOptionPane.showMessageDialog(this, "Xóa sách thành công");
             clearTable();
-            setStudentDetailsToTable();
+            setBookDetailsToTable();
             clearFormInput();
         } else {
-            JOptionPane.showMessageDialog(this, "Xóa sinh viên không thành công");
+            JOptionPane.showMessageDialog(this, "Xóa sách không thành công");
         }
     }//GEN-LAST:event_btnXoaActionPerformed
 
     private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemActionPerformed
-        if (addStudent() == true) {
-            JOptionPane.showMessageDialog(this, "Thêm sinh viên thành công");
+        if (addBook() == true) {
+            JOptionPane.showMessageDialog(this, "Thêm sách thành công");
             clearTable();
-            sortDataBySerialID();
-            setStudentDetailsToTable();
+            setBookDetailsToTable();
             clearFormInput();
         } else {
-            JOptionPane.showMessageDialog(this, "Thêm sinh viên không thành công");
+            JOptionPane.showMessageDialog(this, "Thêm sách không thành công");
         }
     }//GEN-LAST:event_btnThemActionPerformed
 
     private void btnSuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuaActionPerformed
-        if (updateStudent() == true) {
-            JOptionPane.showMessageDialog(this, "Cập nhật sinh viên thành công");
+        if (updateBook() == true) {
+            JOptionPane.showMessageDialog(this, "Cập nhật sách thành công");
             clearTable();
-            setStudentDetailsToTable();
+            setBookDetailsToTable();
             clearFormInput();
         } else {
-            JOptionPane.showMessageDialog(this, "Cập nhật sinh viên không thành công");
+            JOptionPane.showMessageDialog(this, "Cập nhật sách không thành công");
         }
     }//GEN-LAST:event_btnSuaActionPerformed
 
-    private void tbl_studentDetailsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_studentDetailsMouseClicked
-        int rowNo = tbl_studentDetails.getSelectedRow();
-        TableModel model = tbl_studentDetails.getModel();
+    private void tbl_bookDetailsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_bookDetailsMouseClicked
+        int rowNo = tbl_bookDetails.getSelectedRow();
+        TableModel model = tbl_bookDetails.getModel();
 
-        txtStudentID.setText(model.getValueAt(rowNo, 1).toString());
-        txtStudentName.setText(model.getValueAt(rowNo, 2).toString());
-        comboMajor.setSelectedItem(model.getValueAt(rowNo, 3).toString());
+        txtBookID.setText(model.getValueAt(rowNo, 1).toString());
+        txtBookName.setText(model.getValueAt(rowNo, 2).toString());
+        comboCategory.setSelectedItem(model.getValueAt(rowNo, 3).toString());
         
-    }//GEN-LAST:event_tbl_studentDetailsMouseClicked
+    }//GEN-LAST:event_tbl_bookDetailsMouseClicked
 
-    private void txtBirthdayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBirthdayActionPerformed
+    private void txtAuthorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtAuthorActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtBirthdayActionPerformed
+    }//GEN-LAST:event_txtAuthorActionPerformed
 
-    private void txtStudentEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtStudentEmailActionPerformed
+    private void txtPublisherActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPublisherActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtStudentEmailActionPerformed
+    }//GEN-LAST:event_txtPublisherActionPerformed
 
     private void txtFindIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFindIDActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtFindIDActionPerformed
 
-    private void txtFindMajorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFindMajorActionPerformed
+    private void txtFindCategoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFindCategoryActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtFindMajorActionPerformed
+    }//GEN-LAST:event_txtFindCategoryActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        String masv = txtFindID.getText();
-        String nganh = txtFindMajor.getText();
+        String ma = txtFindID.getText();
         
-        if (!masv.isEmpty() && nganh.isEmpty()){
+        
+        if (!ma.isEmpty()){
             //người dùng nhập mã sinh viên
-            Student sv = searchByID(masv);
-            if (sv != null) {
+            Book bk = searchByID(ma);
+            if (bk != null) {
                 model.setRowCount(0);
-                Object[] row = {0, sv.getStudentID(), sv.getName(), sv.getGender(), sv.getBirthday(), sv.getEmail(), sv.getMajor()};
+                Object[] row = {0, bk.getBookID(), bk.getBookName(), bk.getCategory(), bk.getAuthor(), bk.getPublisher(), bk.getQuantity()};
                 model.addRow(row);
-                JOptionPane.showMessageDialog(rootPane, "Tìm kiếm sinh viên thành công");
+                JOptionPane.showMessageDialog(rootPane, "Tìm kiếm sách thành công");
             } else {
-                JOptionPane.showMessageDialog(rootPane, "Không tìm thấy sinh viên có mã " + masv);
+                JOptionPane.showMessageDialog(rootPane, "Không tìm thấy sách có mã " + ma);
                 txtFindID.setText("");
             }
-        } else if (!nganh.isEmpty() && masv.isEmpty()){
-            List<Student> danhSachSV = searchByMajor(nganh);
-            if (!danhSachSV.isEmpty()) {
-                int i = 0;
+        } else if (rbtGiaoTrinh.isSelected()){
+            String loai = rbtGiaoTrinh.getText();
+            List<Book> danhSach = searchByCategory(loai);
+            if (!danhSach.isEmpty()) {
                 model.setRowCount(0); 
-                for (Student sv : danhSachSV) {
-                    Object[] row = {i + 1, sv.getStudentID(), sv.getName(), sv.getGender(), sv.getBirthday(), sv.getEmail(), sv.getMajor()};
+                int  i = 0;
+                for (Book bk : danhSach) {
+                    Object[] row = {i + 1, bk.getBookID(), bk.getBookName(), bk.getCategory(), bk.getAuthor(), bk.getPublisher(), bk.getQuantity()};
                     model.addRow(row);
                     i++;
                 }
-                JOptionPane.showMessageDialog(rootPane, "Tìm kiếm sinh viên theo chuyên ngành thành công");
+                JOptionPane.showMessageDialog(rootPane, "Tìm kiếm sách theo thể loại thành công");
             } else {
-                JOptionPane.showMessageDialog(rootPane, "Không tìm thấy sinh viên có ngành là " + nganh);
+                JOptionPane.showMessageDialog(rootPane, "Không tìm thấy sách có thể loại là " + loai);
+            }
+        } else if (rbtThamKhao.isSelected()){
+            String loai = rbtThamKhao.getText();
+            List<Book> danhSach = searchByCategory(loai);
+            if (!danhSach.isEmpty()) {
+                model.setRowCount(0); 
+                int  i = 0;
+                for (Book bk : danhSach) {
+                    Object[] row = {i + 1, bk.getBookID(), bk.getBookName(), bk.getCategory(), bk.getAuthor(), bk.getPublisher(), bk.getQuantity()};
+                    model.addRow(row);
+                    i++;
+                }
+                JOptionPane.showMessageDialog(rootPane, "Tìm kiếm sách theo thể loại thành công");
+            } else {
+                JOptionPane.showMessageDialog(rootPane, "Không tìm thấy sách có thể loại là " + loai);
             }
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void btnHienThiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHienThiActionPerformed
-        setStudentDetailsToTable();
+        setBookDetailsToTable();
     }//GEN-LAST:event_btnHienThiActionPerformed
 
     private void btnLamMoiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLamMoiActionPerformed
         clearTable();
     }//GEN-LAST:event_btnLamMoiActionPerformed
+
+    private void rbtGiaoTrinhActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbtGiaoTrinhActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_rbtGiaoTrinhActionPerformed
 
     /**
      * @param args the command line arguments
@@ -759,21 +744,23 @@ private void sortDataBySerialID() {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ManageStudents.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ManageBooks1.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ManageStudents.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ManageBooks1.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ManageStudents.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ManageBooks1.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ManageStudents.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ManageBooks1.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ManageStudents().setVisible(true);
+                new ManageBooks1().setVisible(true);
             }
         });
     }
@@ -784,11 +771,12 @@ private void sortDataBySerialID() {
     private rojeru_san.complementos.RSButtonHover btnSua;
     private rojeru_san.complementos.RSButtonHover btnThem;
     private rojeru_san.complementos.RSButtonHover btnXoa;
-    private javax.swing.JComboBox<String> comboMajor;
+    private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JComboBox<String> comboCategory;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -806,13 +794,15 @@ private void sortDataBySerialID() {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lblQLSV;
     private javax.swing.JLabel lblThongTinSV;
-    private rojeru_san.complementos.RSTableMetro tbl_studentDetails;
-    private app.bolivia.swing.JCTextField txtBirthday;
+    private javax.swing.JRadioButton rbtGiaoTrinh;
+    private javax.swing.JRadioButton rbtThamKhao;
+    private rojeru_san.complementos.RSTableMetro tbl_bookDetails;
+    private app.bolivia.swing.JCTextField txtAuthor;
+    private app.bolivia.swing.JCTextField txtBookID;
+    private app.bolivia.swing.JCTextField txtBookName;
+    private javax.swing.JTextField txtFindCategory;
     private javax.swing.JTextField txtFindID;
-    private javax.swing.JTextField txtFindMajor;
-    private app.bolivia.swing.JCTextField txtGender;
-    private app.bolivia.swing.JCTextField txtStudentEmail;
-    private app.bolivia.swing.JCTextField txtStudentID;
-    private app.bolivia.swing.JCTextField txtStudentName;
+    private app.bolivia.swing.JCTextField txtPublisher;
+    private app.bolivia.swing.JCTextField txtQuantity;
     // End of variables declaration//GEN-END:variables
 }

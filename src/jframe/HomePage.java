@@ -300,11 +300,6 @@ public class HomePage extends javax.swing.JFrame {
             public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
             }
         });
-        jPanel10.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                jPanel10MouseExited(evt);
-            }
-        });
         jPanel10.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel12.setFont(new java.awt.Font("Montserrat", 1, 18)); // NOI18N
@@ -580,15 +575,8 @@ public class HomePage extends javax.swing.JFrame {
     }//GEN-LAST:event_jPanel16AncestorAdded
 
     private void jPanel9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel9MouseClicked
-       ManageBooks manageBooks = new ManageBooks();
-       manageBooks.setVisible(true);
-       dispose();
+       
     }//GEN-LAST:event_jPanel9MouseClicked
-
-    private void jPanel10MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel10MouseExited
-        jPanel10.setBackground(mouseExitColor);
-
-    }//GEN-LAST:event_jPanel10MouseExited
 
     private void jPanel9MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel9MouseEntered
         jPanel9.setBackground(mouseEnterColor);
@@ -600,7 +588,9 @@ public class HomePage extends javax.swing.JFrame {
     }//GEN-LAST:event_jPanel9MouseExited
 
     private void jLabel11MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel11MouseClicked
-        // TODO add your handling code here:
+        ManageBooks1 manageBooks = new ManageBooks1();
+        manageBooks.setVisible(true);
+        dispose();
     }//GEN-LAST:event_jLabel11MouseClicked
 
     private void jLabel12MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel12MouseClicked
