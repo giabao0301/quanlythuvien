@@ -18,7 +18,7 @@ import java.text.SimpleDateFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
-
+import javax.swing.JFrame;
 
 public class ManageStudents extends javax.swing.JFrame {
 
@@ -31,6 +31,8 @@ public class ManageStudents extends javax.swing.JFrame {
     public ManageStudents() {
         initComponents();
         setStudentDetailsToTable();
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+
     }
 
 //    to set the student details into table
@@ -53,8 +55,7 @@ public class ManageStudents extends javax.swing.JFrame {
                 // Định dạng ngày sinh thành chuỗi yyyy-MM-dd
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                 String formattedBirthday = dateFormat.format(birthday);
-                
-                
+
                 Object[] obj = {serialID, studentID, studentName, gender, formattedBirthday, studentEmail, major};
                 model = (DefaultTableModel) tbl_studentDetails.getModel();
                 model.addRow(obj);
@@ -66,7 +67,7 @@ public class ManageStudents extends javax.swing.JFrame {
     }
 
 //    to add book to book_details table
-   public boolean addStudent() {
+    public boolean addStudent() {
         boolean isAdded = false;
 
         // Lấy thông tin sinh viên từ các trường nhập liệu
@@ -114,25 +115,25 @@ public class ManageStudents extends javax.swing.JFrame {
     }
 
 // Phương thức chuyển đổi chuỗi ngày thành java.sql.Date
-private Date parseDate(String dateString) {
-    SimpleDateFormat[] formats = {
-        new SimpleDateFormat("yyyy-MM-dd"),
-        new SimpleDateFormat("dd/MM/yyyy"),
-        new SimpleDateFormat("MM/dd/yyyy")
-    };
+    private Date parseDate(String dateString) {
+        SimpleDateFormat[] formats = {
+            new SimpleDateFormat("yyyy-MM-dd"),
+            new SimpleDateFormat("dd/MM/yyyy"),
+            new SimpleDateFormat("MM/dd/yyyy")
+        };
 
-    for (SimpleDateFormat format : formats) {
-        try {
-            format.setLenient(false);
-            return new Date(format.parse(dateString).getTime());
-        } catch (ParseException e) {
-            // Không làm gì cả, thử định dạng tiếp theo
+        for (SimpleDateFormat format : formats) {
+            try {
+                format.setLenient(false);
+                return new Date(format.parse(dateString).getTime());
+            } catch (ParseException e) {
+                // Không làm gì cả, thử định dạng tiếp theo
+            }
         }
+
+        // Nếu không có định dạng nào phù hợp
+        throw new IllegalArgumentException("Ngày không hợp lệ: " + dateString);
     }
-    
-    // Nếu không có định dạng nào phù hợp
-    throw new IllegalArgumentException("Ngày không hợp lệ: " + dateString);
-}
 
 //    to update book details
     public boolean updateStudent() {
@@ -192,12 +193,11 @@ private Date parseDate(String dateString) {
         }
         return isDeleted;
     }
-    
+
 //  method to find student based on studentID and major
     public Student searchByID(String studentID) {
         String sql = "SELECT * FROM student_details WHERE studentID = ?";
-        try (Connection con = DBConnection.getConnection();
-            PreparedStatement pst = con.prepareStatement(sql)) {
+        try (Connection con = DBConnection.getConnection(); PreparedStatement pst = con.prepareStatement(sql)) {
             pst.setString(1, studentID);
             ResultSet rs = pst.executeQuery();
 
@@ -222,11 +222,10 @@ private Date parseDate(String dateString) {
     public List<Student> searchByMajor(String major) {
         List<Student> studentList = new ArrayList<>();
         String sql = "SELECT * FROM student_details WHERE major = ?";
-        try (Connection con = DBConnection.getConnection();
-            PreparedStatement pst = con.prepareStatement(sql)) {
+        try (Connection con = DBConnection.getConnection(); PreparedStatement pst = con.prepareStatement(sql)) {
             pst.setString(1, major);
             ResultSet rs = pst.executeQuery();
-        
+
             // Duyệt qua các dòng kết quả và thêm vào danh sách
             while (rs.next()) {
                 String id = rs.getString("studentID");
@@ -239,20 +238,18 @@ private Date parseDate(String dateString) {
                 // Định dạng ngày sinh thành chuỗi yyyy-MM-dd
                 //SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                 //String formattedBirthday = dateFormat.format(birthday);
-
-                Student st = new Student(id, name, gender,birthday, email, studentMajor);
+                Student st = new Student(id, name, gender, birthday, email, studentMajor);
                 studentList.add(st);
             }
-            
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return studentList; // Trả về null nếu không tìm thấy sinh viên
     }
-    
-    
-    public void displayTable(){
-        
+
+    public void displayTable() {
+
     }
 
 //    method to clear table
@@ -433,31 +430,7 @@ private Date parseDate(String dateString) {
 
         tbl_studentDetails.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null}
+
             },
             new String [] {
                 "STT", "Mssv", "Họ và tên", "Giới tính", "Ngày sinh", "Địa chỉ email", "Chuyên ngành"
@@ -474,7 +447,7 @@ private Date parseDate(String dateString) {
         });
         jScrollPane2.setViewportView(tbl_studentDetails);
 
-        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 270, 990, 440));
+        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 270, 990, 380));
 
         jPanel2.setBackground(new java.awt.Color(153, 153, 255));
         jPanel2.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
@@ -536,7 +509,7 @@ private Date parseDate(String dateString) {
                 btnHienThiActionPerformed(evt);
             }
         });
-        jPanel1.add(btnHienThi, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 760, 110, 40));
+        jPanel1.add(btnHienThi, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 690, 150, 50));
 
         btnLamMoi.setText("Làm mới");
         btnLamMoi.setFont(new java.awt.Font("Montserrat", 1, 18)); // NOI18N
@@ -545,7 +518,7 @@ private Date parseDate(String dateString) {
                 btnLamMoiActionPerformed(evt);
             }
         });
-        jPanel1.add(btnLamMoi, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 760, 110, 40));
+        jPanel1.add(btnLamMoi, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 690, 150, 50));
 
         btnSua.setText("Sửa");
         btnSua.setFont(new java.awt.Font("Montserrat", 1, 18)); // NOI18N
@@ -554,7 +527,7 @@ private Date parseDate(String dateString) {
                 btnSuaActionPerformed(evt);
             }
         });
-        jPanel1.add(btnSua, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 760, 90, -1));
+        jPanel1.add(btnSua, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 690, 150, 50));
 
         btnXoa.setText("Xóa");
         btnXoa.setFont(new java.awt.Font("Montserrat", 1, 18)); // NOI18N
@@ -563,7 +536,7 @@ private Date parseDate(String dateString) {
                 btnXoaActionPerformed(evt);
             }
         });
-        jPanel1.add(btnXoa, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 760, 100, -1));
+        jPanel1.add(btnXoa, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 690, 150, 50));
 
         btnThem.setText("Thêm");
         btnThem.setFont(new java.awt.Font("Montserrat", 1, 18)); // NOI18N
@@ -572,7 +545,7 @@ private Date parseDate(String dateString) {
                 btnThemActionPerformed(evt);
             }
         });
-        jPanel1.add(btnThem, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 760, 90, -1));
+        jPanel1.add(btnThem, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 690, 160, 50));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 0, 1030, 830));
 
@@ -598,7 +571,7 @@ private Date parseDate(String dateString) {
     }//GEN-LAST:event_txtGenderActionPerformed
 
     private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaActionPerformed
-        if (deleteStudent()== true) {
+        if (deleteStudent() == true) {
             JOptionPane.showMessageDialog(this, "Xóa sinh viên thành công");
             clearTable();
             setStudentDetailsToTable();
@@ -637,7 +610,7 @@ private Date parseDate(String dateString) {
         txtStudentID.setText(model.getValueAt(rowNo, 1).toString());
         txtStudentName.setText(model.getValueAt(rowNo, 2).toString());
         comboMajor.setSelectedItem(model.getValueAt(rowNo, 3).toString());
-        
+
     }//GEN-LAST:event_tbl_studentDetailsMouseClicked
 
     private void txtBirthdayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBirthdayActionPerformed
@@ -659,8 +632,8 @@ private Date parseDate(String dateString) {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         String masv = txtFindID.getText();
         String nganh = txtFindMajor.getText();
-        
-        if (!masv.isEmpty() && nganh.isEmpty()){
+
+        if (!masv.isEmpty() && nganh.isEmpty()) {
             //người dùng nhập mã sinh viên
             Student sv = searchByID(masv);
             if (sv != null) {
@@ -672,10 +645,10 @@ private Date parseDate(String dateString) {
                 JOptionPane.showMessageDialog(rootPane, "Không tìm thấy sinh viên có mã " + masv);
                 txtFindID.setText("");
             }
-        } else if (!nganh.isEmpty() && masv.isEmpty()){
+        } else if (!nganh.isEmpty() && masv.isEmpty()) {
             List<Student> danhSachSV = searchByMajor(nganh);
             if (!danhSachSV.isEmpty()) {
-                model.setRowCount(0); 
+                model.setRowCount(0);
                 for (Student sv : danhSachSV) {
                     Object[] row = {sv.getStudentID(), sv.getName(), sv.getGender(), sv.getBirthday(), sv.getEmail(), sv.getMajor()};
                     model.addRow(row);

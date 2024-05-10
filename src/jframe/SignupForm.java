@@ -10,6 +10,7 @@ package jframe;
  */
 import java.sql.*;
 import java.util.regex.Pattern;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 public class SignupForm extends javax.swing.JFrame {
@@ -25,6 +26,7 @@ public class SignupForm extends javax.swing.JFrame {
      */
     public SignupForm() {
         initComponents();
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
 
     }
 
@@ -363,8 +365,8 @@ public class SignupForm extends javax.swing.JFrame {
 
     private void jLabel8MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel8MouseClicked
         LoginForm loginForm = new LoginForm();
-                loginForm.setVisible(true);
-                dispose();
+        loginForm.setVisible(true);
+        dispose();
     }//GEN-LAST:event_jLabel8MouseClicked
 
     /**

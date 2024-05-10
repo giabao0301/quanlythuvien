@@ -6,11 +6,13 @@ package jframe;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PiePlot;
 import org.jfree.data.general.DefaultPieDataset;
+import javax.swing.JFrame;
 
 /**
  *
@@ -21,47 +23,44 @@ public class HomePage extends javax.swing.JFrame {
     /**
      * Creates new form HomePage
      */
-    
-    Color mouseEnterColor = new Color(0,0,0);
-    Color mouseExitColor = new Color(51,51,51);
-    
-    
-    
+    Color mouseEnterColor = new Color(0, 0, 0);
+    Color mouseExitColor = new Color(51, 51, 51);
+
     public HomePage() {
         initComponents();
         showPieChart();
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
 
-    public void showPieChart(){
-        
+    public void showPieChart() {
+
         //create dataset
-      DefaultPieDataset barDataset = new DefaultPieDataset( );
-      barDataset.setValue( "IPhone 5s" , 20 );  
-      barDataset.setValue( "SamSung Grand" , 20);   
-      barDataset.setValue( "MotoG" , 40 );    
-      barDataset.setValue( "Nokia Lumia" , 10 );  
-      
-      //create chart
-       JFreeChart piechart = ChartFactory.createPieChart("mobile sales",barDataset, false,true,false);//explain
-      
-        PiePlot piePlot =(PiePlot) piechart.getPlot();
-      
-       //changing pie chart blocks colors
-        piePlot.setSectionPaint("IPhone 5s", new Color(255,255,102));
-        piePlot.setSectionPaint("SamSung Grand", new Color(102,255,102));
-        piePlot.setSectionPaint("MotoG", new Color(255,102,153));
-        piePlot.setSectionPaint("Nokia Lumia", new Color(0,204,204));
-      
-       
+        DefaultPieDataset barDataset = new DefaultPieDataset();
+        barDataset.setValue("IPhone 5s", 20);
+        barDataset.setValue("SamSung Grand", 20);
+        barDataset.setValue("MotoG", 40);
+        barDataset.setValue("Nokia Lumia", 10);
+
+        //create chart
+        JFreeChart piechart = ChartFactory.createPieChart("mobile sales", barDataset, false, true, false);//explain
+
+        PiePlot piePlot = (PiePlot) piechart.getPlot();
+
+        //changing pie chart blocks colors
+        piePlot.setSectionPaint("IPhone 5s", new Color(255, 255, 102));
+        piePlot.setSectionPaint("SamSung Grand", new Color(102, 255, 102));
+        piePlot.setSectionPaint("MotoG", new Color(255, 102, 153));
+        piePlot.setSectionPaint("Nokia Lumia", new Color(0, 204, 204));
+
         piePlot.setBackgroundPaint(Color.white);
-        
+
         //create chartPanel to display chart(graph)
         ChartPanel barChartPanel = new ChartPanel(piechart);
         panelPieChart.removeAll();
         panelPieChart.add(barChartPanel, BorderLayout.CENTER);
         panelPieChart.validate();
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -77,7 +76,7 @@ public class HomePage extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jPanel3 = new javax.swing.JPanel();
+        sideBar = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jPanel6 = new javax.swing.JPanel();
@@ -159,12 +158,17 @@ public class HomePage extends javax.swing.JFrame {
         jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 0, -1, 60));
 
         jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/adminIcons/icons8-menu-50 (1).png"))); // NOI18N
+        jLabel5.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel5MouseClicked(evt);
+            }
+        });
         jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 0, -1, 60));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1920, 60));
 
-        jPanel3.setBackground(new java.awt.Color(153, 153, 153));
-        jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        sideBar.setBackground(new java.awt.Color(153, 153, 153));
+        sideBar.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel4.setBackground(new java.awt.Color(255, 51, 51));
         jPanel4.addAncestorListener(new javax.swing.event.AncestorListener() {
@@ -176,6 +180,11 @@ public class HomePage extends javax.swing.JFrame {
             public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
             }
         });
+        jPanel4.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jPanel4MouseClicked(evt);
+            }
+        });
         jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Montserrat", 1, 18)); // NOI18N
@@ -184,7 +193,7 @@ public class HomePage extends javax.swing.JFrame {
         jLabel1.setText("   Đăng xuất");
         jPanel4.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 0, 150, 50));
 
-        jPanel3.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 650, 210, 50));
+        sideBar.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 650, 210, 50));
 
         jPanel6.setBackground(new java.awt.Color(102, 102, 255));
         jPanel6.addAncestorListener(new javax.swing.event.AncestorListener() {
@@ -224,12 +233,12 @@ public class HomePage extends javax.swing.JFrame {
         jLabel9.setText("   Trang chủ");
         jPanel6.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 0, 150, 50));
 
-        jPanel3.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 50, 300, 50));
+        sideBar.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 50, 300, 50));
 
         jLabel7.setFont(new java.awt.Font("Montserrat", 1, 18)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(255, 255, 255));
         jLabel7.setText("   Chức năng");
-        jPanel3.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 160, 340, 50));
+        sideBar.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 160, 340, 50));
 
         jPanel8.setBackground(new java.awt.Color(153, 153, 153));
         jPanel8.addAncestorListener(new javax.swing.event.AncestorListener() {
@@ -251,7 +260,7 @@ public class HomePage extends javax.swing.JFrame {
         jLabel10.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         jPanel8.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 0, 150, 50));
 
-        jPanel3.add(jPanel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 100, 300, 50));
+        sideBar.add(jPanel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 100, 300, 50));
 
         jPanel9.setBackground(new java.awt.Color(153, 153, 153));
         jPanel9.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -262,6 +271,11 @@ public class HomePage extends javax.swing.JFrame {
             public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
             }
             public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
+            }
+        });
+        jPanel9.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                jPanel9MouseMoved(evt);
             }
         });
         jPanel9.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -288,9 +302,10 @@ public class HomePage extends javax.swing.JFrame {
         });
         jPanel9.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 0, 150, 50));
 
-        jPanel3.add(jPanel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 210, 300, 50));
+        sideBar.add(jPanel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 210, 300, 50));
 
         jPanel10.setBackground(new java.awt.Color(153, 153, 153));
+        jPanel10.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jPanel10.addAncestorListener(new javax.swing.event.AncestorListener() {
             public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
                 jPanel10AncestorAdded(evt);
@@ -301,6 +316,9 @@ public class HomePage extends javax.swing.JFrame {
             }
         });
         jPanel10.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jPanel10MouseClicked(evt);
+            }
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 jPanel10MouseExited(evt);
             }
@@ -318,7 +336,7 @@ public class HomePage extends javax.swing.JFrame {
         });
         jPanel10.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 0, 150, 50));
 
-        jPanel3.add(jPanel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 270, 300, 50));
+        sideBar.add(jPanel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 270, 300, 50));
 
         jPanel11.setBackground(new java.awt.Color(153, 153, 153));
         jPanel11.addAncestorListener(new javax.swing.event.AncestorListener() {
@@ -338,7 +356,7 @@ public class HomePage extends javax.swing.JFrame {
         jLabel13.setText("   Mượn sách");
         jPanel11.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 0, 150, 50));
 
-        jPanel3.add(jPanel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 330, 300, 50));
+        sideBar.add(jPanel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 330, 300, 50));
 
         jPanel12.setBackground(new java.awt.Color(153, 153, 153));
         jPanel12.addAncestorListener(new javax.swing.event.AncestorListener() {
@@ -358,7 +376,7 @@ public class HomePage extends javax.swing.JFrame {
         jLabel14.setText("   Trả sách");
         jPanel12.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 0, 150, 50));
 
-        jPanel3.add(jPanel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 390, 300, 50));
+        sideBar.add(jPanel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 390, 300, 50));
 
         jPanel5.setBackground(new java.awt.Color(153, 153, 153));
         jPanel5.addAncestorListener(new javax.swing.event.AncestorListener() {
@@ -378,7 +396,7 @@ public class HomePage extends javax.swing.JFrame {
         jLabel6.setText("  Danh sách cấm");
         jPanel5.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 0, 220, 50));
 
-        jPanel3.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 570, 300, 50));
+        sideBar.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 570, 300, 50));
 
         jPanel15.setBackground(new java.awt.Color(153, 153, 153));
         jPanel15.addAncestorListener(new javax.swing.event.AncestorListener() {
@@ -398,7 +416,7 @@ public class HomePage extends javax.swing.JFrame {
         jLabel17.setText("   Danh sách mượn");
         jPanel15.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 0, 220, 50));
 
-        jPanel3.add(jPanel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 450, 300, 50));
+        sideBar.add(jPanel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 450, 300, 50));
 
         jPanel16.setBackground(new java.awt.Color(153, 153, 153));
         jPanel16.addAncestorListener(new javax.swing.event.AncestorListener() {
@@ -418,9 +436,9 @@ public class HomePage extends javax.swing.JFrame {
         jLabel18.setText("   Lịch sử mượn");
         jPanel16.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 0, 220, 50));
 
-        jPanel3.add(jPanel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 510, 300, 50));
+        sideBar.add(jPanel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 510, 300, 50));
 
-        getContentPane().add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 60, 300, 1020));
+        getContentPane().add(sideBar, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 60, 300, 1020));
 
         jPanel13.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -580,9 +598,9 @@ public class HomePage extends javax.swing.JFrame {
     }//GEN-LAST:event_jPanel16AncestorAdded
 
     private void jPanel9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel9MouseClicked
-       ManageBooks manageBooks = new ManageBooks();
-       manageBooks.setVisible(true);
-       dispose();
+        ManageBooks manageBooks = new ManageBooks();
+        manageBooks.setVisible(true);
+        dispose();
     }//GEN-LAST:event_jPanel9MouseClicked
 
     private void jPanel10MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel10MouseExited
@@ -600,7 +618,9 @@ public class HomePage extends javax.swing.JFrame {
     }//GEN-LAST:event_jPanel9MouseExited
 
     private void jLabel11MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel11MouseClicked
-        // TODO add your handling code here:
+        ManageBooks manageBooks = new ManageBooks();
+        manageBooks.setVisible(true);
+        dispose();
     }//GEN-LAST:event_jLabel11MouseClicked
 
     private void jLabel12MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel12MouseClicked
@@ -608,6 +628,26 @@ public class HomePage extends javax.swing.JFrame {
         manageStudents.setVisible(true);
         dispose();
     }//GEN-LAST:event_jLabel12MouseClicked
+
+    private void jPanel10MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel10MouseClicked
+        ManageStudents manageStudents = new ManageStudents();
+        manageStudents.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_jPanel10MouseClicked
+
+    private void jPanel9MouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel9MouseMoved
+        
+    }//GEN-LAST:event_jPanel9MouseMoved
+
+    private void jLabel5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel5MouseClicked
+//        sideBar.setPreferredSize(new Dimension(0, 0));
+    }//GEN-LAST:event_jLabel5MouseClicked
+
+    private void jPanel4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel4MouseClicked
+        LoginForm loginForm = new LoginForm();
+        loginForm.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_jPanel4MouseClicked
 
     /**
      * @param args the command line arguments
@@ -683,7 +723,6 @@ public class HomePage extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel18;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel20;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
@@ -695,5 +734,6 @@ public class HomePage extends javax.swing.JFrame {
     private javax.swing.JPanel panelPieChart;
     private rojeru_san.complementos.RSTableMetro rSTableMetro1;
     private rojeru_san.complementos.RSTableMetro rSTableMetro2;
+    private javax.swing.JPanel sideBar;
     // End of variables declaration//GEN-END:variables
 }

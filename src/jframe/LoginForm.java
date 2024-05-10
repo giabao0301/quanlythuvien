@@ -10,64 +10,68 @@ package jframe;
  */
 import java.sql.*;
 import java.util.regex.Pattern;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 public class LoginForm extends javax.swing.JFrame {
+
     /**
      * Creates new form SignupForm
      */
     public LoginForm() {
         initComponents();
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+
     }
 
     // method to insert values into users table   
-    
-
 //    Validation
     public boolean vailateLogin() {
         String name = txt_username.getText();
         String pwd = txt_password.getText();
-        
-        if(name.equals("")) {
+
+        if (name.equals("")) {
             JOptionPane.showMessageDialog(this, "Vui lòng nhập tên tài khoản");
             return false;
         }
-        
+
         if (pwd.equals("")) {
             JOptionPane.showMessageDialog(this, "Vui lòng nhập mật khẩu");
             return false;
         }
         return true;
     }
-       
+
 //    verify creds
     public void login() {
-         String name = txt_username.getText();
+        String name = txt_username.getText();
         String pwd = txt_password.getText();
-        
+
         try {
             Class.forName("com.mysql.jdbc.Driver");
             Connection connect = DriverManager.getConnection("jdbc:mysql://localhost:3306/quanlythuvien", "root", "");
             PreparedStatement pst = connect.prepareStatement("select * from users where name = ? and password = ?");
-            
+
             pst.setString(1, name);
             pst.setString(2, pwd);
-            
+
             ResultSet rs = pst.executeQuery();
-            
+
             if (rs.next()) {
                 JOptionPane.showMessageDialog(this, "Đăng nhập thành công");
+                HomePage homePage = new HomePage();
+                homePage.setVisible(true);
+                dispose();
             } else {
                 JOptionPane.showMessageDialog(this, "Tên tài khoản hoặc mật khẩu không hợp lệ");
             }
-            
+
         } catch (Exception e) {
             e.printStackTrace();
         }
-        
+
     }
 
-   
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -250,9 +254,9 @@ public class LoginForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void rSMaterialButtonRectangle1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSMaterialButtonRectangle1ActionPerformed
-       if(vailateLogin()) {
-           login();
-       }
+        if (vailateLogin()) {
+            login();
+        }
     }//GEN-LAST:event_rSMaterialButtonRectangle1ActionPerformed
 
     private void txt_usernameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_usernameActionPerformed
@@ -260,7 +264,7 @@ public class LoginForm extends javax.swing.JFrame {
     }//GEN-LAST:event_txt_usernameActionPerformed
 
     private void txt_usernameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txt_usernameFocusLost
-        
+
     }//GEN-LAST:event_txt_usernameFocusLost
 
     private void jLabel8MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel8MouseClicked
