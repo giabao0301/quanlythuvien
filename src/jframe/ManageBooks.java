@@ -11,6 +11,7 @@ import javax.swing.table.DefaultTableModel;
  * @author trinh
  */
 import java.sql.*;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.table.TableModel;
 
@@ -26,6 +27,8 @@ public class ManageBooks extends javax.swing.JFrame {
     public ManageBooks() {
         initComponents();
         setBookDetailsToTable();
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+
     }
 
 //    to set the book details into table
@@ -321,7 +324,7 @@ public class ManageBooks extends javax.swing.JFrame {
     }//GEN-LAST:event_txt_authorNameActionPerformed
 
     private void rSButtonHover1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSButtonHover1ActionPerformed
-        if (deleteBook()== true) {
+        if (deleteBook() == true) {
             JOptionPane.showMessageDialog(this, "Xóa sách thành công");
             clearTable();
             setBookDetailsToTable();
