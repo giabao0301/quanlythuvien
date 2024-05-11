@@ -184,11 +184,6 @@ public class ManageBooks extends javax.swing.JFrame {
 
         jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/AddNewBookIcons/51516_arrow_back_left_icon.png"))); // NOI18N
         jLabel8.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jLabel8.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel8MouseClicked(evt);
-            }
-        });
         jPanel4.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 30, -1));
 
         jLabel9.setFont(new java.awt.Font("Montserrat SemiBold", 0, 18)); // NOI18N
@@ -312,13 +307,6 @@ public class ManageBooks extends javax.swing.JFrame {
     private void txt_quantityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_quantityActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txt_quantityActionPerformed
-
-    private void jLabel8MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel8MouseClicked
-        HomePage homePage = new HomePage();
-
-        homePage.setVisible(true);
-        dispose();
-    }//GEN-LAST:event_jLabel8MouseClicked
 
     private void txt_bookIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_bookIdActionPerformed
         // TODO add your handling code here:

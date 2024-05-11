@@ -296,7 +296,6 @@ public class ManageBooks1 extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         txtFindID = new javax.swing.JTextField();
-        txtFindCategory = new javax.swing.JTextField();
         jPanel3 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
@@ -488,7 +487,7 @@ public class ManageBooks1 extends javax.swing.JFrame {
         jLabel3.setBackground(new java.awt.Color(204, 204, 204));
         jLabel3.setFont(new java.awt.Font("Segoe UI Semibold", 0, 18)); // NOI18N
         jLabel3.setText("Tìm kiếm theo thể loại sách");
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 190, 250, 40));
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 180, 250, 40));
 
         txtFindID.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         txtFindID.addActionListener(new java.awt.event.ActionListener() {
@@ -497,14 +496,6 @@ public class ManageBooks1 extends javax.swing.JFrame {
             }
         });
         jPanel1.add(txtFindID, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 130, 310, 40));
-
-        txtFindCategory.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        txtFindCategory.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtFindCategoryActionPerformed(evt);
-            }
-        });
-        jPanel1.add(txtFindCategory, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 720, 310, 40));
 
         jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
         jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 190, -1, 40));
@@ -577,12 +568,12 @@ public class ManageBooks1 extends javax.swing.JFrame {
                 rbtGiaoTrinhActionPerformed(evt);
             }
         });
-        jPanel1.add(rbtGiaoTrinh, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 170, 310, 40));
+        jPanel1.add(rbtGiaoTrinh, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 180, 130, 40));
 
         buttonGroup1.add(rbtThamKhao);
         rbtThamKhao.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         rbtThamKhao.setText("Sách tham khảo");
-        jPanel1.add(rbtThamKhao, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 210, 310, 40));
+        jPanel1.add(rbtThamKhao, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 180, 170, 40));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 0, 1030, 830));
 
@@ -661,10 +652,6 @@ public class ManageBooks1 extends javax.swing.JFrame {
     private void txtFindIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFindIDActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtFindIDActionPerformed
-
-    private void txtFindCategoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFindCategoryActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtFindCategoryActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         String ma = txtFindID.getText();
@@ -800,7 +787,6 @@ public class ManageBooks1 extends javax.swing.JFrame {
     private app.bolivia.swing.JCTextField txtAuthor;
     private app.bolivia.swing.JCTextField txtBookID;
     private app.bolivia.swing.JCTextField txtBookName;
-    private javax.swing.JTextField txtFindCategory;
     private javax.swing.JTextField txtFindID;
     private app.bolivia.swing.JCTextField txtPublisher;
     private app.bolivia.swing.JCTextField txtQuantity;
