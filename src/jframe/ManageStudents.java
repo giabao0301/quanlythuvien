@@ -5,6 +5,9 @@
 package jframe;
 
 import javax.swing.table.DefaultTableModel;
+import javax.swing.RowSorter;
+import javax.swing.SortOrder;
+import javax.swing.table.TableRowSorter;
 import models.Student;
 
 /**
@@ -35,7 +38,7 @@ public class ManageStudents extends javax.swing.JFrame {
 
     }
 
-//    to set the student details into table
+    // to set the student details into table
     public void setStudentDetailsToTable() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -56,7 +59,7 @@ public class ManageStudents extends javax.swing.JFrame {
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                 String formattedBirthday = dateFormat.format(birthday);
 
-                Object[] obj = {serialID, studentID, studentName, gender, formattedBirthday, studentEmail, major};
+                Object[] obj = { serialID, studentID, studentName, gender, formattedBirthday, studentEmail, major };
                 model = (DefaultTableModel) tbl_studentDetails.getModel();
                 model.addRow(obj);
 
@@ -66,7 +69,7 @@ public class ManageStudents extends javax.swing.JFrame {
         }
     }
 
-//    to add book to book_details table
+    // to add book to book_details table
     public boolean addStudent() {
         boolean isAdded = false;
 
@@ -84,27 +87,37 @@ public class ManageStudents extends javax.swing.JFrame {
         // Thực hiện thêm sinh viên vào cơ sở dữ liệu
         try {
             Connection conn = DBConnection.getConnection();
-            String sql = "INSERT INTO student_details (studentID, StudentName, gender, birthday, studentEmail, major) VALUES (?, ?, ?, ?, ?, ?)";
-            PreparedStatement pst = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            pst.setString(1, studentID);
-            pst.setString(2, studentName);
-            pst.setString(3, gender);
-            pst.setDate(4, birthday);
-            pst.setString(5, studentEmail);
-            pst.setString(6, major);
+
+            // Lấy giá trị serialID lớn nhất hiện có
+            String getMaxSerialIDSql = "SELECT MAX(serialID) AS max_serialID FROM student_details";
+            Statement getMaxSerialIDStatement = conn.createStatement();
+            ResultSet rs = getMaxSerialIDStatement.executeQuery(getMaxSerialIDSql);
+
+            int maxSerialID = 0;
+            if (rs.next()) {
+                maxSerialID = rs.getInt("max_serialID");
+            }
+
+            // Tăng giá trị serialID lên một đơn vị
+            int newSerialID = maxSerialID + 1;
+
+            // Thêm sinh viên mới vào cơ sở dữ liệu với giá trị serialID mới
+            String sql = "INSERT INTO student_details (serialID, studentID, StudentName, gender, birthday, studentEmail, major) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            PreparedStatement pst = conn.prepareStatement(sql);
+            pst.setInt(1, newSerialID);
+            pst.setString(2, studentID);
+            pst.setString(3, studentName);
+            pst.setString(4, gender);
+            pst.setDate(5, birthday);
+            pst.setString(6, studentEmail);
+            pst.setString(7, major);
 
             int rowCount = pst.executeUpdate();
             if (rowCount > 0) {
-                // Lấy giá trị của serialID đã được tự động tăng
-                ResultSet generatedKeys = pst.getGeneratedKeys();
-
-                if (generatedKeys.next()) {
-                    int serialID = generatedKeys.getInt(1);
-                    // Đổ dữ liệu vào table
-                    Object[] obj = {serialID, studentID, studentName, gender, birthdayString, studentEmail, major};
-                    DefaultTableModel model = (DefaultTableModel) tbl_studentDetails.getModel();
-                    model.addRow(obj);
-                }
+                // Đổ dữ liệu vào table
+                Object[] obj = { newSerialID, studentID, studentName, gender, birthdayString, studentEmail, major };
+                DefaultTableModel model = (DefaultTableModel) tbl_studentDetails.getModel();
+                model.addRow(obj);
                 isAdded = true;
             }
         } catch (SQLException e) {
@@ -114,12 +127,12 @@ public class ManageStudents extends javax.swing.JFrame {
         return isAdded;
     }
 
-// Phương thức chuyển đổi chuỗi ngày thành java.sql.Date
+    // Phương thức chuyển đổi chuỗi ngày thành java.sql.Date
     private Date parseDate(String dateString) {
         SimpleDateFormat[] formats = {
-            new SimpleDateFormat("yyyy-MM-dd"),
-            new SimpleDateFormat("dd/MM/yyyy"),
-            new SimpleDateFormat("MM/dd/yyyy")
+                new SimpleDateFormat("yyyy-MM-dd"),
+                new SimpleDateFormat("dd/MM/yyyy"),
+                new SimpleDateFormat("MM/dd/yyyy")
         };
 
         for (SimpleDateFormat format : formats) {
@@ -135,7 +148,7 @@ public class ManageStudents extends javax.swing.JFrame {
         throw new IllegalArgumentException("Ngày không hợp lệ: " + dateString);
     }
 
-//    to update book details
+    // to update book details
     public boolean updateStudent() {
         boolean isUpdated = false;
         String studentID = txtStudentID.getText();
@@ -170,31 +183,49 @@ public class ManageStudents extends javax.swing.JFrame {
         return isUpdated;
     }
 
-//    method to delete student detail
+    // method to delete student detail
     public boolean deleteStudent() {
         boolean isDeleted = false;
-        studentID = txtStudentID.getText();
+        studentID = txtStudentID.getText(); // Lấy giá trị studentID từ textfield
 
         try {
             Connection con = DBConnection.getConnection();
-            String sql = "delete from student_details where studentID = ?";
-            PreparedStatement pst = con.prepareStatement(sql);
-            pst.setString(1, studentID);
+            // Lấy serialID của sinh viên được chọn
+            String serialIDSql = "SELECT serialID FROM student_details WHERE studentID = ?";
+            PreparedStatement serialIDStatement = con.prepareStatement(serialIDSql);
+            serialIDStatement.setString(1, studentID);
+            ResultSet rs = serialIDStatement.executeQuery();
+            int serialID = 0;
+            if (rs.next()) {
+                serialID = rs.getInt("serialID");
+            }
+            rs.close();
 
-            int rowCount = pst.executeUpdate();
-            if (rowCount > 0) {
+            // Xóa sinh viên có student_id được chỉ định
+            String deleteSql = "DELETE FROM student_details WHERE studentID = ?";
+            PreparedStatement deleteStatement = con.prepareStatement(deleteSql);
+            deleteStatement.setString(1, studentID);
+            int deleteRowCount = deleteStatement.executeUpdate();
+
+            // Cập nhật lại số thứ tự của các sinh viên còn lại
+            String updateSql = "UPDATE student_details SET serialID = serialID - 1 WHERE serialID > ?";
+            PreparedStatement updateStatement = con.prepareStatement(updateSql);
+            updateStatement.setInt(1, serialID);
+            int updateRowCount = updateStatement.executeUpdate();
+
+            // Kiểm tra nếu sinh viên đã được xóa và số thứ tự đã được cập nhật
+            if (deleteRowCount > 0 && updateRowCount > 0) {
                 isDeleted = true;
             } else {
                 isDeleted = false;
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
         return isDeleted;
     }
 
-//  method to find student based on studentID and major
+    // method to find student based on studentID and major
     public Student searchByID(String studentID) {
         String sql = "SELECT * FROM student_details WHERE studentID = ?";
         try (Connection con = DBConnection.getConnection(); PreparedStatement pst = con.prepareStatement(sql)) {
@@ -202,6 +233,7 @@ public class ManageStudents extends javax.swing.JFrame {
             ResultSet rs = pst.executeQuery();
 
             if (rs.next()) {
+                int serialID = rs.getInt("serialID");
                 String id = rs.getString("studentID");
                 String name = rs.getString("StudentName");
                 String gender = rs.getString("gender");
@@ -236,8 +268,8 @@ public class ManageStudents extends javax.swing.JFrame {
                 String studentMajor = rs.getString("major");
 
                 // Định dạng ngày sinh thành chuỗi yyyy-MM-dd
-                //SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                //String formattedBirthday = dateFormat.format(birthday);
+                // SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                // String formattedBirthday = dateFormat.format(birthday);
                 Student st = new Student(id, name, gender, birthday, email, studentMajor);
                 studentList.add(st);
             }
@@ -252,7 +284,7 @@ public class ManageStudents extends javax.swing.JFrame {
 
     }
 
-//    method to clear table
+    // method to clear table
     public void clearTable() {
         DefaultTableModel model = (DefaultTableModel) tbl_studentDetails.getModel();
         model.setRowCount(0);
@@ -266,13 +298,24 @@ public class ManageStudents extends javax.swing.JFrame {
         txtStudentEmail.setText("");
     }
 
+    // Phương thức để sắp xếp lại dữ liệu trong bảng theo serialID tăng dần
+    private void sortDataBySerialID() {
+        DefaultTableModel model = (DefaultTableModel) tbl_studentDetails.getModel();
+        TableRowSorter<TableModel> sorter = new TableRowSorter<>(model);
+        tbl_studentDetails.setRowSorter(sorter);
+        List<RowSorter.SortKey> sortKeys = new ArrayList<>();
+        sortKeys.add(new RowSorter.SortKey(0, SortOrder.ASCENDING)); // Sắp xếp theo cột serialID
+        sorter.setSortKeys(sortKeys);
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
      * regenerated by the Form Editor.
      */
     @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jPanel4 = new javax.swing.JPanel();
@@ -367,7 +410,8 @@ public class ManageStudents extends javax.swing.JFrame {
 
         jPanel5.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/AddNewBookIcons/51516_arrow_back_left_icon.png"))); // NOI18N
+        jLabel8.setIcon(
+                new javax.swing.ImageIcon(getClass().getResource("/AddNewBookIcons/51516_arrow_back_left_icon.png"))); // NOI18N
         jLabel8.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jLabel8.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -429,13 +473,12 @@ public class ManageStudents extends javax.swing.JFrame {
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         tbl_studentDetails.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
+                new Object[][] {
 
-            },
-            new String [] {
-                "STT", "Mssv", "Họ và tên", "Giới tính", "Ngày sinh", "Địa chỉ email", "Chuyên ngành"
-            }
-        ));
+                },
+                new String[] {
+                        "STT", "Mssv", "Họ và tên", "Giới tính", "Ngày sinh", "Địa chỉ email", "Chuyên ngành"
+                }));
         tbl_studentDetails.setColorBordeFilas(new java.awt.Color(255, 255, 255));
         tbl_studentDetails.setColorBordeHead(new java.awt.Color(255, 255, 255));
         tbl_studentDetails.setRowHeight(30);
@@ -552,25 +595,25 @@ public class ManageStudents extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jLabel8MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel8MouseClicked
+    private void jLabel8MouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_jLabel8MouseClicked
         HomePage homePage = new HomePage();
         homePage.setVisible(true);
         dispose();
-    }//GEN-LAST:event_jLabel8MouseClicked
+    }// GEN-LAST:event_jLabel8MouseClicked
 
-    private void txtStudentIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtStudentIDActionPerformed
+    private void txtStudentIDActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtStudentIDActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtStudentIDActionPerformed
+    }// GEN-LAST:event_txtStudentIDActionPerformed
 
-    private void txtStudentNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtStudentNameActionPerformed
+    private void txtStudentNameActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtStudentNameActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtStudentNameActionPerformed
+    }// GEN-LAST:event_txtStudentNameActionPerformed
 
-    private void txtGenderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtGenderActionPerformed
+    private void txtGenderActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtGenderActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtGenderActionPerformed
+    }// GEN-LAST:event_txtGenderActionPerformed
 
-    private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaActionPerformed
+    private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnXoaActionPerformed
         if (deleteStudent() == true) {
             JOptionPane.showMessageDialog(this, "Xóa sinh viên thành công");
             clearTable();
@@ -579,20 +622,21 @@ public class ManageStudents extends javax.swing.JFrame {
         } else {
             JOptionPane.showMessageDialog(this, "Xóa sinh viên không thành công");
         }
-    }//GEN-LAST:event_btnXoaActionPerformed
+    }// GEN-LAST:event_btnXoaActionPerformed
 
-    private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemActionPerformed
+    private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnThemActionPerformed
         if (addStudent() == true) {
             JOptionPane.showMessageDialog(this, "Thêm sinh viên thành công");
             clearTable();
+            sortDataBySerialID();
             setStudentDetailsToTable();
             clearFormInput();
         } else {
             JOptionPane.showMessageDialog(this, "Thêm sinh viên không thành công");
         }
-    }//GEN-LAST:event_btnThemActionPerformed
+    }// GEN-LAST:event_btnThemActionPerformed
 
-    private void btnSuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuaActionPerformed
+    private void btnSuaActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnSuaActionPerformed
         if (updateStudent() == true) {
             JOptionPane.showMessageDialog(this, "Cập nhật sinh viên thành công");
             clearTable();
@@ -601,9 +645,9 @@ public class ManageStudents extends javax.swing.JFrame {
         } else {
             JOptionPane.showMessageDialog(this, "Cập nhật sinh viên không thành công");
         }
-    }//GEN-LAST:event_btnSuaActionPerformed
+    }// GEN-LAST:event_btnSuaActionPerformed
 
-    private void tbl_studentDetailsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_studentDetailsMouseClicked
+    private void tbl_studentDetailsMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_tbl_studentDetailsMouseClicked
         int rowNo = tbl_studentDetails.getSelectedRow();
         TableModel model = tbl_studentDetails.getModel();
 
@@ -611,34 +655,35 @@ public class ManageStudents extends javax.swing.JFrame {
         txtStudentName.setText(model.getValueAt(rowNo, 2).toString());
         comboMajor.setSelectedItem(model.getValueAt(rowNo, 3).toString());
 
-    }//GEN-LAST:event_tbl_studentDetailsMouseClicked
+    }// GEN-LAST:event_tbl_studentDetailsMouseClicked
 
-    private void txtBirthdayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBirthdayActionPerformed
+    private void txtBirthdayActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtBirthdayActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtBirthdayActionPerformed
+    }// GEN-LAST:event_txtBirthdayActionPerformed
 
-    private void txtStudentEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtStudentEmailActionPerformed
+    private void txtStudentEmailActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtStudentEmailActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtStudentEmailActionPerformed
+    }// GEN-LAST:event_txtStudentEmailActionPerformed
 
-    private void txtFindIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFindIDActionPerformed
+    private void txtFindIDActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtFindIDActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtFindIDActionPerformed
+    }// GEN-LAST:event_txtFindIDActionPerformed
 
-    private void txtFindMajorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFindMajorActionPerformed
+    private void txtFindMajorActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtFindMajorActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtFindMajorActionPerformed
+    }// GEN-LAST:event_txtFindMajorActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton1ActionPerformed
         String masv = txtFindID.getText();
         String nganh = txtFindMajor.getText();
 
         if (!masv.isEmpty() && nganh.isEmpty()) {
-            //người dùng nhập mã sinh viên
+            // người dùng nhập mã sinh viên
             Student sv = searchByID(masv);
             if (sv != null) {
                 model.setRowCount(0);
-                Object[] row = {sv.getStudentID(), sv.getName(), sv.getGender(), sv.getBirthday(), sv.getEmail(), sv.getMajor()};
+                Object[] row = { 0, sv.getStudentID(), sv.getName(), sv.getGender(), sv.getBirthday(), sv.getEmail(),
+                        sv.getMajor() };
                 model.addRow(row);
                 JOptionPane.showMessageDialog(rootPane, "Tìm kiếm sinh viên thành công");
             } else {
@@ -648,34 +693,41 @@ public class ManageStudents extends javax.swing.JFrame {
         } else if (!nganh.isEmpty() && masv.isEmpty()) {
             List<Student> danhSachSV = searchByMajor(nganh);
             if (!danhSachSV.isEmpty()) {
+                int i = 0;
                 model.setRowCount(0);
                 for (Student sv : danhSachSV) {
-                    Object[] row = {sv.getStudentID(), sv.getName(), sv.getGender(), sv.getBirthday(), sv.getEmail(), sv.getMajor()};
+                    Object[] row = { i + 1, sv.getStudentID(), sv.getName(), sv.getGender(), sv.getBirthday(),
+                            sv.getEmail(), sv.getMajor() };
                     model.addRow(row);
+                    i++;
                 }
                 JOptionPane.showMessageDialog(rootPane, "Tìm kiếm sinh viên theo chuyên ngành thành công");
             } else {
                 JOptionPane.showMessageDialog(rootPane, "Không tìm thấy sinh viên có ngành là " + nganh);
             }
         }
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }// GEN-LAST:event_jButton1ActionPerformed
 
-    private void btnHienThiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHienThiActionPerformed
+    private void btnHienThiActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnHienThiActionPerformed
         setStudentDetailsToTable();
-    }//GEN-LAST:event_btnHienThiActionPerformed
+    }// GEN-LAST:event_btnHienThiActionPerformed
 
-    private void btnLamMoiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLamMoiActionPerformed
+    private void btnLamMoiActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnLamMoiActionPerformed
         clearTable();
-    }//GEN-LAST:event_btnLamMoiActionPerformed
+    }// GEN-LAST:event_btnLamMoiActionPerformed
 
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+        // <editor-fold defaultstate="collapsed" desc=" Look and feel setting code
+        // (optional) ">
+        /*
+         * If Nimbus (introduced in Java SE 6) is not available, stay with the default
+         * look and feel.
+         * For details see
+         * http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
@@ -685,16 +737,20 @@ public class ManageStudents extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ManageStudents.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ManageStudents.class.getName()).log(java.util.logging.Level.SEVERE, null,
+                    ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ManageStudents.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ManageStudents.class.getName()).log(java.util.logging.Level.SEVERE, null,
+                    ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ManageStudents.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ManageStudents.class.getName()).log(java.util.logging.Level.SEVERE, null,
+                    ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ManageStudents.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ManageStudents.class.getName()).log(java.util.logging.Level.SEVERE, null,
+                    ex);
         }
-        //</editor-fold>
-        //</editor-fold>
+        // </editor-fold>
+        // </editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
