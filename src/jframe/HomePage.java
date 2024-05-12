@@ -68,7 +68,10 @@ public class HomePage extends javax.swing.JFrame {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
@@ -139,13 +142,11 @@ public class HomePage extends javax.swing.JFrame {
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+                jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 0, Short.MAX_VALUE));
         jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 60, Short.MAX_VALUE)
-        );
+                jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 60, Short.MAX_VALUE));
 
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 0, 2, 60));
 
@@ -155,7 +156,8 @@ public class HomePage extends javax.swing.JFrame {
         jLabel3.setText("Xin chào, Admin");
         jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(1310, 20, -1, -1));
 
-        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/adminIcons/3592870_brochure_document_menu_note_office_icon.png"))); // NOI18N
+        jLabel4.setIcon(new javax.swing.ImageIcon(
+                getClass().getResource("/adminIcons/3592870_brochure_document_menu_note_office_icon.png"))); // NOI18N
         jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 0, -1, 60));
 
         jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/adminIcons/icons8-menu-50 (1).png"))); // NOI18N
@@ -176,8 +178,10 @@ public class HomePage extends javax.swing.JFrame {
             public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
                 jPanel4AncestorAdded(evt);
             }
+
             public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
             }
+
             public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
             }
         });
@@ -201,8 +205,10 @@ public class HomePage extends javax.swing.JFrame {
             public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
                 jPanel6AncestorAdded(evt);
             }
+
             public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
             }
+
             public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
             }
         });
@@ -213,8 +219,10 @@ public class HomePage extends javax.swing.JFrame {
             public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
                 jPanel7AncestorAdded(evt);
             }
+
             public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
             }
+
             public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
             }
         });
@@ -246,8 +254,10 @@ public class HomePage extends javax.swing.JFrame {
             public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
                 jPanel8AncestorAdded(evt);
             }
+
             public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
             }
+
             public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
             }
         });
@@ -269,23 +279,22 @@ public class HomePage extends javax.swing.JFrame {
             public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
                 jPanel9AncestorAdded(evt);
             }
+
             public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
             }
+
             public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
-            }
-        });
-        jPanel9.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
-            public void mouseMoved(java.awt.event.MouseEvent evt) {
-                jPanel9MouseMoved(evt);
             }
         });
         jPanel9.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jPanel9MouseClicked(evt);
             }
+
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 jPanel9MouseEntered(evt);
             }
+
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 jPanel9MouseExited(evt);
             }
@@ -301,11 +310,6 @@ public class HomePage extends javax.swing.JFrame {
         jLabel11.setForeground(new java.awt.Color(255, 255, 255));
         jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/adminIcons/icons8_Books_26px.png"))); // NOI18N
         jLabel11.setText("   Sách");
-        jLabel11.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel11MouseClicked(evt);
-            }
-        });
         jPanel9.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 0, 150, 50));
 
         sideBar.add(jPanel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 210, 300, 50));
@@ -316,9 +320,16 @@ public class HomePage extends javax.swing.JFrame {
             public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
                 jPanel10AncestorAdded(evt);
             }
+
             public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
             }
+
             public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
+            }
+        });
+        jPanel10.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jPanel10MouseClicked(evt);
             }
         });
         jPanel10.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -327,11 +338,6 @@ public class HomePage extends javax.swing.JFrame {
         jLabel12.setForeground(new java.awt.Color(255, 255, 255));
         jLabel12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/adminIcons/icons8_Read_Online_26px.png"))); // NOI18N
         jLabel12.setText("   Sinh viên");
-        jLabel12.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel12MouseClicked(evt);
-            }
-        });
         jPanel10.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 0, 150, 50));
 
         sideBar.add(jPanel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 270, 300, 50));
@@ -342,8 +348,10 @@ public class HomePage extends javax.swing.JFrame {
             public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
                 jPanel11AncestorAdded(evt);
             }
+
             public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
             }
+
             public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
             }
         });
@@ -367,8 +375,10 @@ public class HomePage extends javax.swing.JFrame {
             public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
                 jPanel12AncestorAdded(evt);
             }
+
             public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
             }
+
             public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
             }
         });
@@ -376,7 +386,8 @@ public class HomePage extends javax.swing.JFrame {
 
         jLabel14.setFont(new java.awt.Font("Montserrat", 1, 18)); // NOI18N
         jLabel14.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel14.setIcon(new javax.swing.ImageIcon(getClass().getResource("/adminIcons/icons8_Return_Purchase_26px.png"))); // NOI18N
+        jLabel14.setIcon(
+                new javax.swing.ImageIcon(getClass().getResource("/adminIcons/icons8_Return_Purchase_26px.png"))); // NOI18N
         jLabel14.setText("   Trả sách");
         jPanel12.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 0, 150, 50));
 
@@ -387,8 +398,10 @@ public class HomePage extends javax.swing.JFrame {
             public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
                 jPanel5AncestorAdded(evt);
             }
+
             public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
             }
+
             public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
             }
         });
@@ -407,8 +420,10 @@ public class HomePage extends javax.swing.JFrame {
             public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
                 jPanel15AncestorAdded(evt);
             }
+
             public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
             }
+
             public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
             }
         });
@@ -427,8 +442,10 @@ public class HomePage extends javax.swing.JFrame {
             public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
                 jPanel16AncestorAdded(evt);
             }
+
             public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
             }
+
             public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
             }
         });
@@ -504,16 +521,15 @@ public class HomePage extends javax.swing.JFrame {
         jPanel13.add(jPanel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 90, 187, 108));
 
         rSTableMetro1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Id", "Tên", "Title 3", "Title 4"
-            }
-        ));
+                new Object[][] {
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null }
+                },
+                new String[] {
+                        "Id", "Tên", "Title 3", "Title 4"
+                }));
         rSTableMetro1.setColorBordeFilas(new java.awt.Color(255, 255, 255));
         rSTableMetro1.setColorBordeHead(new java.awt.Color(255, 255, 255));
         rSTableMetro1.setRowHeight(30);
@@ -531,16 +547,15 @@ public class HomePage extends javax.swing.JFrame {
         jPanel13.add(jLabel28, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 500, -1, -1));
 
         rSTableMetro2.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Id", "Tên", "Tác giả", "Số lượng"
-            }
-        ));
+                new Object[][] {
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null }
+                },
+                new String[] {
+                        "Id", "Tên", "Tác giả", "Số lượng"
+                }));
         rSTableMetro2.setColorBordeFilas(new java.awt.Color(255, 255, 255));
         rSTableMetro2.setColorBordeHead(new java.awt.Color(255, 255, 255));
         rSTableMetro2.setRowHeight(30);
@@ -557,15 +572,15 @@ public class HomePage extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jPanel9KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jPanel9KeyPressed
+    private void jPanel9KeyPressed(java.awt.event.KeyEvent evt) {// GEN-FIRST:event_jPanel9KeyPressed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jPanel9KeyPressed
+    }// GEN-LAST:event_jPanel9KeyPressed
 
-    private void jPanel11MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel11MouseClicked
+    private void jPanel11MouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_jPanel11MouseClicked
         IssueBook issueBook = new IssueBook();
         issueBook.setVisible(true);
         dispose();
-    }//GEN-LAST:event_jPanel11MouseClicked
+    }// GEN-LAST:event_jPanel11MouseClicked
 
     private void jPanel4AncestorAdded(javax.swing.event.AncestorEvent evt) {// GEN-FIRST:event_jPanel4AncestorAdded
         // TODO add your handling code here:
@@ -612,31 +627,10 @@ public class HomePage extends javax.swing.JFrame {
     }// GEN-LAST:event_jPanel16AncestorAdded
 
     private void jPanel9MouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_jPanel9MouseClicked
-        ManageBooks manageBooks = new ManageBooks();
+        ManageBooks1 manageBooks = new ManageBooks1();
         manageBooks.setVisible(true);
         dispose();
     }// GEN-LAST:event_jPanel9MouseClicked
-
-    private void jPanel9MouseEntered(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_jPanel9MouseEntered
-        jPanel9.setBackground(mouseEnterColor);
-    }// GEN-LAST:event_jPanel9MouseEntered
-
-    private void jPanel9MouseExited(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_jPanel9MouseExited
-        jPanel9.setBackground(mouseExitColor);
-
-    }// GEN-LAST:event_jPanel9MouseExited
-
-    private void jLabel11MouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_jLabel11MouseClicked
-        ManageBooks manageBooks = new ManageBooks();
-        manageBooks.setVisible(true);
-        dispose();
-    }// GEN-LAST:event_jLabel11MouseClicked
-
-    private void jLabel12MouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_jLabel12MouseClicked
-        ManageStudents manageStudents = new ManageStudents();
-        manageStudents.setVisible(true);
-        dispose();
-    }// GEN-LAST:event_jLabel12MouseClicked
 
     private void jPanel10MouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_jPanel10MouseClicked
         ManageStudents manageStudents = new ManageStudents();
