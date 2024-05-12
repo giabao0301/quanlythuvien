@@ -69,7 +69,7 @@ public class HomePage extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
-    // Code">//GEN-BEGIN:initComponents
+    // Code">                          
     // <editor-fold defaultstate="collapsed" desc="Generated
     // Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -291,13 +291,6 @@ public class HomePage extends javax.swing.JFrame {
                 jPanel9MouseClicked(evt);
             }
 
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                jPanel9MouseEntered(evt);
-            }
-
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                jPanel9MouseExited(evt);
-            }
         });
         jPanel9.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
@@ -627,7 +620,7 @@ public class HomePage extends javax.swing.JFrame {
     }// GEN-LAST:event_jPanel16AncestorAdded
 
     private void jPanel9MouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_jPanel9MouseClicked
-        ManageBooks1 manageBooks = new ManageBooks1();
+        ManageBooks manageBooks = new ManageBooks();
         manageBooks.setVisible(true);
         dispose();
     }// GEN-LAST:event_jPanel9MouseClicked
