@@ -587,10 +587,7 @@ public class HomePage extends javax.swing.JFrame {
     }// GEN-LAST:event_jPanel10MouseClicked
 
     
-    private void jPanel9MouseMoved(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_jPanel9MouseMoved
-
-    }// GEN-LAST:event_jPanel9MouseMoved
-
+   
     private void jLabel5MouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_jLabel5MouseClicked
         // sideBar.setPreferredSize(new Dimension(0, 0));
     }// GEN-LAST:event_jLabel5MouseClicked
