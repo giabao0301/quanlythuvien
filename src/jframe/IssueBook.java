@@ -197,7 +197,6 @@ public class IssueBook extends javax.swing.JFrame {
         lbl_major = new javax.swing.JComboBox<>();
         jLabel8 = new javax.swing.JLabel();
         lbl_studentError = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
         jLabel15 = new javax.swing.JLabel();
         txt_bookId = new app.bolivia.swing.JCTextField();
         txt_studentId = new app.bolivia.swing.JCTextField();
@@ -208,7 +207,6 @@ public class IssueBook extends javax.swing.JFrame {
         jLabel18 = new javax.swing.JLabel();
         rSMaterialButtonRectangle1 = new rojerusan.RSMaterialButtonRectangle();
         jPanel3 = new javax.swing.JPanel();
-        jLabel11 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel20 = new javax.swing.JLabel();
         lbl_bookId = new app.bolivia.swing.JCTextField();
@@ -224,6 +222,10 @@ public class IssueBook extends javax.swing.JFrame {
         lbl_quantity = new app.bolivia.swing.JCTextField();
         jLabel24 = new javax.swing.JLabel();
         lbl_category = new app.bolivia.swing.JCTextField();
+        jPanel4 = new javax.swing.JPanel();
+        jLabel11 = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
@@ -297,17 +299,12 @@ public class IssueBook extends javax.swing.JFrame {
 
         panel_main.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 0, 440, 800));
 
-        jLabel1.setFont(new java.awt.Font("Montserrat", 1, 24)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(153, 153, 153));
-        jLabel1.setText("Mượn sách");
-        panel_main.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1180, 160, -1, -1));
-
         jLabel15.setFont(new java.awt.Font("Montserrat SemiBold", 0, 18)); // NOI18N
         jLabel15.setForeground(new java.awt.Color(0, 153, 204));
         jLabel15.setText("Mã sách");
-        panel_main.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(1030, 250, 80, -1));
+        panel_main.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(990, 250, 80, -1));
 
-        txt_bookId.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        txt_bookId.setBorder(javax.swing.BorderFactory.createEtchedBorder(new java.awt.Color(0, 112, 192), null));
         txt_bookId.setForeground(new java.awt.Color(102, 102, 102));
         txt_bookId.setFont(new java.awt.Font("Montserrat", 0, 18)); // NOI18N
         txt_bookId.setPhColor(new java.awt.Color(102, 102, 102));
@@ -324,7 +321,7 @@ public class IssueBook extends javax.swing.JFrame {
         });
         panel_main.add(txt_bookId, new org.netbeans.lib.awtextra.AbsoluteConstraints(1140, 240, 250, 40));
 
-        txt_studentId.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        txt_studentId.setBorder(javax.swing.BorderFactory.createEtchedBorder(new java.awt.Color(0, 112, 192), null));
         txt_studentId.setForeground(new java.awt.Color(102, 102, 102));
         txt_studentId.setFont(new java.awt.Font("Montserrat", 0, 18)); // NOI18N
         txt_studentId.setPhColor(new java.awt.Color(102, 102, 102));
@@ -344,17 +341,17 @@ public class IssueBook extends javax.swing.JFrame {
         jLabel16.setFont(new java.awt.Font("Montserrat SemiBold", 0, 18)); // NOI18N
         jLabel16.setForeground(new java.awt.Color(0, 153, 204));
         jLabel16.setText("Ngày trả");
-        panel_main.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(1020, 550, 90, -1));
+        panel_main.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(990, 540, 90, -1));
 
         date_issueDate.setFont(new java.awt.Font("Montserrat", 1, 18)); // NOI18N
         date_issueDate.setFuente(new java.awt.Font("Montserrat", 1, 18)); // NOI18N
         date_issueDate.setPlaceholder("Chọn ngày mượn");
-        panel_main.add(date_issueDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(1150, 460, -1, -1));
+        panel_main.add(date_issueDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(1140, 460, 250, -1));
 
         date_dueDate.setFont(new java.awt.Font("Montserrat", 1, 18)); // NOI18N
         date_dueDate.setFuente(new java.awt.Font("Montserrat", 1, 18)); // NOI18N
         date_dueDate.setPlaceholder("Chọn ngày trả");
-        panel_main.add(date_dueDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(1150, 540, -1, -1));
+        panel_main.add(date_dueDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(1140, 540, 250, -1));
 
         jLabel17.setFont(new java.awt.Font("Montserrat SemiBold", 0, 18)); // NOI18N
         jLabel17.setForeground(new java.awt.Color(0, 153, 204));
@@ -374,19 +371,10 @@ public class IssueBook extends javax.swing.JFrame {
                 rSMaterialButtonRectangle1ActionPerformed(evt);
             }
         });
-        panel_main.add(rSMaterialButtonRectangle1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1160, 640, 210, -1));
+        panel_main.add(rSMaterialButtonRectangle1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1120, 640, 210, -1));
 
         jPanel3.setBackground(new java.awt.Color(100, 136, 234));
         jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/AddNewBookIcons/51516_arrow_back_left_icon.png"))); // NOI18N
-        jLabel11.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jLabel11.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel11MouseClicked(evt);
-            }
-        });
-        jPanel3.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 30, -1));
 
         jLabel4.setFont(new java.awt.Font("Montserrat", 1, 24)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
@@ -485,7 +473,30 @@ public class IssueBook extends javax.swing.JFrame {
         });
         jPanel3.add(lbl_category, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 450, 360, 40));
 
+        jPanel4.setBackground(new java.awt.Color(255, 255, 255));
+
+        jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/AddNewBookIcons/51516_arrow_back_left_icon.png"))); // NOI18N
+        jLabel11.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel11.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel11MouseClicked(evt);
+            }
+        });
+        jPanel4.add(jLabel11);
+
+        jPanel3.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 50, 40));
+
         panel_main.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 440, 800));
+
+        jPanel2.setBackground(new java.awt.Color(51, 102, 255));
+        jPanel2.setForeground(new java.awt.Color(255, 255, 255));
+
+        jLabel3.setFont(new java.awt.Font("Montserrat", 1, 24)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel3.setText("Mượn sách");
+        jPanel2.add(jLabel3);
+
+        panel_main.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(1030, 110, 350, 50));
 
         getContentPane().add(panel_main, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1410, 800));
 
@@ -612,7 +623,6 @@ public class IssueBook extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private rojeru_san.componentes.RSDateChooser date_dueDate;
     private rojeru_san.componentes.RSDateChooser date_issueDate;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
@@ -625,13 +635,16 @@ public class IssueBook extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel24;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private app.bolivia.swing.JCTextField lbl_author;
     private javax.swing.JLabel lbl_bookError;
     private javax.swing.JLabel lbl_bookError1;
