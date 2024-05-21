@@ -3,23 +3,27 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package models;
-import java.util.Date;
+
+import java.time.LocalDate;
 
 /**
  *
  * @author lethi
  */
 public class Student {
-    private String studentID;
+    private String id;
     private String name;
     private String gender;
-    private Date birthday;
+    private LocalDate birthday;
     private String email;
     private String major;
 
-    // Constructor
-    public Student(String studentID, String name, String gender, Date birthday, String email, String major) {
-        this.studentID = studentID;
+    public Student() {
+        
+    }
+    
+    public Student(String id, String name, String gender, LocalDate birthday, String email, String major) {
+        this.id = id;
         this.name = name;
         this.gender = gender;
         this.birthday = birthday;
@@ -27,28 +31,53 @@ public class Student {
         this.major = major;
     }
 
-    // Getters
-    public String getStudentID() {
-        return studentID;
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getGender() {
         return gender;
     }
 
-    public Date getBirthday() {
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public LocalDate getBirthday() {
         return birthday;
+    }
+
+    public void setBirthday(LocalDate birthday) {
+        this.birthday = birthday;
     }
 
     public String getEmail() {
         return email;
     }
 
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public String getMajor() {
         return major;
     }
+
+    public void setMajor(String major) {
+        this.major = major;
+    }
+    
+    
 }

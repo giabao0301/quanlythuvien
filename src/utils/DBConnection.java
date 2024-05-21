@@ -2,10 +2,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package jframe;
+package utils;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 
 /**
  *
@@ -24,5 +25,14 @@ public class DBConnection {
         }
 
         return connect;
+    }
+    
+    public static void closeConnection() {
+        try {
+            connect.close();
+            System.out.println("Database closed");
+        } catch (SQLException e) {
+            System.out.println("Cannot close connection");
+        }
     }
 }

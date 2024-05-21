@@ -2,18 +2,23 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package jframe;
+package views;
 
 /**
  *
  * @author trinh
  */
+import controllers.UserController;
 import java.sql.*;
+import java.util.Arrays;
 import java.util.regex.Pattern;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import models.User;
 
 public class SignupForm extends javax.swing.JFrame {
+
+    private UserController userController;
 
     public static boolean patternMatches(String emailAddress, String regexPattern) {
         return Pattern.compile(regexPattern)
@@ -25,77 +30,75 @@ public class SignupForm extends javax.swing.JFrame {
      * Creates new form SignupForm
      */
     public SignupForm() {
+        userController = new UserController(this);
         initComponents();
         setExtendedState(JFrame.MAXIMIZED_BOTH);
-
     }
 
-    // method to insert values into users table   
-    public void insertSignupDetails() {
+    // method to get data from user's input
+    public User getUserInput() {
         String name = txt_username.getText();
-        String pwd = txt_password.getText();
-        String email = txt_email.getText();
-        String phone = txt_phone.getText();
-
-        try {
-            Connection connect = DBConnection.getConnection();
-            String sql = "insert into users(name, password, email, phone) values(?, ?, ?, ?)";
-            PreparedStatement pst = connect.prepareStatement(sql);
-
-            pst.setString(1, name);
-            pst.setString(2, pwd);
-            pst.setString(3, email);
-            pst.setString(4, phone);
-
-            int updatedRowCount = pst.executeUpdate();
-
-            if (updatedRowCount > 0) {
-                JOptionPane.showMessageDialog(this, "Đăng ký thành công");
-                LoginForm loginForm = new LoginForm();
-                loginForm.setVisible(true);
-                dispose();
-            } else {
-                JOptionPane.showMessageDialog(this, "Đăng ký không thành công");
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
+        String pwd = "";
+        
+        for (char c : txt_password.getPassword()) {
+            pwd += c;
         }
-    }
-
-//    Validation
-    public boolean validateSignup() {
-        String name = txt_username.getText();
-        String pwd = txt_password.getText();
+        
         String email = txt_email.getText();
         String phone = txt_phone.getText();
 
-        if (name.equals("")) {
+        return new User(name, pwd, email, phone);
+    }
+
+    // method to show message dialog
+    public void showMessage(String message) {
+        JOptionPane.showMessageDialog(this, message);
+    }
+
+    // method to check if a user already exists
+    public boolean checkDuplicateUser(String userName) {
+        boolean existed = false;
+        if (userController.getUserByUserName(txt_username.getText()) != null) {
+            existed = true;
+        }
+        return existed;
+    }
+
+    // Validation
+    public boolean validateUserInput() {
+        User user = this.getUserInput();
+
+        if (user.getName().equals("")) {
             JOptionPane.showMessageDialog(this, "Vui lòng nhập tên tài khoản");
             return false;
         }
 
-        if (pwd.equals("")) {
+        if (checkDuplicateUser(user.getName())) {
+            JOptionPane.showMessageDialog(this, "Tên tài khoản đã tồn tại");
+            return false;
+        }
+
+        if (user.getPassword().equals("")) {
             JOptionPane.showMessageDialog(this, "Vui lòng nhập mật khẩu");
             return false;
         }
 
-        if (pwd.length() < 6) {
+        if (user.getPassword().length() < 6) {
             JOptionPane.showMessageDialog(this, "Mật khẩu phải chứa ít nhất 6 ký tự");
             return false;
         }
 
-        if (email.equals("") || patternMatches(email, "^(.+)@(\\S+)$") == false) {
+        if (user.getEmail().equals("") || patternMatches(user.getEmail(), "^(.+)@(\\S+)$") == false) {
             JOptionPane.showMessageDialog(this, "Vui lòng nhập email hợp lệ");
             return false;
         }
 
-        if (phone.equals("")) {
+        if (user.getPhone().equals("")) {
             JOptionPane.showMessageDialog(this, "Vui lòng nhập số điện thoại");
             return false;
         } else {
             try {
-                int i = Integer.parseInt(phone);
+                int i = Integer.parseInt(user.getPhone());
             } catch (NumberFormatException e) {
                 JOptionPane.showMessageDialog(this, "Vui lòng nhập số điện thoại hợp lệ");
                 return false;
@@ -104,39 +107,16 @@ public class SignupForm extends javax.swing.JFrame {
         return true;
     }
 
-//    Check duplicate users
-    public boolean checkDuplicateUser() {
-        String name = txt_username.getText();
-        boolean isExist = false;
-
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection connect = DriverManager.getConnection("jdbc:mysql://localhost:3306/quanlythuvien", "root", "");
-
-            PreparedStatement pst = connect.prepareStatement("select * from users where name = ?");
-
-            pst.setString(1, name);
-
-            ResultSet result = pst.executeQuery();
-            if (result.next()) {
-                isExist = true;
-            } else {
-                isExist = false;
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return isExist;
-    }
-
+    // Check duplicate users
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
      * regenerated by the Form Editor.
      */
     @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -149,34 +129,21 @@ public class SignupForm extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         txt_username = new app.bolivia.swing.JCTextField();
-        txt_password = new app.bolivia.swing.JCTextField();
         jLabel5 = new javax.swing.JLabel();
         txt_email = new app.bolivia.swing.JCTextField();
         jLabel6 = new javax.swing.JLabel();
         txt_phone = new app.bolivia.swing.JCTextField();
-        rSMaterialButtonRectangle1 = new rojerusan.RSMaterialButtonRectangle();
+        signupButton = new rojerusan.RSMaterialButtonRectangle();
         jPanel3 = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
+        txt_password = new rojerusan.RSPasswordTextPlaceHolder();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/signup_background.jpg"))); // NOI18N
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 953, Short.MAX_VALUE)
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 901, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 105, Short.MAX_VALUE))
-        );
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -204,9 +171,6 @@ public class SignupForm extends javax.swing.JFrame {
             }
         });
 
-        txt_password.setFont(new java.awt.Font("Montserrat Light", 0, 18)); // NOI18N
-        txt_password.setPlaceholder("Nhập mật khẩu");
-
         jLabel5.setFont(new java.awt.Font("Montserrat SemiBold", 0, 18)); // NOI18N
         jLabel5.setText("Email");
 
@@ -219,12 +183,12 @@ public class SignupForm extends javax.swing.JFrame {
         txt_phone.setFont(new java.awt.Font("Montserrat Light", 0, 18)); // NOI18N
         txt_phone.setPlaceholder("Nhập số điện thoại");
 
-        rSMaterialButtonRectangle1.setBackground(new java.awt.Color(100, 136, 234));
-        rSMaterialButtonRectangle1.setText("Đăng ký");
-        rSMaterialButtonRectangle1.setFont(new java.awt.Font("Montserrat SemiBold", 0, 18)); // NOI18N
-        rSMaterialButtonRectangle1.addActionListener(new java.awt.event.ActionListener() {
+        signupButton.setBackground(new java.awt.Color(100, 136, 234));
+        signupButton.setText("Đăng ký");
+        signupButton.setFont(new java.awt.Font("Montserrat SemiBold", 0, 18)); // NOI18N
+        signupButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rSMaterialButtonRectangle1ActionPerformed(evt);
+                signupButtonActionPerformed(evt);
             }
         });
 
@@ -261,36 +225,44 @@ public class SignupForm extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        txt_password.setForeground(new java.awt.Color(0, 0, 0));
+        txt_password.setFont(new java.awt.Font("Montserrat", 0, 18)); // NOI18N
+        txt_password.setPhColor(new java.awt.Color(0, 0, 0));
+        txt_password.setPlaceholder("Nhập mật khẩu");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(145, 145, 145))
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(135, 135, 135)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(txt_phone, javax.swing.GroupLayout.PREFERRED_SIZE, 323, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(txt_email, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(txt_password, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(txt_username, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel2Layout.createSequentialGroup()
-                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel3)
-                                .addComponent(jLabel5)
-                                .addComponent(jLabel4)
-                                .addComponent(jLabel6))
-                            .addGap(196, 196, 196)))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(rSMaterialButtonRectangle1, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(61, 61, 61))
+                        .addGap(135, 135, 135)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(txt_phone, javax.swing.GroupLayout.PREFERRED_SIZE, 323, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(txt_email, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(txt_username, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(jPanel2Layout.createSequentialGroup()
+                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jLabel3)
+                                        .addComponent(jLabel5)
+                                        .addComponent(jLabel6))
+                                    .addGap(196, 196, 196))
+                                .addGroup(jPanel2Layout.createSequentialGroup()
+                                    .addComponent(jLabel4)
+                                    .addGap(236, 236, 236))
+                                .addComponent(txt_password, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(signupButton, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(61, 61, 61))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 298, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(13, 13, 13))))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 298, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(13, 13, 13)))
-                .addContainerGap(106, Short.MAX_VALUE))
+                        .addGap(162, 162, 162)
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(332, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -305,7 +277,7 @@ public class SignupForm extends javax.swing.JFrame {
                 .addComponent(jLabel4)
                 .addGap(18, 18, 18)
                 .addComponent(txt_password, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(32, 32, 32)
+                .addGap(38, 38, 38)
                 .addComponent(jLabel5)
                 .addGap(18, 18, 18)
                 .addComponent(txt_email, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -316,8 +288,27 @@ public class SignupForm extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(rSMaterialButtonRectangle1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(signupButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(185, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 901, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 104, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -326,15 +317,12 @@ public class SignupForm extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 564, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 902, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -342,41 +330,47 @@ public class SignupForm extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void rSMaterialButtonRectangle1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSMaterialButtonRectangle1ActionPerformed
-        if (validateSignup() == true) {
-            if (checkDuplicateUser() == false) {
-                insertSignupDetails();
-
+    private void signupButtonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_signupButtonActionPerformed
+        if (validateUserInput()) {
+            if (userController.signUp()) {
+                JOptionPane.showMessageDialog(this, "Đăng ký thành công");
+                HomePage homePage = new HomePage();
+                homePage.setVisible(true);
+                this.dispose();
             } else {
-                JOptionPane.showMessageDialog(this, "Tài khoản đã tồn tại");
+                JOptionPane.showMessageDialog(this, "Đăng ký không thành công");
             }
         }
-    }//GEN-LAST:event_rSMaterialButtonRectangle1ActionPerformed
+    }// GEN-LAST:event_signupButtonActionPerformed
 
-    private void txt_usernameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_usernameActionPerformed
+    private void txt_usernameActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txt_usernameActionPerformed
 
-    }//GEN-LAST:event_txt_usernameActionPerformed
+    }// GEN-LAST:event_txt_usernameActionPerformed
 
-    private void txt_usernameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txt_usernameFocusLost
-        if (checkDuplicateUser() == true) {
-            JOptionPane.showMessageDialog(this, "Tài khoản đã tồn tại");
-        }
-    }//GEN-LAST:event_txt_usernameFocusLost
+    private void txt_usernameFocusLost(java.awt.event.FocusEvent evt) {// GEN-FIRST:event_txt_usernameFocusLost
+//        if (checkDuplicateUser(txt_username.getText())) {
+//            showMessage("Tên tài khoản đã tồn tại");
+//        }
+    }// GEN-LAST:event_txt_usernameFocusLost
 
-    private void jLabel8MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel8MouseClicked
+    private void jLabel8MouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_jLabel8MouseClicked
         LoginForm loginForm = new LoginForm();
         loginForm.setVisible(true);
         dispose();
-    }//GEN-LAST:event_jLabel8MouseClicked
+    }// GEN-LAST:event_jLabel8MouseClicked
 
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+        // <editor-fold defaultstate="collapsed" desc=" Look and feel setting code
+        // (optional) ">
+        /*
+         * If Nimbus (introduced in Java SE 6) is not available, stay with the default
+         * look and feel.
+         * For details see
+         * http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
@@ -386,15 +380,19 @@ public class SignupForm extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(SignupForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SignupForm.class.getName()).log(java.util.logging.Level.SEVERE, null,
+                    ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(SignupForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SignupForm.class.getName()).log(java.util.logging.Level.SEVERE, null,
+                    ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(SignupForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SignupForm.class.getName()).log(java.util.logging.Level.SEVERE, null,
+                    ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(SignupForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SignupForm.class.getName()).log(java.util.logging.Level.SEVERE, null,
+                    ex);
         }
-        //</editor-fold>
+        // </editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -417,10 +415,10 @@ public class SignupForm extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private rojeru_san.complementos.RSEstiloTablaHeader rSEstiloTablaHeader1;
-    private rojerusan.RSMaterialButtonRectangle rSMaterialButtonRectangle1;
     private rojeru_san.complementos.RSPopuMenu rSPopuMenu1;
+    private rojerusan.RSMaterialButtonRectangle signupButton;
     private app.bolivia.swing.JCTextField txt_email;
-    private app.bolivia.swing.JCTextField txt_password;
+    private rojerusan.RSPasswordTextPlaceHolder txt_password;
     private app.bolivia.swing.JCTextField txt_phone;
     private app.bolivia.swing.JCTextField txt_username;
     // End of variables declaration//GEN-END:variables

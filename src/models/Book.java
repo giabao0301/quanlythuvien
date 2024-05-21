@@ -11,29 +11,41 @@ package models;
 
 
 public class Book {
-    public Book(String bookID, String bookName, String category, String author, String publisher, int quantity) {
-        this.bookID = bookID;
-        this.bookName = bookName;
+    private String id;
+    private String name;
+    private String category;
+    private String author;
+    private String publisher;
+    private int quantity;
+    private int price;
+
+    public Book() {
+    }
+
+    public Book(String id, String name, String category, String author, String publisher, int quantity, int price) {
+        this.id = id;
+        this.name = name;
         this.category = category;
         this.author = author;
         this.publisher = publisher;
         this.quantity = quantity;
+        this.price = price;
     }
 
-    public String getBookID() {
-        return bookID;
+    public String getId() {
+        return id;
     }
 
-    public void setBookID(String bookID) {
-        this.bookID = bookID;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public String getBookName() {
-        return bookName;
+    public String getName() {
+        return name;
     }
 
-    public void setBookName(String bookName) {
-        this.bookName = bookName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getCategory() {
@@ -67,10 +79,13 @@ public class Book {
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
-    private String bookID;
-    private String bookName;
-    private String category;
-    private String author;
-    private String publisher;
-    private int quantity;
+
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
+    
 }

@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package jframe;
+package views;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -69,7 +69,11 @@ public class HomePage extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
-    // Code">                          
+    // Code">
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -135,7 +139,7 @@ public class HomePage extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Montserrat", 1, 24)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Quản lý thư viện");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 0, -1, 60));
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 0, -1, 60));
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -175,6 +179,7 @@ public class HomePage extends javax.swing.JFrame {
         sideBar.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel4.setBackground(new java.awt.Color(255, 51, 51));
+        jPanel4.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jPanel4.addAncestorListener(new javax.swing.event.AncestorListener() {
             public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
                 jPanel4AncestorAdded(evt);
@@ -233,7 +238,7 @@ public class HomePage extends javax.swing.JFrame {
 
         jLabel9.setFont(new java.awt.Font("Montserrat", 1, 18)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/adminIcons/icons8_Home_26px_2.png"))); // NOI18N
+        jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/adminIcons/home_24px.png"))); // NOI18N
         jLabel9.setText("   Trang chủ");
         jPanel6.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 0, 150, 50));
 
@@ -554,17 +559,17 @@ public class HomePage extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jPanel12MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel12MouseClicked
+    private void jPanel12MouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_jPanel12MouseClicked
         ReturnBook returnBook = new ReturnBook();
         returnBook.setVisible(true);
         dispose();
-    }//GEN-LAST:event_jPanel12MouseClicked
+    }// GEN-LAST:event_jPanel12MouseClicked
 
-    private void jPanel15MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel15MouseClicked
+    private void jPanel15MouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_jPanel15MouseClicked
         ViewAllRecord view = new ViewAllRecord();
         view.setVisible(true);
         dispose();
-    }//GEN-LAST:event_jPanel15MouseClicked
+    }// GEN-LAST:event_jPanel15MouseClicked
 
     private void jPanel9KeyPressed(java.awt.event.KeyEvent evt) {// GEN-FIRST:event_jPanel9KeyPressed
         // TODO add your handling code here:
@@ -631,7 +636,6 @@ public class HomePage extends javax.swing.JFrame {
         manageStudents.setVisible(true);
         dispose();
     }// GEN-LAST:event_jPanel10MouseClicked
-
 
     private void jPanel9MouseMoved(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_jPanel9MouseMoved
 
