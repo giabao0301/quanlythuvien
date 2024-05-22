@@ -89,11 +89,6 @@ public class BookPenaltyForm extends javax.swing.JFrame {
 
         jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/AddNewBookIcons/51516_arrow_back_left_icon.png"))); // NOI18N
         jLabel9.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jLabel9.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel9MouseClicked(evt);
-            }
-        });
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -198,7 +193,7 @@ public class BookPenaltyForm extends javax.swing.JFrame {
 
             },
             new String [] {
-                "STT", "Mã sách", "Tên sách", "Mã sinh viên", "Tên sinh viên", "Trạng thái"
+                "Mã sách", "Tên sách", "Mã sinh viên", "Tên sinh viên", "Trạng thái"
             }
         ));
         tbl_issueBookDetails1.setColorBordeFilas(new java.awt.Color(255, 255, 255));
