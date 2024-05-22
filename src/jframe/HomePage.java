@@ -24,8 +24,10 @@ public class HomePage extends javax.swing.JFrame {
      * Creates new form HomePage
      */
     Color mouseEnterColor = new Color(0, 0, 0);
-    Color mouseExitColor = new Color(51, 51, 51);
-
+    Color mouseExitColor = new Color(153, 153, 153);
+    Color logoutEnterColor = new Color(255, 102, 102);
+    Color logoutExitColor = new Color(255, 51, 51);
+    
     public HomePage() {
         initComponents();
         showPieChart();
@@ -76,10 +78,8 @@ public class HomePage extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        jPanel2 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
         sideBar = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -135,22 +135,7 @@ public class HomePage extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Montserrat", 1, 24)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Quản lý thư viện");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 0, -1, 60));
-
-        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 60, Short.MAX_VALUE)
-        );
-
-        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 0, 2, 60));
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 0, -1, 60));
 
         jLabel3.setBackground(new java.awt.Color(255, 255, 255));
         jLabel3.setFont(new java.awt.Font("Montserrat", 1, 18)); // NOI18N
@@ -159,15 +144,7 @@ public class HomePage extends javax.swing.JFrame {
         jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(1310, 20, -1, -1));
 
         jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/adminIcons/3592870_brochure_document_menu_note_office_icon.png"))); // NOI18N
-        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 0, -1, 60));
-
-        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/adminIcons/icons8-menu-50 (1).png"))); // NOI18N
-        jLabel5.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel5MouseClicked(evt);
-            }
-        });
-        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 0, -1, 60));
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 0, -1, 60));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1920, 60));
 
@@ -175,6 +152,7 @@ public class HomePage extends javax.swing.JFrame {
         sideBar.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel4.setBackground(new java.awt.Color(255, 51, 51));
+        jPanel4.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jPanel4.addAncestorListener(new javax.swing.event.AncestorListener() {
             public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
                 jPanel4AncestorAdded(evt);
@@ -188,6 +166,12 @@ public class HomePage extends javax.swing.JFrame {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jPanel4MouseClicked(evt);
             }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jPanel4MouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                jPanel4MouseExited(evt);
+            }
         });
         jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -199,7 +183,7 @@ public class HomePage extends javax.swing.JFrame {
 
         sideBar.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 650, 210, 50));
 
-        jPanel6.setBackground(new java.awt.Color(102, 102, 255));
+        jPanel6.setBackground(new java.awt.Color(153, 153, 153));
         jPanel6.addAncestorListener(new javax.swing.event.AncestorListener() {
             public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
                 jPanel6AncestorAdded(evt);
@@ -207,6 +191,14 @@ public class HomePage extends javax.swing.JFrame {
             public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
             }
             public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
+            }
+        });
+        jPanel6.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jPanel6MouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                jPanel6MouseExited(evt);
             }
         });
         jPanel6.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -245,6 +237,7 @@ public class HomePage extends javax.swing.JFrame {
         sideBar.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 160, 340, 50));
 
         jPanel8.setBackground(new java.awt.Color(153, 153, 153));
+        jPanel8.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jPanel8.addAncestorListener(new javax.swing.event.AncestorListener() {
             public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
                 jPanel8AncestorAdded(evt);
@@ -252,6 +245,14 @@ public class HomePage extends javax.swing.JFrame {
             public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
             }
             public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
+            }
+        });
+        jPanel8.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jPanel8MouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                jPanel8MouseExited(evt);
             }
         });
         jPanel8.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -280,6 +281,12 @@ public class HomePage extends javax.swing.JFrame {
         jPanel9.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jPanel9MouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jPanel9MouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                jPanel9MouseExited(evt);
             }
         });
         jPanel9.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -312,6 +319,12 @@ public class HomePage extends javax.swing.JFrame {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jPanel10MouseClicked(evt);
             }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jPanel10MouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                jPanel10MouseExited(evt);
+            }
         });
         jPanel10.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -338,6 +351,12 @@ public class HomePage extends javax.swing.JFrame {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jPanel11MouseClicked(evt);
             }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jPanel11MouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                jPanel11MouseExited(evt);
+            }
         });
         jPanel11.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -350,6 +369,7 @@ public class HomePage extends javax.swing.JFrame {
         sideBar.add(jPanel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 330, 300, 50));
 
         jPanel12.setBackground(new java.awt.Color(153, 153, 153));
+        jPanel12.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jPanel12.addAncestorListener(new javax.swing.event.AncestorListener() {
             public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
                 jPanel12AncestorAdded(evt);
@@ -363,6 +383,12 @@ public class HomePage extends javax.swing.JFrame {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jPanel12MouseClicked(evt);
             }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jPanel12MouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                jPanel12MouseExited(evt);
+            }
         });
         jPanel12.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -375,6 +401,7 @@ public class HomePage extends javax.swing.JFrame {
         sideBar.add(jPanel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 390, 300, 50));
 
         jPanel5.setBackground(new java.awt.Color(153, 153, 153));
+        jPanel5.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jPanel5.addAncestorListener(new javax.swing.event.AncestorListener() {
             public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
                 jPanel5AncestorAdded(evt);
@@ -382,6 +409,14 @@ public class HomePage extends javax.swing.JFrame {
             public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
             }
             public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
+            }
+        });
+        jPanel5.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jPanel5MouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                jPanel5MouseExited(evt);
             }
         });
         jPanel5.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -395,6 +430,7 @@ public class HomePage extends javax.swing.JFrame {
         sideBar.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 570, 300, 50));
 
         jPanel15.setBackground(new java.awt.Color(153, 153, 153));
+        jPanel15.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jPanel15.addAncestorListener(new javax.swing.event.AncestorListener() {
             public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
                 jPanel15AncestorAdded(evt);
@@ -408,6 +444,12 @@ public class HomePage extends javax.swing.JFrame {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jPanel15MouseClicked(evt);
             }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jPanel15MouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                jPanel15MouseExited(evt);
+            }
         });
         jPanel15.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -420,6 +462,7 @@ public class HomePage extends javax.swing.JFrame {
         sideBar.add(jPanel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 450, 300, 50));
 
         jPanel16.setBackground(new java.awt.Color(153, 153, 153));
+        jPanel16.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jPanel16.addAncestorListener(new javax.swing.event.AncestorListener() {
             public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
                 jPanel16AncestorAdded(evt);
@@ -448,8 +491,9 @@ public class HomePage extends javax.swing.JFrame {
         jPanel14.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel16.setFont(new java.awt.Font("Montserrat", 1, 48)); // NOI18N
-        jLabel16.setText("10");
-        jPanel14.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 30, 60, -1));
+        jLabel16.setIcon(new javax.swing.ImageIcon(getClass().getResource("/adminIcons/icons8_List_of_Thumbnails_50px.png"))); // NOI18N
+        jLabel16.setText(" 10");
+        jPanel14.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 30, 120, -1));
 
         jPanel13.add(jPanel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(900, 90, 187, 108));
 
@@ -466,8 +510,9 @@ public class HomePage extends javax.swing.JFrame {
         jPanel17.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel20.setFont(new java.awt.Font("Montserrat", 1, 48)); // NOI18N
-        jLabel20.setText("10");
-        jPanel17.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 30, 60, -1));
+        jLabel20.setIcon(new javax.swing.ImageIcon(getClass().getResource("/adminIcons/icons8_People_50px.png"))); // NOI18N
+        jLabel20.setText(" 10");
+        jPanel17.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 30, 130, -1));
 
         jPanel13.add(jPanel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 90, 187, 108));
 
@@ -480,8 +525,9 @@ public class HomePage extends javax.swing.JFrame {
         jPanel18.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel22.setFont(new java.awt.Font("Montserrat", 1, 48)); // NOI18N
-        jLabel22.setText("10");
-        jPanel18.add(jLabel22, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 30, 60, -1));
+        jLabel22.setIcon(new javax.swing.ImageIcon(getClass().getResource("/adminIcons/icons8_Sell_50px.png"))); // NOI18N
+        jLabel22.setText(" 10");
+        jPanel18.add(jLabel22, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 30, 120, -1));
 
         jPanel13.add(jPanel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 90, 187, 108));
 
@@ -495,7 +541,7 @@ public class HomePage extends javax.swing.JFrame {
 
         jLabel26.setFont(new java.awt.Font("Montserrat", 1, 48)); // NOI18N
         jLabel26.setIcon(new javax.swing.ImageIcon(getClass().getResource("/adminIcons/icons8_Book_Shelf_50px.png"))); // NOI18N
-        jLabel26.setText("10");
+        jLabel26.setText(" 10");
         jPanel20.add(jLabel26, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 30, 120, -1));
 
         jPanel13.add(jPanel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 90, 187, 108));
@@ -566,6 +612,86 @@ public class HomePage extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_jPanel15MouseClicked
 
+    private void jPanel5AncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_jPanel5AncestorAdded
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jPanel5AncestorAdded
+
+    private void jPanel6AncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_jPanel6AncestorAdded
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jPanel6AncestorAdded
+
+    private void jPanel6MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel6MouseExited
+        jPanel6.setBackground(mouseExitColor);
+    }//GEN-LAST:event_jPanel6MouseExited
+
+    private void jPanel6MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel6MouseEntered
+        jPanel6.setBackground(mouseEnterColor);
+    }//GEN-LAST:event_jPanel6MouseEntered
+
+    private void jPanel8MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel8MouseEntered
+        jPanel8.setBackground(mouseEnterColor);
+    }//GEN-LAST:event_jPanel8MouseEntered
+
+    private void jPanel8MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel8MouseExited
+        jPanel8.setBackground(mouseExitColor);
+    }//GEN-LAST:event_jPanel8MouseExited
+
+    private void jPanel9MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel9MouseEntered
+        jPanel9.setBackground(mouseEnterColor);
+    }//GEN-LAST:event_jPanel9MouseEntered
+
+    private void jPanel9MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel9MouseExited
+        jPanel9.setBackground(mouseExitColor);
+    }//GEN-LAST:event_jPanel9MouseExited
+
+    private void jPanel10MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel10MouseEntered
+        jPanel10.setBackground(mouseEnterColor);
+    }//GEN-LAST:event_jPanel10MouseEntered
+
+    private void jPanel10MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel10MouseExited
+        jPanel10.setBackground(mouseExitColor);
+    }//GEN-LAST:event_jPanel10MouseExited
+
+    private void jPanel11MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel11MouseEntered
+        jPanel11.setBackground(mouseEnterColor);
+    }//GEN-LAST:event_jPanel11MouseEntered
+
+    private void jPanel11MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel11MouseExited
+        jPanel11.setBackground(mouseExitColor);
+    }//GEN-LAST:event_jPanel11MouseExited
+
+    private void jPanel12MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel12MouseEntered
+        jPanel12.setBackground(mouseEnterColor);
+    }//GEN-LAST:event_jPanel12MouseEntered
+
+    private void jPanel12MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel12MouseExited
+        jPanel12.setBackground(mouseExitColor);
+    }//GEN-LAST:event_jPanel12MouseExited
+
+    private void jPanel15MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel15MouseEntered
+        jPanel15.setBackground(mouseEnterColor);
+    }//GEN-LAST:event_jPanel15MouseEntered
+
+    private void jPanel15MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel15MouseExited
+        jPanel15.setBackground(mouseExitColor);
+    }//GEN-LAST:event_jPanel15MouseExited
+
+    private void jPanel5MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel5MouseEntered
+        jPanel5.setBackground(mouseEnterColor);
+    }//GEN-LAST:event_jPanel5MouseEntered
+
+    private void jPanel5MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel5MouseExited
+        jPanel5.setBackground(mouseExitColor);
+    }//GEN-LAST:event_jPanel5MouseExited
+
+    private void jPanel4MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel4MouseEntered
+         jPanel4.setBackground(logoutEnterColor);
+    }//GEN-LAST:event_jPanel4MouseEntered
+
+    private void jPanel4MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel4MouseExited
+        jPanel4.setBackground(logoutExitColor);
+    }//GEN-LAST:event_jPanel4MouseExited
+
     private void jPanel9KeyPressed(java.awt.event.KeyEvent evt) {// GEN-FIRST:event_jPanel9KeyPressed
         // TODO add your handling code here:
     }// GEN-LAST:event_jPanel9KeyPressed
@@ -583,10 +709,6 @@ public class HomePage extends javax.swing.JFrame {
     private void jPanel7AncestorAdded(javax.swing.event.AncestorEvent evt) {// GEN-FIRST:event_jPanel7AncestorAdded
         // TODO add your handling code here:
     }// GEN-LAST:event_jPanel7AncestorAdded
-
-    private void jPanel6AncestorAdded(javax.swing.event.AncestorEvent evt) {// GEN-FIRST:event_jPanel6AncestorAdded
-        // TODO add your handling code here:
-    }// GEN-LAST:event_jPanel6AncestorAdded
 
     private void jPanel8AncestorAdded(javax.swing.event.AncestorEvent evt) {// GEN-FIRST:event_jPanel8AncestorAdded
         // TODO add your handling code here:
@@ -608,10 +730,6 @@ public class HomePage extends javax.swing.JFrame {
         // TODO add your handling code here:
     }// GEN-LAST:event_jPanel12AncestorAdded
 
-    private void jPanel5AncestorAdded(javax.swing.event.AncestorEvent evt) {// GEN-FIRST:event_jPanel5AncestorAdded
-        // TODO add your handling code here:
-    }// GEN-LAST:event_jPanel5AncestorAdded
-
     private void jPanel15AncestorAdded(javax.swing.event.AncestorEvent evt) {// GEN-FIRST:event_jPanel15AncestorAdded
         // TODO add your handling code here:
     }// GEN-LAST:event_jPanel15AncestorAdded
@@ -629,9 +747,8 @@ public class HomePage extends javax.swing.JFrame {
     private void jPanel10MouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_jPanel10MouseClicked
         ManageStudents manageStudents = new ManageStudents();
         manageStudents.setVisible(true);
-        dispose();
+        this.dispose();
     }// GEN-LAST:event_jPanel10MouseClicked
-
 
     private void jPanel9MouseMoved(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_jPanel9MouseMoved
 
@@ -708,7 +825,6 @@ public class HomePage extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel28;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
@@ -723,7 +839,6 @@ public class HomePage extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel16;
     private javax.swing.JPanel jPanel17;
     private javax.swing.JPanel jPanel18;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel20;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;

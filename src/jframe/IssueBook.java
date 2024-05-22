@@ -21,6 +21,8 @@ public class IssueBook extends javax.swing.JFrame {
     public IssueBook() {
         initComponents();
         setExtendedState(JFrame.MAXIMIZED_BOTH);
+        date_dueDate.setEnabled(false);
+
     }
 
     public void getBookDetails() {
@@ -346,6 +348,19 @@ public class IssueBook extends javax.swing.JFrame {
         date_issueDate.setFont(new java.awt.Font("Montserrat", 1, 18)); // NOI18N
         date_issueDate.setFuente(new java.awt.Font("Montserrat", 1, 18)); // NOI18N
         date_issueDate.setPlaceholder("Chọn ngày mượn");
+        date_issueDate.addInputMethodListener(new java.awt.event.InputMethodListener() {
+            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
+                date_issueDateCaretPositionChanged(evt);
+            }
+            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
+                date_issueDateInputMethodTextChanged(evt);
+            }
+        });
+        date_issueDate.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                date_issueDatePropertyChange(evt);
+            }
+        });
         panel_main.add(date_issueDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(1140, 460, 250, -1));
 
         date_dueDate.setFont(new java.awt.Font("Montserrat", 1, 18)); // NOI18N
@@ -584,6 +599,17 @@ public class IssueBook extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_lbl_categoryActionPerformed
 
+    private void date_issueDateInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_date_issueDateInputMethodTextChanged
+        date_dueDate.setDatoFecha(date_issueDate.getDatoFecha());
+    }//GEN-LAST:event_date_issueDateInputMethodTextChanged
+
+    private void date_issueDateCaretPositionChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_date_issueDateCaretPositionChanged
+    }//GEN-LAST:event_date_issueDateCaretPositionChanged
+
+    private void date_issueDatePropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_date_issueDatePropertyChange
+        date_dueDate.setDatoFecha(date_issueDate.getDatoFecha());
+    }//GEN-LAST:event_date_issueDatePropertyChange
+    
     /**
      * @param args the command line arguments
      */
