@@ -9,6 +9,9 @@ import javax.swing.JFrame;
 import java.util.Date;
 import javax.swing.JOptionPane;
 import javax.swing.UnsupportedLookAndFeelException;
+import java.text.SimpleDateFormat;
+
+
 
 /**
  *
@@ -60,7 +63,99 @@ public class ReturnBook extends javax.swing.JFrame {
     }
 
     //return the book
+    public boolean returnBook1() {
+        boolean isReturned = false;
+        String bookId = txt_bookId.getText();
+        String studentId = txt_studentId.getText();
+        String returnDate = txt_returnDate.getText();
+        
+        try {
+            Connection con = DBConnection.getConnection();
+            String sql = "update issue_book_details set returnDate = ?, status = ? where bookID = ? and studentID = ? and status = ?";
+            PreparedStatement pst = con.prepareStatement(sql);
+            
+            pst.setString(1, returnDate);
+            //String status = checkDate(java.sql.Date.valueOf(returnDate)); 
+            //pst.setString(2, status); // Setting status
+        
+            pst.setString(3, bookId);
+            pst.setString(4, studentId);
+            pst.setString(5, "đang mượn");
+            
+            int rowCount = pst.executeUpdate();
+            if ( rowCount > 0){
+                isReturned = true;
+            } else {
+                isReturned = false;
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return isReturned;
+    }
+    
     public boolean returnBook() {
+    boolean isReturned = false;
+    String bookId = txt_bookId.getText();
+    String studentId = txt_studentId.getText();
+    String returnDateStr = txt_returnDate.getText(); // Assuming this is in 'yyyy-MM-dd' format
+
+    try {
+        // Get the connection
+        Connection con = DBConnection.getConnection();
+
+        // Fetch the due date from the database
+        String fetchDueDateSql = "SELECT dueDate FROM issue_book_details WHERE bookID = ? AND studentID = ? AND status = ?";
+        PreparedStatement fetchDueDatePst = con.prepareStatement(fetchDueDateSql);
+        fetchDueDatePst.setString(1, bookId);
+        fetchDueDatePst.setString(2, studentId);
+        fetchDueDatePst.setString(3, "đang mượn");
+
+        ResultSet rs = fetchDueDatePst.executeQuery();
+        Date dueDate = null;
+        if (rs.next()) {
+            dueDate = rs.getDate("dueDate");
+        }
+
+        if (dueDate == null) {
+            return false;
+        }
+
+        // Convert returnDateStr to java.util.Date
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date returnDate = sdf.parse(returnDateStr);
+
+        // Determine the status based on the due date and return date
+        String status = checkDate(dueDate, returnDate);
+
+        // Update the return date and status in the database
+        String sql = "UPDATE issue_book_details SET returnDate = ?, status = ? WHERE bookID = ? AND studentID = ? AND status = ?";
+        PreparedStatement pst = con.prepareStatement(sql);
+        pst.setString(1, returnDateStr); // Setting returnDate
+        pst.setString(2, status); // Setting status
+        pst.setString(3, bookId);
+        pst.setString(4, studentId);
+        pst.setString(5, "đang mượn");
+
+        int rowCount = pst.executeUpdate();
+        if (rowCount > 0) {
+            isReturned = true;
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    return isReturned;
+}
+   
+    public String checkDate(Date dueDate, Date returnDate) {
+        if (returnDate.after(dueDate)) {
+            return "trả quá hạn";
+        } else {
+            return "đã trả";
+        }
+    }
+    
+    public boolean lostBook() {
         boolean isReturned = false;
         String bookId = txt_bookId.getText();
         String studentId = txt_studentId.getText();
@@ -69,7 +164,7 @@ public class ReturnBook extends javax.swing.JFrame {
             Connection con = DBConnection.getConnection();
             String sql = "update issue_book_details set status = ? where bookID = ? and studentID = ? and status = ?";
             PreparedStatement pst = con.prepareStatement(sql);
-            pst.setString(1, "đã trả");
+            pst.setString(1, "đã mất");
             pst.setString(2, bookId);
             pst.setString(3, studentId);
             pst.setString(4, "đang mượn");
@@ -86,6 +181,7 @@ public class ReturnBook extends javax.swing.JFrame {
         return isReturned;
     }
     
+   
     public void updateBookCount() {
         String bookId = txt_bookId.getText();
         try {
@@ -163,7 +259,6 @@ public class ReturnBook extends javax.swing.JFrame {
         lbl_studentName = new app.bolivia.swing.JCTextField();
         lbl_dueDate = new app.bolivia.swing.JCTextField();
         jLabel23 = new javax.swing.JLabel();
-        lbl_bookError1 = new javax.swing.JLabel();
         lbl_bookError = new javax.swing.JLabel();
         jLabel24 = new javax.swing.JLabel();
         lbl_issueDate = new app.bolivia.swing.JCTextField();
@@ -173,6 +268,9 @@ public class ReturnBook extends javax.swing.JFrame {
         jLabel11 = new javax.swing.JLabel();
         rSMaterialButtonRectangle2 = new rojerusan.RSMaterialButtonRectangle();
         jLabel2 = new javax.swing.JLabel();
+        rSMaterialButtonRectangle3 = new rojerusan.RSMaterialButtonRectangle();
+        txt_returnDate = new app.bolivia.swing.JCTextField();
+        jLabel18 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
@@ -184,7 +282,7 @@ public class ReturnBook extends javax.swing.JFrame {
         jLabel15.setFont(new java.awt.Font("Montserrat SemiBold", 0, 18)); // NOI18N
         jLabel15.setForeground(new java.awt.Color(0, 153, 204));
         jLabel15.setText("Mã sách");
-        panel_main.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(1080, 230, 80, -1));
+        panel_main.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(1000, 250, 80, -1));
 
         txt_bookId.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         txt_bookId.setForeground(new java.awt.Color(102, 102, 102));
@@ -201,7 +299,7 @@ public class ReturnBook extends javax.swing.JFrame {
                 txt_bookIdActionPerformed(evt);
             }
         });
-        panel_main.add(txt_bookId, new org.netbeans.lib.awtextra.AbsoluteConstraints(1190, 220, 250, 40));
+        panel_main.add(txt_bookId, new org.netbeans.lib.awtextra.AbsoluteConstraints(1120, 240, 250, 40));
 
         txt_studentId.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         txt_studentId.setForeground(new java.awt.Color(102, 102, 102));
@@ -218,12 +316,12 @@ public class ReturnBook extends javax.swing.JFrame {
                 txt_studentIdActionPerformed(evt);
             }
         });
-        panel_main.add(txt_studentId, new org.netbeans.lib.awtextra.AbsoluteConstraints(1190, 290, 250, 40));
+        panel_main.add(txt_studentId, new org.netbeans.lib.awtextra.AbsoluteConstraints(1120, 310, 250, 40));
 
         jLabel17.setFont(new java.awt.Font("Montserrat SemiBold", 0, 18)); // NOI18N
         jLabel17.setForeground(new java.awt.Color(0, 153, 204));
         jLabel17.setText("Mã sinh viên");
-        panel_main.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(1080, 300, 120, -1));
+        panel_main.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(1000, 320, 120, -1));
 
         rSMaterialButtonRectangle1.setBackground(new java.awt.Color(100, 136, 234));
         rSMaterialButtonRectangle1.setText("Kiểm tra");
@@ -233,15 +331,15 @@ public class ReturnBook extends javax.swing.JFrame {
                 rSMaterialButtonRectangle1ActionPerformed(evt);
             }
         });
-        panel_main.add(rSMaterialButtonRectangle1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1170, 380, 210, -1));
+        panel_main.add(rSMaterialButtonRectangle1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1140, 380, 210, -1));
 
         jPanel3.setBackground(new java.awt.Color(100, 136, 234));
         jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel4.setFont(new java.awt.Font("Montserrat", 1, 24)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel4.setText("Thông tin sách");
-        jPanel3.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 60, -1, -1));
+        jLabel4.setText("Thông tin mượn sách");
+        jPanel3.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 50, -1, -1));
 
         jLabel20.setFont(new java.awt.Font("Montserrat SemiBold", 0, 18)); // NOI18N
         jLabel20.setForeground(new java.awt.Color(255, 255, 255));
@@ -292,16 +390,12 @@ public class ReturnBook extends javax.swing.JFrame {
 
         jLabel23.setFont(new java.awt.Font("Montserrat SemiBold", 0, 18)); // NOI18N
         jLabel23.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel23.setText("Ngày trả");
+        jLabel23.setText("Hạn trả");
         jPanel3.add(jLabel23, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 510, 150, -1));
 
-        lbl_bookError1.setFont(new java.awt.Font("Montserrat SemiBold", 0, 18)); // NOI18N
-        lbl_bookError1.setForeground(new java.awt.Color(255, 51, 51));
-        jPanel3.add(lbl_bookError1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 620, 360, 110));
-
-        lbl_bookError.setFont(new java.awt.Font("Montserrat SemiBold", 0, 24)); // NOI18N
+        lbl_bookError.setFont(new java.awt.Font("Montserrat SemiBold", 0, 18)); // NOI18N
         lbl_bookError.setForeground(new java.awt.Color(255, 51, 51));
-        jPanel3.add(lbl_bookError, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 670, 360, 60));
+        jPanel3.add(lbl_bookError, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 620, 360, 110));
 
         jLabel24.setFont(new java.awt.Font("Montserrat SemiBold", 0, 18)); // NOI18N
         jLabel24.setForeground(new java.awt.Color(255, 255, 255));
@@ -316,7 +410,7 @@ public class ReturnBook extends javax.swing.JFrame {
         });
         jPanel3.add(lbl_issueDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 450, 360, 40));
 
-        panel_main.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 20, 440, 820));
+        panel_main.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 40, 440, 800));
 
         jPanel1.setBackground(new java.awt.Color(51, 102, 255));
         jPanel1.setForeground(new java.awt.Color(255, 255, 255));
@@ -326,7 +420,7 @@ public class ReturnBook extends javax.swing.JFrame {
         jLabel1.setText("Trả sách");
         jPanel1.add(jLabel1);
 
-        panel_main.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1090, 110, 350, 50));
+        panel_main.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1010, 90, 350, 50));
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -342,18 +436,50 @@ public class ReturnBook extends javax.swing.JFrame {
         panel_main.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, 50, 40));
 
         rSMaterialButtonRectangle2.setBackground(new java.awt.Color(100, 136, 234));
+        rSMaterialButtonRectangle2.setText("Trả sách");
         rSMaterialButtonRectangle2.setFont(new java.awt.Font("Montserrat SemiBold", 0, 18)); // NOI18N
-        rSMaterialButtonRectangle2.setLabel("Hoàn tất");
         rSMaterialButtonRectangle2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 rSMaterialButtonRectangle2ActionPerformed(evt);
             }
         });
-        panel_main.add(rSMaterialButtonRectangle2, new org.netbeans.lib.awtextra.AbsoluteConstraints(1170, 480, 210, -1));
+        panel_main.add(rSMaterialButtonRectangle2, new org.netbeans.lib.awtextra.AbsoluteConstraints(1140, 560, 210, -1));
 
         jLabel2.setBackground(new java.awt.Color(204, 204, 204));
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/library-2.png"))); // NOI18N
-        panel_main.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(-40, 80, 650, 700));
+        panel_main.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(-40, 80, 550, 700));
+
+        rSMaterialButtonRectangle3.setBackground(new java.awt.Color(100, 136, 234));
+        rSMaterialButtonRectangle3.setText("Mất sách");
+        rSMaterialButtonRectangle3.setFont(new java.awt.Font("Montserrat SemiBold", 0, 18)); // NOI18N
+        rSMaterialButtonRectangle3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rSMaterialButtonRectangle3ActionPerformed(evt);
+            }
+        });
+        panel_main.add(rSMaterialButtonRectangle3, new org.netbeans.lib.awtextra.AbsoluteConstraints(1140, 660, 210, -1));
+
+        txt_returnDate.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        txt_returnDate.setForeground(new java.awt.Color(102, 102, 102));
+        txt_returnDate.setFont(new java.awt.Font("Montserrat", 0, 18)); // NOI18N
+        txt_returnDate.setPhColor(new java.awt.Color(102, 102, 102));
+        txt_returnDate.setPlaceholder("Nhập ngày trả");
+        txt_returnDate.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txt_returnDateFocusLost(evt);
+            }
+        });
+        txt_returnDate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txt_returnDateActionPerformed(evt);
+            }
+        });
+        panel_main.add(txt_returnDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(1120, 490, 250, 40));
+
+        jLabel18.setFont(new java.awt.Font("Montserrat SemiBold", 0, 18)); // NOI18N
+        jLabel18.setForeground(new java.awt.Color(0, 153, 204));
+        jLabel18.setText("Ngày trả");
+        panel_main.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(1000, 500, 120, -1));
 
         getContentPane().add(panel_main, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1700, 800));
 
@@ -416,6 +542,22 @@ public class ReturnBook extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_lbl_issueIdActionPerformed
 
+    private void rSMaterialButtonRectangle3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSMaterialButtonRectangle3ActionPerformed
+        if (lostBook() ==  true){
+            JOptionPane.showMessageDialog(this, "Báo mất sách thành công!");
+        } else{
+            JOptionPane.showMessageDialog(this, "Báo mất sách thất bại!");
+        }
+    }//GEN-LAST:event_rSMaterialButtonRectangle3ActionPerformed
+
+    private void txt_returnDateFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txt_returnDateFocusLost
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txt_returnDateFocusLost
+
+    private void txt_returnDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_returnDateActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txt_returnDateActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -459,6 +601,7 @@ public class ReturnBook extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
@@ -470,7 +613,6 @@ public class ReturnBook extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JLabel lbl_bookError;
-    private javax.swing.JLabel lbl_bookError1;
     private app.bolivia.swing.JCTextField lbl_bookName;
     private app.bolivia.swing.JCTextField lbl_dueDate;
     private app.bolivia.swing.JCTextField lbl_issueDate;
@@ -480,7 +622,9 @@ public class ReturnBook extends javax.swing.JFrame {
     private rojeru_san.componentes.RSDateChooserBeanInfo rSDateChooserBeanInfo1;
     private rojerusan.RSMaterialButtonRectangle rSMaterialButtonRectangle1;
     private rojerusan.RSMaterialButtonRectangle rSMaterialButtonRectangle2;
+    private rojerusan.RSMaterialButtonRectangle rSMaterialButtonRectangle3;
     private app.bolivia.swing.JCTextField txt_bookId;
+    private app.bolivia.swing.JCTextField txt_returnDate;
     private app.bolivia.swing.JCTextField txt_studentId;
     // End of variables declaration//GEN-END:variables
 }

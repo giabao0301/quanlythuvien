@@ -26,7 +26,7 @@ public class ManageBooks extends javax.swing.JFrame {
      * Creates new form ManageBooks
      */
     String bookID, bookName, category, author, publisher;
-    int quantity;
+    int price, quantity;
     DefaultTableModel model;
 
     public ManageBooks() {
@@ -51,9 +51,10 @@ public class ManageBooks extends javax.swing.JFrame {
                 String category = rs.getString("category");
                 String author = rs.getString("author");
                 String publisher = rs.getString("publisher");
+                String price = rs.getString("price");
                 String quantity = rs.getString("quantity");
 
-                Object[] obj = { serialID, bookID, bookName, category, author, publisher, quantity };
+                Object[] obj = { serialID, bookID, bookName, category, author, publisher, price, quantity };
                 model = (DefaultTableModel) tbl_bookDetails.getModel();
                 model.addRow(obj);
 
@@ -73,6 +74,7 @@ public class ManageBooks extends javax.swing.JFrame {
         String category = comboCategory.getSelectedItem().toString();
         String author = txtAuthor.getText();
         String publisher = txtPublisher.getText();
+        int price = Integer.parseInt(txtPrice.getText());
         int quantity = Integer.parseInt(txtQuantity.getText());
 
         // Thực hiện thêm sách vào cơ sở dữ liệu
@@ -92,7 +94,7 @@ public class ManageBooks extends javax.swing.JFrame {
             // Tăng giá trị serialID lên một đơn vị
             int newSerialID = maxSerialID + 1;
 
-            String sql = "INSERT INTO book_details (serialID, bookID, bookName, category, author, publisher, quantity) VALUES (?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO book_details (serialID, bookID, bookName, category, author, publisher, price, quantity) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement pst = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             pst.setInt(1, newSerialID);
             pst.setString(2, bookID);
@@ -100,7 +102,8 @@ public class ManageBooks extends javax.swing.JFrame {
             pst.setString(4, category);
             pst.setString(5, author);
             pst.setString(6, publisher);
-            pst.setInt(7, quantity);
+            pst.setInt(7, price);
+            pst.setInt(8, quantity);
 
             int rowCount = pst.executeUpdate();
             if (rowCount > 0) {
@@ -110,7 +113,7 @@ public class ManageBooks extends javax.swing.JFrame {
                 if (generatedKeys.next()) {
                     int serialID = generatedKeys.getInt(1);
                     // Đổ dữ liệu vào table
-                    Object[] obj = { newSerialID, bookID, bookName, category, author, publisher, quantity };
+                    Object[] obj = { newSerialID, bookID, bookName, category, author, publisher, price, quantity };
                     DefaultTableModel model = (DefaultTableModel) tbl_bookDetails.getModel();
                     model.addRow(obj);
                 }
@@ -131,18 +134,20 @@ public class ManageBooks extends javax.swing.JFrame {
         String category = comboCategory.getSelectedItem().toString();
         String author = txtAuthor.getText();
         String publisher = txtPublisher.getText();
+        int price = Integer.parseInt(txtPrice.getText());
         int quantity = Integer.parseInt(txtQuantity.getText());
 
         try {
             Connection con = DBConnection.getConnection();
-            String sql = "update book_details set bookName = ?, category = ?, author = ?, publisher = ?, quantity = ?   where bookID = ?";
+            String sql = "update book_details set bookName = ?, category = ?, author = ?, publisher = ?, price = ?, quantity = ?   where bookID = ?";
             PreparedStatement pst = con.prepareStatement(sql);
             pst.setString(1, bookID);
             pst.setString(2, bookName);
             pst.setString(3, category);
             pst.setString(4, author);
             pst.setString(5, publisher);
-            pst.setInt(6, quantity);
+            pst.setInt(6, price);
+            pst.setInt(7, quantity);
 
             int rowCount = pst.executeUpdate();
             if (rowCount > 0) {
@@ -208,10 +213,11 @@ public class ManageBooks extends javax.swing.JFrame {
                 String category = rs.getString("category");
                 String author = rs.getString("author");
                 String publisher = rs.getString("publisher");
+                int price = Integer.valueOf(rs.getString("price"));
                 int quantity = Integer.valueOf(rs.getString("quantity"));
 
                 // Tạo đối tượng sách từ dữ liệu được trả về từ cơ sở dữ liệu
-                Book book = new Book(bookID, bookName, category, author, publisher, quantity);
+                Book book = new Book(bookID, bookName, category, author, publisher, price, quantity);
                 return book;
             }
         } catch (SQLException e) {
@@ -233,9 +239,10 @@ public class ManageBooks extends javax.swing.JFrame {
                 String bookName = rs.getString("bookName");
                 String author = rs.getString("author");
                 String publisher = rs.getString("publisher");
+                int price = Integer.valueOf(rs.getString("price"));
                 int quantity = Integer.valueOf(rs.getString("quantity"));
 
-                Book book = new Book(bookID, bookName, category, author, publisher, quantity);
+                Book book = new Book(bookID, bookName, category, author, publisher, price, quantity);
                 bookList.add(book);
             }
 
@@ -257,6 +264,7 @@ public class ManageBooks extends javax.swing.JFrame {
         txtQuantity.setText("");
         txtAuthor.setText("");
         txtPublisher.setText("");
+        txtPrice.setText("");
     }
 
     /**
@@ -266,11 +274,12 @@ public class ManageBooks extends javax.swing.JFrame {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated
-    // Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         buttonGroup1 = new javax.swing.ButtonGroup();
         jPanel4 = new javax.swing.JPanel();
+        jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         txtBookID = new app.bolivia.swing.JCTextField();
         txtBookName = new app.bolivia.swing.JCTextField();
@@ -279,7 +288,7 @@ public class ManageBooks extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
-        jLabel8 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
         jPanel6 = new javax.swing.JPanel();
         lblQLSV = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
@@ -288,6 +297,8 @@ public class ManageBooks extends javax.swing.JFrame {
         txtPublisher = new app.bolivia.swing.JCTextField();
         comboCategory = new javax.swing.JComboBox<>();
         jLabel12 = new javax.swing.JLabel();
+        txtPrice = new app.bolivia.swing.JCTextField();
+        jLabel13 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tbl_bookDetails = new rojeru_san.complementos.RSTableMetro();
@@ -313,8 +324,7 @@ public class ManageBooks extends javax.swing.JFrame {
         jPanel4.setFont(new java.awt.Font("Montserrat SemiBold", 0, 18)); // NOI18N
         jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel8.setIcon(
-                new javax.swing.ImageIcon(getClass().getResource("/AddNewBookIcons/51516_arrow_back_left_icon.png"))); // NOI18N
+        jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/AddNewBookIcons/51516_arrow_back_left_icon.png"))); // NOI18N
         jLabel8.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jPanel4.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 30, -1));
 
@@ -330,16 +340,16 @@ public class ManageBooks extends javax.swing.JFrame {
                 txtBookIDActionPerformed(evt);
             }
         });
-        jPanel4.add(txtBookID, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 210, 370, 40));
+        jPanel4.add(txtBookID, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 210, 320, 40));
 
-        txtBookName.setFont(new java.awt.Font("Montserrat", 0, 14)); // NOI18N
+        txtBookName.setFont(new java.awt.Font("Montserrat", 0, 18)); // NOI18N
         txtBookName.setPlaceholder("Nhập tên sách");
         txtBookName.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtBookNameActionPerformed(evt);
             }
         });
-        jPanel4.add(txtBookName, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 300, 370, 40));
+        jPanel4.add(txtBookName, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 300, 320, 40));
 
         txtQuantity.setFont(new java.awt.Font("Montserrat", 0, 18)); // NOI18N
         txtQuantity.setPlaceholder("Nhập số lượng");
@@ -348,7 +358,7 @@ public class ManageBooks extends javax.swing.JFrame {
                 txtQuantityActionPerformed(evt);
             }
         });
-        jPanel4.add(txtQuantity, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 670, 370, 40));
+        jPanel4.add(txtQuantity, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 750, 320, 40));
 
         jLabel11.setFont(new java.awt.Font("Montserrat SemiBold", 0, 18)); // NOI18N
         jLabel11.setForeground(new java.awt.Color(255, 255, 255));
@@ -358,7 +368,7 @@ public class ManageBooks extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Montserrat SemiBold", 0, 18)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Số lượng");
-        jPanel4.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 640, -1, -1));
+        jPanel4.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 720, -1, -1));
 
         jLabel7.setFont(new java.awt.Font("Montserrat SemiBold", 0, 18)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(255, 255, 255));
@@ -367,15 +377,14 @@ public class ManageBooks extends javax.swing.JFrame {
 
         jPanel5.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel8.setIcon(
-                new javax.swing.ImageIcon(getClass().getResource("/AddNewBookIcons/51516_arrow_back_left_icon.png"))); // NOI18N
-        jLabel8.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jLabel8.addMouseListener(new java.awt.event.MouseAdapter() {
+        jLabel10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/AddNewBookIcons/51516_arrow_back_left_icon.png"))); // NOI18N
+        jLabel10.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel10.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel8MouseClicked(evt);
             }
         });
-        jPanel5.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 40, 50));
+        jPanel5.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 40, 50));
 
         jPanel4.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 50, 50));
 
@@ -388,17 +397,17 @@ public class ManageBooks extends javax.swing.JFrame {
         lblQLSV.setText("Quản lý sách");
         jPanel6.add(lblQLSV, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 10, -1, -1));
 
-        jPanel4.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 10, 340, 50));
+        jPanel4.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 10, 300, 50));
 
         jLabel4.setFont(new java.awt.Font("Montserrat SemiBold", 0, 18)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("Tác giả");
-        jPanel4.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 460, -1, -1));
+        jPanel4.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 450, -1, -1));
 
         jLabel5.setFont(new java.awt.Font("Montserrat SemiBold", 0, 18)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setText("Nhà xuất bản");
-        jPanel4.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 550, -1, -1));
+        jPanel4.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 540, -1, -1));
 
         txtAuthor.setFont(new java.awt.Font("Montserrat", 0, 18)); // NOI18N
         txtAuthor.setPlaceholder("Nhập tác giả");
@@ -407,7 +416,7 @@ public class ManageBooks extends javax.swing.JFrame {
                 txtAuthorActionPerformed(evt);
             }
         });
-        jPanel4.add(txtAuthor, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 490, 370, 40));
+        jPanel4.add(txtAuthor, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 480, 320, 40));
 
         txtPublisher.setFont(new java.awt.Font("Montserrat", 0, 18)); // NOI18N
         txtPublisher.setPlaceholder("Nhập nhà xuất bản");
@@ -416,28 +425,42 @@ public class ManageBooks extends javax.swing.JFrame {
                 txtPublisherActionPerformed(evt);
             }
         });
-        jPanel4.add(txtPublisher, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 580, 370, 40));
+        jPanel4.add(txtPublisher, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 570, 320, 40));
 
         comboCategory.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        comboCategory
-                .setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Giáo trình", "Sách tham khảo", " " }));
-        jPanel4.add(comboCategory, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 390, 370, 40));
+        comboCategory.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Giáo trình", "Sách tham khảo", " " }));
+        jPanel4.add(comboCategory, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 390, 320, 40));
 
         jLabel12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/adminIcons/icons8_Book_Shelf_50px.png"))); // NOI18N
         jLabel12.setText("jLabel12");
-        jPanel4.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 110, 60, 60));
+        jPanel4.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 90, 60, 60));
 
-        getContentPane().add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 430, 830));
+        txtPrice.setFont(new java.awt.Font("Montserrat", 0, 18)); // NOI18N
+        txtPrice.setPlaceholder("Nhập giá sách");
+        txtPrice.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtPriceActionPerformed(evt);
+            }
+        });
+        jPanel4.add(txtPrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 660, 320, 40));
+
+        jLabel13.setFont(new java.awt.Font("Montserrat SemiBold", 0, 18)); // NOI18N
+        jLabel13.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel13.setText("Đơn giá");
+        jPanel4.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 630, -1, -1));
+
+        getContentPane().add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 390, 830));
 
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         tbl_bookDetails.setModel(new javax.swing.table.DefaultTableModel(
-                new Object[][] {
+            new Object [][] {
 
-                },
-                new String[] {
-                        "STT", "Mã sách", "Tên sách", "Thể loại", "Tác giả", "Nhà xuất bản", "Số lượng"
-                }));
+            },
+            new String [] {
+                "STT", "Mã sách", "Tên sách", "Thể loại", "Tác giả", "Nhà xuất bản", "Giá", "Số lượng"
+            }
+        ));
         tbl_bookDetails.setColorBordeFilas(new java.awt.Color(255, 255, 255));
         tbl_bookDetails.setColorBordeHead(new java.awt.Color(255, 255, 255));
         tbl_bookDetails.setRowHeight(30);
@@ -449,7 +472,7 @@ public class ManageBooks extends javax.swing.JFrame {
         });
         jScrollPane2.setViewportView(tbl_bookDetails);
 
-        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 270, 990, 360));
+        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 270, 1090, 360));
 
         jPanel2.setBackground(new java.awt.Color(153, 153, 255));
         jPanel2.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
@@ -458,7 +481,7 @@ public class ManageBooks extends javax.swing.JFrame {
         lblThongTinSV.setText("Thông tin sách");
         jPanel2.add(lblThongTinSV);
 
-        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 20, 990, 80));
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 20, 1090, 80));
 
         jLabel1.setBackground(new java.awt.Color(153, 153, 153));
         jLabel1.setFont(new java.awt.Font("Segoe UI Semibold", 0, 18)); // NOI18N
@@ -503,7 +526,7 @@ public class ManageBooks extends javax.swing.JFrame {
                 btnLamMoiActionPerformed(evt);
             }
         });
-        jPanel1.add(btnLamMoi, new org.netbeans.lib.awtextra.AbsoluteConstraints(850, 670, 140, 60));
+        jPanel1.add(btnLamMoi, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 670, 140, 60));
 
         btnSua.setText("Sửa");
         btnSua.setFont(new java.awt.Font("Montserrat", 1, 18)); // NOI18N
@@ -512,7 +535,7 @@ public class ManageBooks extends javax.swing.JFrame {
                 btnSuaActionPerformed(evt);
             }
         });
-        jPanel1.add(btnSua, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 670, 120, 60));
+        jPanel1.add(btnSua, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 670, 120, 60));
 
         btnXoa.setText("Xóa");
         btnXoa.setFont(new java.awt.Font("Montserrat", 1, 18)); // NOI18N
@@ -521,7 +544,7 @@ public class ManageBooks extends javax.swing.JFrame {
                 btnXoaActionPerformed(evt);
             }
         });
-        jPanel1.add(btnXoa, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 670, 130, 60));
+        jPanel1.add(btnXoa, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 670, 130, 60));
 
         btnThem.setText("Thêm");
         btnThem.setFont(new java.awt.Font("Montserrat", 1, 18)); // NOI18N
@@ -530,7 +553,7 @@ public class ManageBooks extends javax.swing.JFrame {
                 btnThemActionPerformed(evt);
             }
         });
-        jPanel1.add(btnThem, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 670, 140, 60));
+        jPanel1.add(btnThem, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 670, 140, 60));
 
         buttonGroup1.add(rbtGiaoTrinh);
         rbtGiaoTrinh.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
@@ -547,10 +570,14 @@ public class ManageBooks extends javax.swing.JFrame {
         rbtThamKhao.setText("Sách tham khảo");
         jPanel1.add(rbtThamKhao, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 210, 310, 40));
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 0, 1020, 830));
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 0, 1110, 830));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void txtPriceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPriceActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtPriceActionPerformed
 
     private void jLabel8MouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_jLabel8MouseClicked
         HomePage homePage = new HomePage();
@@ -678,6 +705,7 @@ public class ManageBooks extends javax.swing.JFrame {
 
     private void btnLamMoiActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnLamMoiActionPerformed
         clearTable();
+        clearFormInput();
         setBookDetailsToTable();
     }// GEN-LAST:event_btnLamMoiActionPerformed
 
@@ -744,8 +772,10 @@ public class ManageBooks extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> comboCategory;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -770,6 +800,7 @@ public class ManageBooks extends javax.swing.JFrame {
     private app.bolivia.swing.JCTextField txtBookID;
     private app.bolivia.swing.JCTextField txtBookName;
     private javax.swing.JTextField txtFindID;
+    private app.bolivia.swing.JCTextField txtPrice;
     private app.bolivia.swing.JCTextField txtPublisher;
     private app.bolivia.swing.JCTextField txtQuantity;
     // End of variables declaration//GEN-END:variables

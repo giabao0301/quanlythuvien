@@ -139,7 +139,7 @@ public class ViewAllRecord extends javax.swing.JFrame {
 
             },
             new String [] {
-                "STT", "Tên sách", "Tên sinh viên", "Ngày mượn", "Ngày trả", "Trạng thái"
+                "STT", "Tên sách", "Tên sinh viên", "Ngày mượn", "Hạn trả", "Ngày trả", "Trạng thái"
             }
         ));
         tbl_issueBookDetails.setColorBordeFilas(new java.awt.Color(255, 255, 255));
@@ -175,9 +175,10 @@ public class ViewAllRecord extends javax.swing.JFrame {
                 String studentName = rs.getString("StudentName");
                 String issueDate = rs.getString("issueDate");
                 String dueDate = rs.getString("dueDate");
+                String returnDate = rs.getString("returnDate");
                 String status = rs.getString("status");
                 
-                Object[] obj = { serialID, bookName, studentName, issueDate, dueDate, status };
+                Object[] obj = { serialID, bookName, studentName, issueDate, dueDate, returnDate, status };
                 model = (DefaultTableModel) tbl_issueBookDetails.getModel();
                 model.addRow(obj);
 
@@ -222,9 +223,10 @@ public class ViewAllRecord extends javax.swing.JFrame {
                 String studentName = rs.getString("StudentName");
                 String issueDate = rs.getString("issueDate");
                 String dueDate = rs.getString("dueDate");
+                String returnDate = rs.getString("returnDate");
                 String status = rs.getString("status");
                 
-                Object[] obj = { serialID, bookName, studentName, issueDate, dueDate, status };
+                Object[] obj = { serialID, bookName, studentName, issueDate, dueDate, returnDate, status };
                 model = (DefaultTableModel) tbl_issueBookDetails.getModel();
                 model.addRow(obj);
                 }  
