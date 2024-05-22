@@ -1,1 +1,1 @@
-"public class BookPenaltyForm {}" 
+public class BookPenaltyForm { } 

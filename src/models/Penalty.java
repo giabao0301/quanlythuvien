@@ -1,1 +1,1 @@
-"public class Penalty {}" 
+public class Penalty { } 
