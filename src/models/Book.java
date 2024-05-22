@@ -11,12 +11,13 @@ package models;
 
 
 public class Book {
-    public Book(String bookID, String bookName, String category, String author, String publisher, int quantity) {
+    public Book(String bookID, String bookName, String category, String author, String publisher, int price, int quantity) {
         this.bookID = bookID;
         this.bookName = bookName;
         this.category = category;
         this.author = author;
         this.publisher = publisher;
+        this.price = price;
         this.quantity = quantity;
     }
 
@@ -72,5 +73,14 @@ public class Book {
     private String category;
     private String author;
     private String publisher;
+
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
+    private int price;
     private int quantity;
 }
