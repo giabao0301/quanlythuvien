@@ -22,7 +22,7 @@ public class IssueBook extends javax.swing.JFrame {
         initComponents();
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         date_dueDate.setEnabled(false);
-
+        
     }
 
     public void getBookDetails() {

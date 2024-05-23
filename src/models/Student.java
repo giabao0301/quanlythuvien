@@ -16,7 +16,19 @@ public class Student {
     private Date birthday;
     private String email;
     private String major;
+    private int issuedBooks;
+    
+    public Student() {
+    }
 
+    public Student(String studentID, String name, int issuedBooks) {
+        this.studentID = studentID;
+        this.name = name;
+        this.issuedBooks = issuedBooks;
+    }
+
+    
+    
     // Constructor
     public Student(String studentID, String name, String gender, Date birthday, String email, String major) {
         this.studentID = studentID;
@@ -27,6 +39,15 @@ public class Student {
         this.major = major;
     }
 
+    public Student(String studentID, String name, String email, String major) {
+        this.studentID = studentID;
+        this.name = name;
+        this.email = email;
+        this.major = major;
+    }
+
+    
+    
     // Getters
     public String getStudentID() {
         return studentID;
@@ -51,4 +72,14 @@ public class Student {
     public String getMajor() {
         return major;
     }
+
+    public int getIssuedBooks() {
+        return issuedBooks;
+    }
+
+    public void setIssuedBooks(int issuedBooks) {
+        this.issuedBooks = issuedBooks;
+    }
+    
+    
 }

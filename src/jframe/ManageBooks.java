@@ -51,8 +51,8 @@ public class ManageBooks extends javax.swing.JFrame {
                 String category = rs.getString("category");
                 String author = rs.getString("author");
                 String publisher = rs.getString("publisher");
-                String price = rs.getString("price");
-                String quantity = rs.getString("quantity");
+                int price = rs.getInt("price");
+                int quantity = rs.getInt("quantity");
 
                 Object[] obj = { serialID, bookID, bookName, category, author, publisher, price, quantity };
                 model = (DefaultTableModel) tbl_bookDetails.getModel();
@@ -331,7 +331,7 @@ public class ManageBooks extends javax.swing.JFrame {
         jLabel9.setFont(new java.awt.Font("Montserrat SemiBold", 0, 18)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(255, 255, 255));
         jLabel9.setText("Mã sách");
-        jPanel4.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 180, -1, -1));
+        jPanel4.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 120, -1, -1));
 
         txtBookID.setFont(new java.awt.Font("Montserrat", 0, 18)); // NOI18N
         txtBookID.setPlaceholder("Nhập mã sách");
@@ -340,7 +340,7 @@ public class ManageBooks extends javax.swing.JFrame {
                 txtBookIDActionPerformed(evt);
             }
         });
-        jPanel4.add(txtBookID, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 210, 320, 40));
+        jPanel4.add(txtBookID, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 150, 320, 40));
 
         txtBookName.setFont(new java.awt.Font("Montserrat", 0, 18)); // NOI18N
         txtBookName.setPlaceholder("Nhập tên sách");
@@ -349,7 +349,7 @@ public class ManageBooks extends javax.swing.JFrame {
                 txtBookNameActionPerformed(evt);
             }
         });
-        jPanel4.add(txtBookName, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 300, 320, 40));
+        jPanel4.add(txtBookName, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 240, 320, 40));
 
         txtQuantity.setFont(new java.awt.Font("Montserrat", 0, 18)); // NOI18N
         txtQuantity.setPlaceholder("Nhập số lượng");
@@ -358,22 +358,22 @@ public class ManageBooks extends javax.swing.JFrame {
                 txtQuantityActionPerformed(evt);
             }
         });
-        jPanel4.add(txtQuantity, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 750, 320, 40));
+        jPanel4.add(txtQuantity, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 690, 320, 40));
 
         jLabel11.setFont(new java.awt.Font("Montserrat SemiBold", 0, 18)); // NOI18N
         jLabel11.setForeground(new java.awt.Color(255, 255, 255));
         jLabel11.setText("Thể loại");
-        jPanel4.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 360, -1, -1));
+        jPanel4.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 300, -1, -1));
 
         jLabel2.setFont(new java.awt.Font("Montserrat SemiBold", 0, 18)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Số lượng");
-        jPanel4.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 720, -1, -1));
+        jPanel4.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 660, -1, -1));
 
         jLabel7.setFont(new java.awt.Font("Montserrat SemiBold", 0, 18)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(255, 255, 255));
         jLabel7.setText("Tên sách");
-        jPanel4.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 270, -1, -1));
+        jPanel4.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 210, -1, -1));
 
         jPanel5.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -402,12 +402,12 @@ public class ManageBooks extends javax.swing.JFrame {
         jLabel4.setFont(new java.awt.Font("Montserrat SemiBold", 0, 18)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("Tác giả");
-        jPanel4.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 450, -1, -1));
+        jPanel4.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 390, -1, -1));
 
         jLabel5.setFont(new java.awt.Font("Montserrat SemiBold", 0, 18)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setText("Nhà xuất bản");
-        jPanel4.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 540, -1, -1));
+        jPanel4.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 480, -1, -1));
 
         txtAuthor.setFont(new java.awt.Font("Montserrat", 0, 18)); // NOI18N
         txtAuthor.setPlaceholder("Nhập tác giả");
@@ -416,7 +416,7 @@ public class ManageBooks extends javax.swing.JFrame {
                 txtAuthorActionPerformed(evt);
             }
         });
-        jPanel4.add(txtAuthor, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 480, 320, 40));
+        jPanel4.add(txtAuthor, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 420, 320, 40));
 
         txtPublisher.setFont(new java.awt.Font("Montserrat", 0, 18)); // NOI18N
         txtPublisher.setPlaceholder("Nhập nhà xuất bản");
@@ -425,15 +425,14 @@ public class ManageBooks extends javax.swing.JFrame {
                 txtPublisherActionPerformed(evt);
             }
         });
-        jPanel4.add(txtPublisher, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 570, 320, 40));
+        jPanel4.add(txtPublisher, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 510, 320, 40));
 
         comboCategory.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         comboCategory.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Giáo trình", "Sách tham khảo", " " }));
-        jPanel4.add(comboCategory, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 390, 320, 40));
+        jPanel4.add(comboCategory, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 330, 320, 40));
 
         jLabel12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/adminIcons/icons8_Book_Shelf_50px.png"))); // NOI18N
-        jLabel12.setText("jLabel12");
-        jPanel4.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 90, 60, 60));
+        jPanel4.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 60, -1, 60));
 
         txtPrice.setFont(new java.awt.Font("Montserrat", 0, 18)); // NOI18N
         txtPrice.setPlaceholder("Nhập giá sách");
@@ -442,12 +441,12 @@ public class ManageBooks extends javax.swing.JFrame {
                 txtPriceActionPerformed(evt);
             }
         });
-        jPanel4.add(txtPrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 660, 320, 40));
+        jPanel4.add(txtPrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 600, 320, 40));
 
         jLabel13.setFont(new java.awt.Font("Montserrat SemiBold", 0, 18)); // NOI18N
         jLabel13.setForeground(new java.awt.Color(255, 255, 255));
         jLabel13.setText("Đơn giá");
-        jPanel4.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 630, -1, -1));
+        jPanel4.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 570, -1, -1));
 
         getContentPane().add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 390, 830));
 

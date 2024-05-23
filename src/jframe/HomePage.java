@@ -6,18 +6,27 @@ package jframe;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import javax.swing.JFrame;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PiePlot;
 import org.jfree.data.general.DefaultPieDataset;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.table.DefaultTableModel;
+import models.Book;
+import models.Student;
 
 /**
  *
  * @author trinh
  */
 public class HomePage extends javax.swing.JFrame {
-
+    
+    public List<Book> books;
+    public List<Student> students;
     /**
      * Creates new form HomePage
      */
@@ -25,39 +34,101 @@ public class HomePage extends javax.swing.JFrame {
     Color mouseExitColor = new Color(153, 153, 153);
     Color logoutEnterColor = new Color(255, 102, 102);
     Color logoutExitColor = new Color(255, 51, 51);
-
+    
+    DefaultTableModel model;
+    
     public HomePage() {
         initComponents();
-        showPieChart();
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        books = new ArrayList<>();
+        students = new ArrayList<>();
+        setBooksToTable();
+        setStudentsToTable();
+        setIssuedBookQuantity();
+        setBannedQuantity();
     }
-
-    public void showPieChart() {
-
-        // create dataset
-        DefaultPieDataset barDataset = new DefaultPieDataset();
-        barDataset.setValue("IPhone 5s", 20);
-        barDataset.setValue("SamSung Grand", 20);
-        barDataset.setValue("MotoG", 40);
-        barDataset.setValue("Nokia Lumia", 10);
-
-        // create chart
-        JFreeChart piechart = ChartFactory.createPieChart("mobile sales", barDataset, false, true, false);// explain
-
-        PiePlot piePlot = (PiePlot) piechart.getPlot();
-
-        // changing pie chart blocks colors
-        piePlot.setSectionPaint("IPhone 5s", new Color(255, 255, 102));
-        piePlot.setSectionPaint("SamSung Grand", new Color(102, 255, 102));
-        piePlot.setSectionPaint("MotoG", new Color(255, 102, 153));
-        piePlot.setSectionPaint("Nokia Lumia", new Color(0, 204, 204));
-
-        piePlot.setBackgroundPaint(Color.white);
-
-        // create chartPanel to display chart(graph)
-        ChartPanel barChartPanel = new ChartPanel(piechart);
-        panelPieChart.removeAll();
-        panelPieChart.add(barChartPanel, BorderLayout.CENTER);
-        panelPieChart.validate();
+    
+    public void setIssuedBookQuantity() {
+        try {
+            Connection connect = DBConnection.getConnection();
+            String sql = "select count(*) as issue_count from issue_book_details";
+            Statement st = connect.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+            
+            if (rs.next()) {
+                label3.setText(String.valueOf(rs.getInt("issue_count")));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public void setBannedQuantity() {
+        try {
+            Connection connect = DBConnection.getConnection();
+            String sql = "select count(*) as banned_count from issue_book_details where status = 'đã mất' or status = 'trả quá hạn'";
+            
+            Statement st = connect.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+            
+            
+            if (rs.next()) {
+                label4.setText(String.valueOf(rs.getInt("banned_count")));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public void setStudentsToTable() {
+        try {
+            Connection conn = DBConnection.getConnection();
+            Statement st = conn.createStatement();
+            ResultSet rs = st.executeQuery("select * from student_details");
+            
+            while (rs.next()) {
+                String studentID = rs.getString("studentID");
+                String studentName = rs.getString("StudentName");
+                String studentEmail = rs.getString("studentEmail");
+                String major = rs.getString("major");
+                
+                students.add(new Student(studentID, studentName, studentEmail, major));
+                
+                label2.setText(String.valueOf(students.size()));
+                
+                Object[] obj = {studentID, studentName, studentEmail, major};
+                model = (DefaultTableModel) table1.getModel();
+                model.addRow(obj);
+                
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public void setBooksToTable() {
+        try {
+            Connection conn = DBConnection.getConnection();
+            Statement st = conn.createStatement();
+            ResultSet rs = st.executeQuery("select * from book_details");
+            
+            while (rs.next()) {
+                String bookID = rs.getString("bookID");
+                String bookName = rs.getString("bookName");
+                String author = rs.getString("author");
+                int quantity = rs.getInt("quantity");
+                
+                books.add(new Book(bookID, bookName, author, quantity));
+                
+                label1.setText(String.valueOf(books.size()));
+                
+                Object[] obj = {bookID, bookName, author, quantity};
+                model = (DefaultTableModel) table2.getModel();
+                model.addRow(obj);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -81,9 +152,6 @@ public class HomePage extends javax.swing.JFrame {
         jPanel7 = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
-        jPanel8 = new javax.swing.JPanel();
-        jLabel10 = new javax.swing.JLabel();
         jPanel9 = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
         jPanel10 = new javax.swing.JPanel();
@@ -100,24 +168,23 @@ public class HomePage extends javax.swing.JFrame {
         jLabel18 = new javax.swing.JLabel();
         jPanel13 = new javax.swing.JPanel();
         jPanel14 = new javax.swing.JPanel();
-        jLabel16 = new javax.swing.JLabel();
+        label4 = new javax.swing.JLabel();
         jLabel15 = new javax.swing.JLabel();
         jLabel19 = new javax.swing.JLabel();
         jPanel17 = new javax.swing.JPanel();
-        jLabel20 = new javax.swing.JLabel();
+        label2 = new javax.swing.JLabel();
         jLabel21 = new javax.swing.JLabel();
         jPanel18 = new javax.swing.JPanel();
-        jLabel22 = new javax.swing.JLabel();
+        label3 = new javax.swing.JLabel();
         jLabel25 = new javax.swing.JLabel();
         jPanel20 = new javax.swing.JPanel();
-        jLabel26 = new javax.swing.JLabel();
+        label1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        rSTableMetro1 = new rojeru_san.complementos.RSTableMetro();
+        table1 = new rojeru_san.complementos.RSTableMetro();
         jLabel27 = new javax.swing.JLabel();
         jLabel28 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        rSTableMetro2 = new rojeru_san.complementos.RSTableMetro();
-        panelPieChart = new javax.swing.JPanel();
+        table2 = new rojeru_san.complementos.RSTableMetro();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -129,16 +196,16 @@ public class HomePage extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Montserrat", 1, 24)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Quản lý thư viện");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 0, -1, 60));
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 0, -1, 60));
 
         jLabel3.setBackground(new java.awt.Color(255, 255, 255));
         jLabel3.setFont(new java.awt.Font("Montserrat", 1, 18)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("Xin chào, Admin");
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(1310, 20, -1, -1));
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(1230, 10, -1, -1));
 
         jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/adminIcons/3592870_brochure_document_menu_note_office_icon.png"))); // NOI18N
-        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 0, -1, 60));
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 0, -1, 60));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1920, 60));
 
@@ -225,42 +292,6 @@ public class HomePage extends javax.swing.JFrame {
 
         jPanel3.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 50, 300, 50));
 
-        jLabel7.setFont(new java.awt.Font("Montserrat", 1, 18)); // NOI18N
-        jLabel7.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel7.setText("   Chức năng");
-        jPanel3.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 160, 340, 50));
-
-        jPanel8.setBackground(new java.awt.Color(153, 153, 153));
-        jPanel8.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jPanel8.addAncestorListener(new javax.swing.event.AncestorListener() {
-            public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
-                jPanel8AncestorAdded(evt);
-            }
-            public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
-            }
-            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
-            }
-        });
-        jPanel8.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                jPanel8MouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                jPanel8MouseExited(evt);
-            }
-        });
-        jPanel8.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jLabel10.setFont(new java.awt.Font("Montserrat", 1, 18)); // NOI18N
-        jLabel10.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/adminIcons/icons8_Library_26px_1.png"))); // NOI18N
-        jLabel10.setText("   Dashboard");
-        jLabel10.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        jPanel8.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 0, 150, 50));
-
-        jPanel3.add(jPanel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 100, 300, 50));
-
         jPanel9.setBackground(new java.awt.Color(153, 153, 153));
         jPanel9.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jPanel9.addAncestorListener(new javax.swing.event.AncestorListener() {
@@ -296,7 +327,7 @@ public class HomePage extends javax.swing.JFrame {
         jLabel11.setText("   Sách");
         jPanel9.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 0, 150, 50));
 
-        jPanel3.add(jPanel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 210, 300, 50));
+        jPanel3.add(jPanel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 180, 300, 50));
 
         jPanel10.setBackground(new java.awt.Color(153, 153, 153));
         jPanel10.addAncestorListener(new javax.swing.event.AncestorListener() {
@@ -327,7 +358,7 @@ public class HomePage extends javax.swing.JFrame {
         jLabel12.setText("   Sinh viên");
         jPanel10.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 0, 150, 50));
 
-        jPanel3.add(jPanel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 270, 300, 50));
+        jPanel3.add(jPanel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 250, 300, 50));
 
         jPanel11.setBackground(new java.awt.Color(153, 153, 153));
         jPanel11.addAncestorListener(new javax.swing.event.AncestorListener() {
@@ -358,7 +389,7 @@ public class HomePage extends javax.swing.JFrame {
         jLabel13.setText("   Mượn sách");
         jPanel11.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 0, 150, 50));
 
-        jPanel3.add(jPanel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 330, 300, 50));
+        jPanel3.add(jPanel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 320, 300, 50));
 
         jPanel12.setBackground(new java.awt.Color(153, 153, 153));
         jPanel12.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -404,6 +435,9 @@ public class HomePage extends javax.swing.JFrame {
             }
         });
         jPanel5.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jPanel5MouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 jPanel5MouseEntered(evt);
             }
@@ -419,7 +453,7 @@ public class HomePage extends javax.swing.JFrame {
         jLabel6.setText("   Thống kê");
         jPanel5.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 0, 220, 50));
 
-        jPanel3.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 570, 300, 50));
+        jPanel3.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 110, 300, 50));
 
         jPanel15.setBackground(new java.awt.Color(153, 153, 153));
         jPanel15.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -451,7 +485,7 @@ public class HomePage extends javax.swing.JFrame {
         jLabel17.setText("   Danh sách mượn");
         jPanel15.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 0, 220, 50));
 
-        jPanel3.add(jPanel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 450, 300, 50));
+        jPanel3.add(jPanel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 460, 300, 50));
 
         jPanel16.setBackground(new java.awt.Color(153, 153, 153));
         jPanel16.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -477,7 +511,7 @@ public class HomePage extends javax.swing.JFrame {
         jLabel18.setText("   Phiếu phạt");
         jPanel16.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 0, 220, 50));
 
-        jPanel3.add(jPanel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 510, 300, 50));
+        jPanel3.add(jPanel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 530, 300, 50));
 
         getContentPane().add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 60, 300, 1020));
 
@@ -487,110 +521,101 @@ public class HomePage extends javax.swing.JFrame {
         jPanel14.setBorder(javax.swing.BorderFactory.createMatteBorder(15, 0, 0, 0, new java.awt.Color(100, 136, 234)));
         jPanel14.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel16.setFont(new java.awt.Font("Montserrat", 1, 48)); // NOI18N
-        jLabel16.setIcon(new javax.swing.ImageIcon(getClass().getResource("/adminIcons/icons8_List_of_Thumbnails_50px.png"))); // NOI18N
-        jLabel16.setText(" 10");
-        jPanel14.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 30, 120, -1));
+        label4.setFont(new java.awt.Font("Montserrat", 1, 48)); // NOI18N
+        label4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/adminIcons/icons8_List_of_Thumbnails_50px.png"))); // NOI18N
+        label4.setText(" 10");
+        jPanel14.add(label4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 30, 120, -1));
 
-        jPanel13.add(jPanel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(900, 90, 187, 108));
+        jPanel13.add(jPanel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(890, 60, 187, 108));
 
         jLabel15.setFont(new java.awt.Font("Montserrat", 1, 18)); // NOI18N
         jLabel15.setText("Số lượng cấm");
-        jPanel13.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(900, 50, -1, -1));
+        jPanel13.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(890, 20, -1, -1));
 
         jLabel19.setFont(new java.awt.Font("Montserrat", 1, 18)); // NOI18N
         jLabel19.setText("Số lượng sinh viên");
-        jPanel13.add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 50, -1, -1));
+        jPanel13.add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 20, -1, -1));
 
         jPanel17.setBackground(new java.awt.Color(204, 255, 255));
         jPanel17.setBorder(javax.swing.BorderFactory.createMatteBorder(15, 0, 0, 0, new java.awt.Color(100, 136, 234)));
         jPanel17.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel20.setFont(new java.awt.Font("Montserrat", 1, 48)); // NOI18N
-        jLabel20.setIcon(new javax.swing.ImageIcon(getClass().getResource("/adminIcons/icons8_People_50px.png"))); // NOI18N
-        jLabel20.setText(" 10");
-        jPanel17.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 30, 130, -1));
+        label2.setFont(new java.awt.Font("Montserrat", 1, 48)); // NOI18N
+        label2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/adminIcons/icons8_People_50px.png"))); // NOI18N
+        label2.setText(" 10");
+        jPanel17.add(label2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 30, 130, -1));
 
-        jPanel13.add(jPanel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 90, 187, 108));
+        jPanel13.add(jPanel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 60, 187, 108));
 
         jLabel21.setFont(new java.awt.Font("Montserrat", 1, 18)); // NOI18N
         jLabel21.setText("Số lượng sách mượn ");
-        jPanel13.add(jLabel21, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 50, -1, -1));
+        jPanel13.add(jLabel21, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 20, -1, -1));
 
         jPanel18.setBackground(new java.awt.Color(204, 255, 255));
         jPanel18.setBorder(javax.swing.BorderFactory.createMatteBorder(15, 0, 0, 0, new java.awt.Color(100, 136, 234)));
         jPanel18.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel22.setFont(new java.awt.Font("Montserrat", 1, 48)); // NOI18N
-        jLabel22.setIcon(new javax.swing.ImageIcon(getClass().getResource("/adminIcons/icons8_Sell_50px.png"))); // NOI18N
-        jLabel22.setText(" 10");
-        jPanel18.add(jLabel22, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 30, 120, -1));
+        label3.setFont(new java.awt.Font("Montserrat", 1, 48)); // NOI18N
+        label3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/adminIcons/icons8_Sell_50px.png"))); // NOI18N
+        label3.setText(" 10");
+        jPanel18.add(label3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 30, 120, -1));
 
-        jPanel13.add(jPanel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 90, 187, 108));
+        jPanel13.add(jPanel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 60, 187, 108));
 
         jLabel25.setFont(new java.awt.Font("Montserrat", 1, 18)); // NOI18N
         jLabel25.setText("Danh sách sinh viên");
-        jPanel13.add(jLabel25, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 250, -1, -1));
+        jPanel13.add(jLabel25, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 190, -1, -1));
 
         jPanel20.setBackground(new java.awt.Color(204, 255, 255));
         jPanel20.setBorder(javax.swing.BorderFactory.createMatteBorder(15, 0, 0, 0, new java.awt.Color(100, 136, 234)));
         jPanel20.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel26.setFont(new java.awt.Font("Montserrat", 1, 48)); // NOI18N
-        jLabel26.setIcon(new javax.swing.ImageIcon(getClass().getResource("/adminIcons/icons8_Book_Shelf_50px.png"))); // NOI18N
-        jLabel26.setText(" 10");
-        jPanel20.add(jLabel26, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 30, 120, -1));
+        label1.setFont(new java.awt.Font("Montserrat", 1, 48)); // NOI18N
+        label1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/adminIcons/icons8_Book_Shelf_50px.png"))); // NOI18N
+        label1.setText(" 10");
+        jPanel20.add(label1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 30, 120, -1));
 
-        jPanel13.add(jPanel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 90, 187, 108));
+        jPanel13.add(jPanel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 60, 187, 108));
 
-        rSTableMetro1.setModel(new javax.swing.table.DefaultTableModel(
+        table1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Id", "Tên", "Title 3", "Title 4"
+                "Mã sinh viên", "Tên", "Email", "Chuyên ngành"
             }
         ));
-        rSTableMetro1.setColorBordeFilas(new java.awt.Color(255, 255, 255));
-        rSTableMetro1.setColorBordeHead(new java.awt.Color(255, 255, 255));
-        rSTableMetro1.setRowHeight(30);
-        rSTableMetro1.setShowGrid(false);
-        jScrollPane1.setViewportView(rSTableMetro1);
+        table1.setColorBordeFilas(new java.awt.Color(255, 255, 255));
+        table1.setColorBordeHead(new java.awt.Color(255, 255, 255));
+        table1.setRowHeight(30);
+        table1.setShowGrid(false);
+        jScrollPane1.setViewportView(table1);
 
-        jPanel13.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 290, 580, 190));
+        jPanel13.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 220, 1000, 220));
 
         jLabel27.setFont(new java.awt.Font("Montserrat", 1, 18)); // NOI18N
         jLabel27.setText("Số lượng sách");
-        jPanel13.add(jLabel27, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 50, -1, -1));
+        jPanel13.add(jLabel27, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 20, -1, -1));
 
         jLabel28.setFont(new java.awt.Font("Montserrat", 1, 18)); // NOI18N
         jLabel28.setText("Chi tiết sách ");
-        jPanel13.add(jLabel28, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 500, -1, -1));
+        jPanel13.add(jLabel28, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 450, -1, -1));
 
-        rSTableMetro2.setModel(new javax.swing.table.DefaultTableModel(
+        table2.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Id", "Tên", "Tác giả", "Số lượng"
+                "Mã sách", "Tên", "Tác giả", "Số lượng"
             }
         ));
-        rSTableMetro2.setColorBordeFilas(new java.awt.Color(255, 255, 255));
-        rSTableMetro2.setColorBordeHead(new java.awt.Color(255, 255, 255));
-        rSTableMetro2.setRowHeight(30);
-        rSTableMetro2.setShowGrid(false);
-        jScrollPane2.setViewportView(rSTableMetro2);
+        table2.setColorBordeFilas(new java.awt.Color(255, 255, 255));
+        table2.setColorBordeHead(new java.awt.Color(255, 255, 255));
+        table2.setRowHeight(30);
+        table2.setShowGrid(false);
+        jScrollPane2.setViewportView(table2);
 
-        jPanel13.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 540, 580, 190));
-
-        panelPieChart.setLayout(new java.awt.BorderLayout());
-        jPanel13.add(panelPieChart, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 290, 380, 380));
+        jPanel13.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 480, 1000, 250));
 
         getContentPane().add(jPanel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 60, 1620, 1010));
 
@@ -598,14 +623,20 @@ public class HomePage extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jPanel16MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel16MouseClicked
-       BookPenaltyForm fb = new BookPenaltyForm();
-       fb.setVisible(true);
-       dispose();
+        BookPenaltyForm fb = new BookPenaltyForm();
+        fb.setVisible(true);
+        dispose();
     }//GEN-LAST:event_jPanel16MouseClicked
 
+    private void jPanel5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel5MouseClicked
+        Dashboard dashboard = new Dashboard();
+        dashboard.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_jPanel5MouseClicked
+    
     private void jPanel4AncestorAdded(javax.swing.event.AncestorEvent evt) {
     }
-
+    
     private void jPanel12MouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_jPanel12MouseClicked
         ReturnBook returnBook = new ReturnBook();
         returnBook.setVisible(true);
@@ -635,11 +666,11 @@ public class HomePage extends javax.swing.JFrame {
     }// GEN-LAST:event_jPanel6MouseEntered
 
     private void jPanel8MouseEntered(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_jPanel8MouseEntered
-        jPanel8.setBackground(mouseEnterColor);
+
     }// GEN-LAST:event_jPanel8MouseEntered
 
     private void jPanel8MouseExited(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_jPanel8MouseExited
-        jPanel8.setBackground(mouseExitColor);
+
     }// GEN-LAST:event_jPanel8MouseExited
 
     private void jPanel9MouseEntered(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_jPanel9MouseEntered
@@ -702,7 +733,7 @@ public class HomePage extends javax.swing.JFrame {
 
         // TODO add your handling code here:
     }
-
+    
     private void jPanel7AncestorAdded(javax.swing.event.AncestorEvent evt) {// GEN-FIRST:event_jPanel7AncestorAdded
         // TODO add your handling code here:
     }// GEN-LAST:event_jPanel7AncestorAdded
@@ -800,28 +831,22 @@ public class HomePage extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
-    private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
-    private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel25;
-    private javax.swing.JLabel jLabel26;
     private javax.swing.JLabel jLabel27;
     private javax.swing.JLabel jLabel28;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
@@ -840,12 +865,14 @@ public class HomePage extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
-    private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JPanel panelPieChart;
-    private rojeru_san.complementos.RSTableMetro rSTableMetro1;
-    private rojeru_san.complementos.RSTableMetro rSTableMetro2;
+    private javax.swing.JLabel label1;
+    private javax.swing.JLabel label2;
+    private javax.swing.JLabel label3;
+    private javax.swing.JLabel label4;
+    private rojeru_san.complementos.RSTableMetro table1;
+    private rojeru_san.complementos.RSTableMetro table2;
     // End of variables declaration//GEN-END:variables
 }

@@ -19,6 +19,7 @@ import javax.swing.JOptionPane;
  * @author lethi
  */
 public class BookPenaltyForm extends javax.swing.JFrame {
+
     DefaultTableModel model;
 
     /**
@@ -29,7 +30,8 @@ public class BookPenaltyForm extends javax.swing.JFrame {
         setIssueBookDetailsToTable();
         importDataToCombobox(); // Populate the combobox
         setBookPenaltyDetailsToTable();
-        
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+
     }
 
     /**
@@ -63,6 +65,7 @@ public class BookPenaltyForm extends javax.swing.JFrame {
         date_collectDate = new rojeru_san.componentes.RSDateChooser();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setPreferredSize(new java.awt.Dimension(1920, 1080));
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel1.setBackground(new java.awt.Color(102, 102, 255));
@@ -86,6 +89,12 @@ public class BookPenaltyForm extends javax.swing.JFrame {
         );
 
         jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 70, 400, 10));
+
+        jPanel4.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jPanel4MouseClicked(evt);
+            }
+        });
 
         jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/AddNewBookIcons/51516_arrow_back_left_icon.png"))); // NOI18N
         jLabel9.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -113,7 +122,7 @@ public class BookPenaltyForm extends javax.swing.JFrame {
 
         jPanel1.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 50, 40));
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1390, 110));
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1920, 110));
 
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -136,7 +145,7 @@ public class BookPenaltyForm extends javax.swing.JFrame {
         });
         jScrollPane5.setViewportView(tbl_penalty);
 
-        jPanel2.add(jScrollPane5, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 30, 620, 190));
+        jPanel2.add(jScrollPane5, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 50, 740, 190));
 
         label1.setFont(new java.awt.Font("Segoe UI Semibold", 0, 18)); // NOI18N
         label1.setText("Mã phiếu");
@@ -183,7 +192,7 @@ public class BookPenaltyForm extends javax.swing.JFrame {
                 btnTaoPhieuActionPerformed(evt);
             }
         });
-        jPanel2.add(btnTaoPhieu, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 250, 140, 50));
+        jPanel2.add(btnTaoPhieu, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 260, 140, 50));
 
         txt_penaltyID.setFont(new java.awt.Font("Segoe UI Semibold", 0, 18)); // NOI18N
         jPanel2.add(txt_penaltyID, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 30, 320, 40));
@@ -207,7 +216,7 @@ public class BookPenaltyForm extends javax.swing.JFrame {
         });
         jScrollPane6.setViewportView(tbl_issueBookDetails1);
 
-        jPanel2.add(jScrollPane6, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 380, 1280, 270));
+        jPanel2.add(jScrollPane6, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 380, 1280, 270));
 
         btnLamMoi.setBackground(new java.awt.Color(102, 153, 255));
         btnLamMoi.setFont(new java.awt.Font("Segoe UI Semibold", 0, 18)); // NOI18N
@@ -218,16 +227,16 @@ public class BookPenaltyForm extends javax.swing.JFrame {
                 btnLamMoiActionPerformed(evt);
             }
         });
-        jPanel2.add(btnLamMoi, new org.netbeans.lib.awtextra.AbsoluteConstraints(980, 250, 140, 50));
+        jPanel2.add(btnLamMoi, new org.netbeans.lib.awtextra.AbsoluteConstraints(1030, 260, 140, 50));
 
         date_collectDate.setFont(new java.awt.Font("Montserrat", 1, 18)); // NOI18N
         date_collectDate.setFuente(new java.awt.Font("Montserrat", 1, 18)); // NOI18N
         date_collectDate.setPlaceholder("Chọn ngày thu tiền");
         jPanel2.add(date_collectDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 280, 300, -1));
 
-        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 110, 1380, 690));
+        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 110, 1920, 690));
 
-        setSize(new java.awt.Dimension(1394, 867));
+        setSize(new java.awt.Dimension(1934, 1087));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
@@ -239,15 +248,15 @@ public class BookPenaltyForm extends javax.swing.JFrame {
             ResultSet rs = st.executeQuery("select * from issue_book_details where status = 'đã mất'");
 
             while (rs.next()) {
-               
+
                 String bookID = rs.getString("bookID");
                 String bookName = rs.getString("bookName");
                 String studentID = rs.getString("studentID");
                 String studentName = rs.getString("StudentName");
-                
+
                 String status = rs.getString("status");
-                
-                Object[] obj = { bookID, bookName,studentID, studentName, status };
+
+                Object[] obj = {bookID, bookName, studentID, studentName, status};
                 model = (DefaultTableModel) tbl_issueBookDetails1.getModel();
                 model.addRow(obj);
 
@@ -256,12 +265,12 @@ public class BookPenaltyForm extends javax.swing.JFrame {
             e.printStackTrace();
         }
     }
-    
-    public void clearTable(){
+
+    public void clearTable() {
         DefaultTableModel model = (DefaultTableModel) tbl_penalty.getModel();
         model.setRowCount(0);
     }
-    
+
     public void setBookPenaltyDetailsToTable() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -270,13 +279,13 @@ public class BookPenaltyForm extends javax.swing.JFrame {
             ResultSet rs = st.executeQuery("select * from penalty");
 
             while (rs.next()) {
-               
+
                 String penaltyID = rs.getString("penaltyID");
                 String studentID = rs.getString("studentID");
                 String money = rs.getString("money");
                 String date = rs.getString("date");
-                
-                Object[] obj = { penaltyID, studentID, money, date };
+
+                Object[] obj = {penaltyID, studentID, money, date};
                 model = (DefaultTableModel) tbl_penalty.getModel();
                 model.addRow(obj);
 
@@ -285,8 +294,8 @@ public class BookPenaltyForm extends javax.swing.JFrame {
             e.printStackTrace();
         }
     }
-    
-    public void importDataToCombobox(){
+
+    public void importDataToCombobox() {
         studentCombobox.removeAllItems();
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -299,70 +308,69 @@ public class BookPenaltyForm extends javax.swing.JFrame {
                 String studentName = rs.getString("StudentName");
                 studentCombobox.addItem(studentID + " - " + studentName);
             }
-            
+
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    
+
     public int moneyPenalty(String studentId) {
-    int totalPenalty = 0;
-    try {
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/quanlythuvien", "root", "");
-        Statement st = conn.createStatement();
-        String query = "SELECT SUM(b.price) AS total_penalty " +
-                       "FROM book_details b " +
-                       "JOIN issue_book_details i ON b.bookID = i.bookID " +
-                       "WHERE i.studentID = '" + studentId + "' AND i.status = 'đã mất'";
-        ResultSet rs = st.executeQuery(query);
+        int totalPenalty = 0;
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/quanlythuvien", "root", "");
+            Statement st = conn.createStatement();
+            String query = "SELECT SUM(b.price) AS total_penalty "
+                    + "FROM book_details b "
+                    + "JOIN issue_book_details i ON b.bookID = i.bookID "
+                    + "WHERE i.studentID = '" + studentId + "' AND i.status = 'đã mất'";
+            ResultSet rs = st.executeQuery(query);
 
-        if (rs.next()) {
-            totalPenalty = rs.getInt("total_penalty");
+            if (rs.next()) {
+                totalPenalty = rs.getInt("total_penalty");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-    } catch (Exception e) {
-        e.printStackTrace();
-    }
-    return totalPenalty;
+        return totalPenalty;
     }
 
+    public boolean addPenalty() {
+        boolean isAdded = false;
 
-    public boolean addPenalty(){
-    boolean isAdded = false;
-    
-    Date collectDate = date_collectDate.getDatoFecha();
-    long l1 = collectDate.getTime();
-    java.sql.Date sqlCollectDate = new java.sql.Date(l1);
-    
-    String penaltyID = txt_penaltyID.getText();
-    String selectedItem = (String) studentCombobox.getSelectedItem();
-    if (selectedItem == null) {
-        JOptionPane.showMessageDialog(this, "Please select a student.");
-        return false;
-    }
-    String studentId = selectedItem.split(" - ")[0];
-    int totalPenalty = moneyPenalty(studentId);
-    
-    try {
-        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/quanlythuvien", "root", "");
-        String sql = "insert into penalty(penaltyID, studentID, money, date) values(?, ?, ?, ?)";
-        PreparedStatement pst = con.prepareStatement(sql);
-        pst.setString(1, penaltyID);
-        pst.setString(2, studentId);
-        pst.setInt(3, totalPenalty);
-        pst.setDate(4, sqlCollectDate);
-        
-        int rowCount = pst.executeUpdate();
-        if (rowCount > 0) {
-            isAdded = true;
+        Date collectDate = date_collectDate.getDatoFecha();
+        long l1 = collectDate.getTime();
+        java.sql.Date sqlCollectDate = new java.sql.Date(l1);
+
+        String penaltyID = txt_penaltyID.getText();
+        String selectedItem = (String) studentCombobox.getSelectedItem();
+        if (selectedItem == null) {
+            JOptionPane.showMessageDialog(this, "Please select a student.");
+            return false;
         }
-    } catch (Exception e) {
-        e.printStackTrace();
+        String studentId = selectedItem.split(" - ")[0];
+        int totalPenalty = moneyPenalty(studentId);
+
+        try {
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/quanlythuvien", "root", "");
+            String sql = "insert into penalty(penaltyID, studentID, money, date) values(?, ?, ?, ?)";
+            PreparedStatement pst = con.prepareStatement(sql);
+            pst.setString(1, penaltyID);
+            pst.setString(2, studentId);
+            pst.setInt(3, totalPenalty);
+            pst.setDate(4, sqlCollectDate);
+
+            int rowCount = pst.executeUpdate();
+            if (rowCount > 0) {
+                isAdded = true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return isAdded;
     }
-    return isAdded;
-    }
-    
-    public void clearFormInput(){
+
+    public void clearFormInput() {
         txt_penaltyID.setText("");
         txt_money.setText("");
     }
@@ -377,7 +385,7 @@ public class BookPenaltyForm extends javax.swing.JFrame {
     }//GEN-LAST:event_tbl_issueBookDetails1MouseClicked
 
     private void btnLamMoiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLamMoiActionPerformed
-       clearTable();
+        clearTable();
     }//GEN-LAST:event_btnLamMoiActionPerformed
 
     private void studentComboboxPopupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_studentComboboxPopupMenuWillBecomeVisible
@@ -399,13 +407,13 @@ public class BookPenaltyForm extends javax.swing.JFrame {
 
     private void btnTaoPhieuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTaoPhieuActionPerformed
         if (addPenalty()) {
-        JOptionPane.showMessageDialog(this, "Thêm phiếu phạt thành công");
-        clearTable();
-        setBookPenaltyDetailsToTable();
-        clearFormInput();
-    } else {
-        JOptionPane.showMessageDialog(this, "Thêm phiếu phạt thất bại");
-    }
+            JOptionPane.showMessageDialog(this, "Thêm phiếu phạt thành công");
+            clearTable();
+            setBookPenaltyDetailsToTable();
+            clearFormInput();
+        } else {
+            JOptionPane.showMessageDialog(this, "Thêm phiếu phạt thất bại");
+        }
     }//GEN-LAST:event_btnTaoPhieuActionPerformed
 
     private void jLabel9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel9MouseClicked
@@ -413,6 +421,12 @@ public class BookPenaltyForm extends javax.swing.JFrame {
         hp.setVisible(true);
         dispose();
     }//GEN-LAST:event_jLabel9MouseClicked
+
+    private void jPanel4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel4MouseClicked
+        HomePage homePage = new HomePage();
+        homePage.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_jPanel4MouseClicked
 
     /**
      * @param args the command line arguments

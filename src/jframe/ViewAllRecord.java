@@ -11,6 +11,7 @@ import java.sql.Statement;
 import javax.swing.table.DefaultTableModel;
 import java.util.*;
 import java.sql.PreparedStatement;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 /**
@@ -20,9 +21,12 @@ import javax.swing.JOptionPane;
 public class ViewAllRecord extends javax.swing.JFrame {
 
     DefaultTableModel model;
+
     public ViewAllRecord() {
         initComponents();
         setIssueBookDetailsToTable();
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+
     }
 
     /**
@@ -161,7 +165,6 @@ public class ViewAllRecord extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    
     public void setIssueBookDetailsToTable() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -177,8 +180,8 @@ public class ViewAllRecord extends javax.swing.JFrame {
                 String dueDate = rs.getString("dueDate");
                 String returnDate = rs.getString("returnDate");
                 String status = rs.getString("status");
-                
-                Object[] obj = { serialID, bookName, studentName, issueDate, dueDate, returnDate, status };
+
+                Object[] obj = {serialID, bookName, studentName, issueDate, dueDate, returnDate, status};
                 model = (DefaultTableModel) tbl_issueBookDetails.getModel();
                 model.addRow(obj);
 
@@ -187,57 +190,57 @@ public class ViewAllRecord extends javax.swing.JFrame {
             e.printStackTrace();
         }
     }
-    
+
     //method to clear table
-    public void clearTable(){
+    public void clearTable() {
         DefaultTableModel model = (DefaultTableModel) tbl_issueBookDetails.getModel();
         model.setRowCount(0);
     }
-    
+
     //to fetch the record using date fields
-    public void search(){
+    public void search() {
         Date uFromDate = date_fromDate.getDatoFecha();
         Date uToDate = date_toDate.getDatoFecha();
 
         long l1 = uFromDate.getTime();
         long l2 = uToDate.getTime();
-        
+
         java.sql.Date fromDate = new java.sql.Date(l1);
         java.sql.Date toDate = new java.sql.Date(l2);
-        
+
         try {
             Connection con = DBConnection.getConnection();
             String sql = "select * from issue_book_details where issueDate BETWEEN ? AND ?";
             PreparedStatement pst = con.prepareStatement(sql);
             pst.setDate(1, fromDate);
             pst.setDate(2, toDate);
-            
+
             ResultSet rs = pst.executeQuery();
-            
-            if(rs.next()){
-                JOptionPane.showMessageDialog(this,"Không tìm thấy");
+
+            if (rs.next()) {
+                JOptionPane.showMessageDialog(this, "Không tìm thấy");
             } else {
-                while(rs.next()){
-                int serialID = rs.getInt("id");
-                String bookName = rs.getString("bookName");
-                String studentName = rs.getString("StudentName");
-                String issueDate = rs.getString("issueDate");
-                String dueDate = rs.getString("dueDate");
-                String returnDate = rs.getString("returnDate");
-                String status = rs.getString("status");
-                
-                Object[] obj = { serialID, bookName, studentName, issueDate, dueDate, returnDate, status };
-                model = (DefaultTableModel) tbl_issueBookDetails.getModel();
-                model.addRow(obj);
-                }  
+                while (rs.next()) {
+                    int serialID = rs.getInt("id");
+                    String bookName = rs.getString("bookName");
+                    String studentName = rs.getString("StudentName");
+                    String issueDate = rs.getString("issueDate");
+                    String dueDate = rs.getString("dueDate");
+                    String returnDate = rs.getString("returnDate");
+                    String status = rs.getString("status");
+
+                    Object[] obj = {serialID, bookName, studentName, issueDate, dueDate, returnDate, status};
+                    model = (DefaultTableModel) tbl_issueBookDetails.getModel();
+                    model.addRow(obj);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    
+
     private void tbl_issueBookDetailsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_issueBookDetailsMouseClicked
-        
+
     }//GEN-LAST:event_tbl_issueBookDetailsMouseClicked
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
