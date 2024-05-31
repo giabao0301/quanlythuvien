@@ -16,7 +16,7 @@ import javax.swing.JOptionPane;
 
 /**
  *
- * @author lethi
+ * @author trinh
  */
 public class ViewAllRecord extends javax.swing.JFrame {
 
@@ -24,9 +24,8 @@ public class ViewAllRecord extends javax.swing.JFrame {
 
     public ViewAllRecord() {
         initComponents();
-        setIssueBookDetailsToTable();
         setExtendedState(JFrame.MAXIMIZED_BOTH);
-
+        setIssueBookDetailsToTable();
     }
 
     /**
@@ -69,32 +68,32 @@ public class ViewAllRecord extends javax.swing.JFrame {
             .addGap(0, 0, Short.MAX_VALUE)
         );
 
-        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 80, 360, 10));
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 90, 360, 10));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI Semibold", 0, 36)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Danh sách mượn trả");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 20, 370, 60));
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 30, 370, 60));
 
         jLabel18.setFont(new java.awt.Font("Segoe UI Semibold", 0, 18)); // NOI18N
         jLabel18.setForeground(new java.awt.Color(255, 255, 255));
         jLabel18.setText("Ngày mượn");
-        jPanel1.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 140, 120, -1));
+        jPanel1.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 150, 120, -1));
 
         jLabel17.setFont(new java.awt.Font("Segoe UI Semibold", 0, 18)); // NOI18N
         jLabel17.setForeground(new java.awt.Color(255, 255, 255));
         jLabel17.setText("Ngày trả");
-        jPanel1.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 140, 90, -1));
+        jPanel1.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 150, 90, -1));
 
         date_fromDate.setFont(new java.awt.Font("Montserrat", 1, 18)); // NOI18N
         date_fromDate.setFuente(new java.awt.Font("Montserrat", 1, 18)); // NOI18N
         date_fromDate.setPlaceholder("Chọn ngày mượn");
-        jPanel1.add(date_fromDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 130, 300, -1));
+        jPanel1.add(date_fromDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 140, 300, -1));
 
         date_toDate.setFont(new java.awt.Font("Montserrat", 1, 18)); // NOI18N
         date_toDate.setFuente(new java.awt.Font("Montserrat", 1, 18)); // NOI18N
         date_toDate.setPlaceholder("Chọn ngày trả");
-        jPanel1.add(date_toDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 130, 290, -1));
+        jPanel1.add(date_toDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(900, 140, 290, -1));
 
         jButton1.setBackground(new java.awt.Color(51, 102, 255));
         jButton1.setFont(new java.awt.Font("Segoe UI Semibold", 0, 18)); // NOI18N
@@ -105,7 +104,7 @@ public class ViewAllRecord extends javax.swing.JFrame {
                 jButton1ActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1150, 130, 110, 40));
+        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1240, 140, 110, 40));
 
         jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/AddNewBookIcons/51516_arrow_back_left_icon.png"))); // NOI18N
         jLabel8.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -134,7 +133,7 @@ public class ViewAllRecord extends javax.swing.JFrame {
 
         jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, 50, 40));
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1480, 240));
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1920, 240));
 
         panel_table.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -157,11 +156,11 @@ public class ViewAllRecord extends javax.swing.JFrame {
         });
         jScrollPane5.setViewportView(tbl_issueBookDetails);
 
-        panel_table.add(jScrollPane5, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 50, 1280, 440));
+        panel_table.add(jScrollPane5, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 60, 1280, 440));
 
-        getContentPane().add(panel_table, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 240, 1410, 570));
+        getContentPane().add(panel_table, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 240, 1920, 570));
 
-        setSize(new java.awt.Dimension(1425, 810));
+        setSize(new java.awt.Dimension(1934, 1087));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 

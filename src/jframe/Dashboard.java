@@ -36,6 +36,8 @@ public class Dashboard extends javax.swing.JFrame {
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setStudentToTable();
         setBookToTable();
+        setMissingBooksToTable();
+
     }
 
     public void showPieChart() {
@@ -119,6 +121,30 @@ public class Dashboard extends javax.swing.JFrame {
         return books;
     }
 
+    public List<Book> getMissingBooks() {
+        List<Book> books = new ArrayList<>();
+
+        try {
+             Connection conn = DBConnection.getConnection();
+            String sql = "select bookID, bookName, count(*) as issuedBooks from issue_book_details where status = ? group by bookID";
+            PreparedStatement pst = conn.prepareStatement(sql);
+            pst.setString(1, "đã mất");
+            
+            ResultSet rs = pst.executeQuery();
+            
+            while (rs.next()) {
+                String bookID = rs.getString("bookID");
+                String bookName = rs.getString("bookName");
+                int issuedQuantity = rs.getInt("issuedBooks");
+
+                books.add(new Book(bookID, bookName, issuedQuantity));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return books;
+    }
+
     public void setStudentToTable() {
         List<Student> students = new ArrayList<>();
         int max = 0;
@@ -165,6 +191,14 @@ public class Dashboard extends javax.swing.JFrame {
         }
     }
 
+    public void setMissingBooksToTable() {
+        for (Book b : getMissingBooks()) {
+            Object[] obj = {b.getBookID(), b.getBookName(), b.getIssuedQuantity()};
+            model = (DefaultTableModel) tbl_bookDetails2.getModel();
+            model.addRow(obj);
+        }
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -189,6 +223,9 @@ public class Dashboard extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
         tbl_bookDetails = new rojeru_san.complementos.RSTableMetro();
+        jLabel5 = new javax.swing.JLabel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        tbl_bookDetails2 = new rojeru_san.complementos.RSTableMetro();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -280,15 +317,15 @@ public class Dashboard extends javax.swing.JFrame {
 
         jLabel4.setBackground(new java.awt.Color(204, 204, 204));
         jLabel4.setFont(new java.awt.Font("Montserrat", 1, 18)); // NOI18N
-        jLabel4.setText("Sách được sinh viên mượn nhiều nhất");
-        jPanel2.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 300, 380, 40));
+        jLabel4.setText("Sách đã mất");
+        jPanel2.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 480, 380, 40));
 
         tbl_bookDetails.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Mã sách", "Tên sách", "Số lượt mượn"
+                "Mã sách", "Tên sách", "Tình trạng"
             }
         ));
         tbl_bookDetails.setColorBordeFilas(new java.awt.Color(255, 255, 255));
@@ -302,7 +339,33 @@ public class Dashboard extends javax.swing.JFrame {
         });
         jScrollPane3.setViewportView(tbl_bookDetails);
 
-        jPanel2.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 360, 990, 150));
+        jPanel2.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 310, 990, 150));
+
+        jLabel5.setBackground(new java.awt.Color(204, 204, 204));
+        jLabel5.setFont(new java.awt.Font("Montserrat", 1, 18)); // NOI18N
+        jLabel5.setText("Sách được sinh viên mượn nhiều nhất");
+        jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 260, 380, 40));
+
+        tbl_bookDetails2.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Mã sách", "Tên sách", "Số lượng"
+            }
+        ));
+        tbl_bookDetails2.setColorBordeFilas(new java.awt.Color(255, 255, 255));
+        tbl_bookDetails2.setColorBordeHead(new java.awt.Color(255, 255, 255));
+        tbl_bookDetails2.setRowHeight(40);
+        tbl_bookDetails2.setShowGrid(false);
+        tbl_bookDetails2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbl_bookDetails2MouseClicked(evt);
+            }
+        });
+        jScrollPane4.setViewportView(tbl_bookDetails2);
+
+        jPanel2.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 520, 990, 150));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -335,6 +398,10 @@ public class Dashboard extends javax.swing.JFrame {
     private void tbl_bookDetailsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_bookDetailsMouseClicked
         // TODO add your handling code here:
     }//GEN-LAST:event_tbl_bookDetailsMouseClicked
+
+    private void tbl_bookDetails2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_bookDetails2MouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tbl_bookDetails2MouseClicked
 
     /**
      * @param args the command line arguments
@@ -375,6 +442,7 @@ public class Dashboard extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -382,9 +450,11 @@ public class Dashboard extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JPanel panelPieChart;
     private org.jfree.chart.plot.PiePlot piePlot1;
     private rojeru_san.complementos.RSTableMetro tbl_bookDetails;
+    private rojeru_san.complementos.RSTableMetro tbl_bookDetails2;
     private rojeru_san.complementos.RSTableMetro tbl_studentDetails;
     private org.jfree.data.time.Year year1;
     // End of variables declaration//GEN-END:variables
