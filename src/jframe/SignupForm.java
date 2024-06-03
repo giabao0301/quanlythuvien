@@ -33,7 +33,11 @@ public class SignupForm extends javax.swing.JFrame {
     // method to insert values into users table   
     public void insertSignupDetails() {
         String name = txt_username.getText();
-        String pwd = txt_password.getText();
+        String pwd = "";
+
+        for (char c : txt_password.getPassword()) {
+            pwd += c;
+        }
         String email = txt_email.getText();
         String phone = txt_phone.getText();
 
@@ -66,7 +70,11 @@ public class SignupForm extends javax.swing.JFrame {
 //    Validation
     public boolean validateSignup() {
         String name = txt_username.getText();
-        String pwd = txt_password.getText();
+        String pwd = "";
+
+        for (char c : txt_password.getPassword()) {
+            pwd += c;
+        }
         String email = txt_email.getText();
         String phone = txt_phone.getText();
 
@@ -149,7 +157,6 @@ public class SignupForm extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         txt_username = new app.bolivia.swing.JCTextField();
-        txt_password = new app.bolivia.swing.JCTextField();
         jLabel5 = new javax.swing.JLabel();
         txt_email = new app.bolivia.swing.JCTextField();
         jLabel6 = new javax.swing.JLabel();
@@ -158,6 +165,7 @@ public class SignupForm extends javax.swing.JFrame {
         jPanel3 = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
+        txt_password = new rojerusan.RSPasswordTextPlaceHolder();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -203,9 +211,6 @@ public class SignupForm extends javax.swing.JFrame {
                 txt_usernameActionPerformed(evt);
             }
         });
-
-        txt_password.setFont(new java.awt.Font("Montserrat Light", 0, 18)); // NOI18N
-        txt_password.setPlaceholder("Nhập mật khẩu");
 
         jLabel5.setFont(new java.awt.Font("Montserrat SemiBold", 0, 18)); // NOI18N
         jLabel5.setText("Email");
@@ -261,6 +266,11 @@ public class SignupForm extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        txt_password.setForeground(new java.awt.Color(0, 0, 0));
+        txt_password.setFont(new java.awt.Font("Montserrat", 0, 18)); // NOI18N
+        txt_password.setPhColor(new java.awt.Color(0, 0, 0));
+        txt_password.setPlaceholder("Nhập mật khẩu");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -275,7 +285,6 @@ public class SignupForm extends javax.swing.JFrame {
                     .addComponent(txt_phone, javax.swing.GroupLayout.PREFERRED_SIZE, 323, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                         .addComponent(txt_email, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(txt_password, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(txt_username, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel2Layout.createSequentialGroup()
                             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -283,7 +292,8 @@ public class SignupForm extends javax.swing.JFrame {
                                 .addComponent(jLabel5)
                                 .addComponent(jLabel4)
                                 .addComponent(jLabel6))
-                            .addGap(196, 196, 196)))
+                            .addGap(196, 196, 196))
+                        .addComponent(txt_password, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(rSMaterialButtonRectangle1, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(61, 61, 61))
@@ -303,9 +313,9 @@ public class SignupForm extends javax.swing.JFrame {
                 .addComponent(txt_username, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(32, 32, 32)
                 .addComponent(jLabel4)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(txt_password, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(32, 32, 32)
+                .addGap(38, 38, 38)
                 .addComponent(jLabel5)
                 .addGap(18, 18, 18)
                 .addComponent(txt_email, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -327,14 +337,14 @@ public class SignupForm extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 564, Short.MAX_VALUE))
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 902, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -420,7 +430,7 @@ public class SignupForm extends javax.swing.JFrame {
     private rojerusan.RSMaterialButtonRectangle rSMaterialButtonRectangle1;
     private rojeru_san.complementos.RSPopuMenu rSPopuMenu1;
     private app.bolivia.swing.JCTextField txt_email;
-    private app.bolivia.swing.JCTextField txt_password;
+    private rojerusan.RSPasswordTextPlaceHolder txt_password;
     private app.bolivia.swing.JCTextField txt_phone;
     private app.bolivia.swing.JCTextField txt_username;
     // End of variables declaration//GEN-END:variables

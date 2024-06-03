@@ -28,7 +28,11 @@ public class LoginForm extends javax.swing.JFrame {
 //    Validation
     public boolean vailateLogin() {
         String name = txt_username.getText();
-        String pwd = txt_password.getText();
+        String pwd = "";
+
+        for (char c : txt_password.getPassword()) {
+            pwd += c;
+        }
 
         if (name.equals("")) {
             JOptionPane.showMessageDialog(this, "Vui lòng nhập tên tài khoản");
@@ -45,7 +49,11 @@ public class LoginForm extends javax.swing.JFrame {
 //    verify creds
     public void login() {
         String name = txt_username.getText();
-        String pwd = txt_password.getText();
+        String pwd = "";
+
+        for (char c : txt_password.getPassword()) {
+            pwd += c;
+        }
 
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -90,11 +98,11 @@ public class LoginForm extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         txt_username = new app.bolivia.swing.JCTextField();
-        txt_password = new app.bolivia.swing.JCTextField();
         rSMaterialButtonRectangle1 = new rojerusan.RSMaterialButtonRectangle();
         jPanel3 = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
+        txt_password = new rojerusan.RSPasswordTextPlaceHolder();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -141,9 +149,6 @@ public class LoginForm extends javax.swing.JFrame {
             }
         });
 
-        txt_password.setFont(new java.awt.Font("Montserrat Light", 0, 18)); // NOI18N
-        txt_password.setPlaceholder("Nhập mật khẩu");
-
         rSMaterialButtonRectangle1.setBackground(new java.awt.Color(100, 136, 234));
         rSMaterialButtonRectangle1.setText("Đăng nhập");
         rSMaterialButtonRectangle1.setFont(new java.awt.Font("Montserrat SemiBold", 0, 18)); // NOI18N
@@ -186,6 +191,11 @@ public class LoginForm extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        txt_password.setForeground(new java.awt.Color(0, 0, 0));
+        txt_password.setFont(new java.awt.Font("Montserrat", 0, 18)); // NOI18N
+        txt_password.setPhColor(new java.awt.Color(0, 0, 0));
+        txt_password.setPlaceholder("Nhập mật khẩu");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -196,12 +206,12 @@ public class LoginForm extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                             .addComponent(rSMaterialButtonRectangle1, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(140, 140, 140))
+                            .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txt_password, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(115, 115, 115))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(txt_password, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(txt_username, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGroup(jPanel2Layout.createSequentialGroup()
                                     .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -226,7 +236,7 @@ public class LoginForm extends javax.swing.JFrame {
                 .addComponent(jLabel4)
                 .addGap(18, 18, 18)
                 .addComponent(txt_password, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(12, 12, 12)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(rSMaterialButtonRectangle1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -322,7 +332,7 @@ public class LoginForm extends javax.swing.JFrame {
     private rojeru_san.complementos.RSEstiloTablaHeader rSEstiloTablaHeader1;
     private rojerusan.RSMaterialButtonRectangle rSMaterialButtonRectangle1;
     private rojeru_san.complementos.RSPopuMenu rSPopuMenu1;
-    private app.bolivia.swing.JCTextField txt_password;
+    private rojerusan.RSPasswordTextPlaceHolder txt_password;
     private app.bolivia.swing.JCTextField txt_username;
     // End of variables declaration//GEN-END:variables
 }
